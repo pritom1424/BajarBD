@@ -76,19 +76,27 @@ class ProductItem extends ConsumerWidget {
                                 child: Image.network(
                                   link,
                                   fit: BoxFit.cover,
-                                  errorBuilder: (context, error, stackTrace) {
-                                    return const Center(
-                                      child: Icon(
-                                        Icons.error, // Built-in icon for error
-                                        color: Colors.red,
-                                        size: 50.0,
-                                      ),
-                                    );
-                                  },
-                                  /* loadingBuilder: (context, child, loadingProgress) {
-                              print("loading progress ${link}");
-                              return Center(child: CircularProgressIndicator());
-                            }, */
+                                  loadingBuilder: (context, child,
+                                          loadingProgress) =>
+                                      (loadingProgress == null)
+                                          ? child
+                                          : Container(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 5),
+                                              child: Image.asset(
+                                                AppConstants.appPlaceHolder,
+                                              ),
+                                            ),
+                                  errorBuilder: (context, error, stackTrace) =>
+                                      Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10),
+                                    child: const Center(
+                                        child: CircularProgressIndicator(
+                                      color: Appcolors.appThemeColor,
+                                    )),
+                                  ),
                                 )),
                             const SizedBox(
                               height: 5,

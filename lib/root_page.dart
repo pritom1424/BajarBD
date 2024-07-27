@@ -1,3 +1,7 @@
+import 'package:bajarbd/utils/Appvars/app_constants.dart';
+import 'package:bajarbd/utils/Colors/appcolors.dart';
+import 'package:flutter/widgets.dart';
+
 import 'provider/providers.dart';
 import 'screens/cart_screen.dart';
 import 'screens/products_overview_scr.dart';
@@ -32,64 +36,88 @@ class RootPage extends ConsumerWidget {
       ];
     }
 
-    return Scaffold(
-        appBar: AppBar(
-          title: const Text("Ecommerce App"),
-          /* leading: Builder(
-          builder: (BuildContext context) {
-            return IconButton(
-              icon: const Icon(
-                Icons.menu,
-                color: Colors.white,
-              ), // Replace with your custom icon
-              onPressed: () {
-                Scaffold.of(context).openDrawer();
-              },
-            );
-          },
-        ), */
-          actions: [
-            PopupMenuButton(
-                iconColor: Colors.white,
-                /*  onSelected: (filterOptions selectedVal) {
-                setState(() {
-                  if (selectedVal == filterOptions.Favorites) {
-                    _showfavorites = true;
-                  } else {
-                    _showfavorites = false;
-                  }
-                });
-              }, */
-                icon: const Icon(Icons.more_vert),
-                itemBuilder: (_) => [
-                      const PopupMenuItem(
-                        child: Text("Show Favorites"),
-                        //   value: filterOptions.Favorites,
-                      ),
-                      const PopupMenuItem(
-                        child: Text("Show All"),
-                        //   value: filterOptions.All,
-                      ),
-                    ]),
-            const Padding(
-              padding: EdgeInsets.all(5),
-              child: Icon(
-                CupertinoIcons.bell_fill,
-                color: Colors.white,
-              ),
-            )
-          ],
-        ),
-        bottomNavigationBar: NavBarWidget(
-          currentIndex: ref.read(rootPageProvider).navPageIndex,
-          onTap: (ind) {
-            AppMethods().onNavButtonTap(ind, ref);
-          },
-        ),
-        drawer: const CustomDrawer(),
-        body: AppComponent().navViews()[ref
-            .read(rootPageProvider)
-            .navPageIndex] //navViews()[ref.read(rootPageProvider).navPageIndex],
-        );
+    return SafeArea(
+      child: Scaffold(
+          appBar: AppBar(
+            title: Container(
+                height: kToolbarHeight * 1.2,
+                width: double.infinity,
+                color: Colors.transparent,
+                padding: EdgeInsets.symmetric(vertical: 10),
+                child: Image.asset(AppConstants.logoAltLink)
+
+                /* Row(
+                  children: [
+                    CircleAvatar(
+                      backgroundColor: Colors.white,
+                      child: Image.asset(AppConstants.appIcon),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      "bajarBD",
+                      style: TextStyle(fontSize: 25),
+                    )
+                  ],
+                ) */
+                ),
+            /* leading: Builder(
+            builder: (BuildContext context) {
+              return IconButton(
+                icon: const Icon(
+                  Icons.menu,
+                  color: Colors.white,
+                ), // Replace with your custom icon
+                onPressed: () {
+                  Scaffold.of(context).openDrawer();
+                },
+              );
+            },
+          ), */
+            actions: [
+              PopupMenuButton(
+                  iconColor: Colors.white,
+                  /*  onSelected: (filterOptions selectedVal) {
+                  setState(() {
+                    if (selectedVal == filterOptions.Favorites) {
+                      _showfavorites = true;
+                    } else {
+                      _showfavorites = false;
+                    }
+                  });
+                }, */
+                  icon: const Icon(Icons.more_vert),
+                  itemBuilder: (_) => [
+                        const PopupMenuItem(
+                          child: Text("Show Favorites"),
+                          //   value: filterOptions.Favorites,
+                        ),
+                        const PopupMenuItem(
+                          child: Text("Show All"),
+                          //   value: filterOptions.All,
+                        ),
+                      ]),
+              const Padding(
+                padding: EdgeInsets.all(5),
+                child: Icon(
+                  CupertinoIcons.bell_fill,
+                  color: Colors.white,
+                ),
+              )
+            ],
+          ),
+          bottomNavigationBar: NavBarWidget(
+            currentIndex: ref.read(rootPageProvider).navPageIndex,
+            onTap: (ind) {
+              AppMethods().onNavButtonTap(ind, ref);
+            },
+          ),
+          drawer: const CustomDrawer(),
+          body: AppComponent().navViews()[ref
+              .read(rootPageProvider)
+              .navPageIndex] //navViews()[ref.read(rootPageProvider).navPageIndex],
+          ),
+    );
   }
 }

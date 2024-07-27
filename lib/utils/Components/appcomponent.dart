@@ -28,44 +28,46 @@ class AppComponent {
 
   static ThemeData get theme {
     return ThemeData(
-      primaryColor: Appcolors.appThemeColor,
-      primarySwatch: createMaterialColor(Appcolors.appThemeColor),
-      colorScheme: ColorScheme.fromSwatch(
-              primarySwatch: createMaterialColor(Appcolors.appThemeColor))
-          .copyWith(secondary: Appcolors.appThemeSecondaryColor),
-      visualDensity: VisualDensity.adaptivePlatformDensity,
-      textTheme: const TextTheme(
-          displayLarge: TextStyle(color: Appcolors.appThemeColor),
-          bodyLarge: TextStyle(
-              color: Colors.black, fontSize: 22, fontWeight: FontWeight.bold),
-          titleLarge: TextStyle(
-            color: Colors.black,
-            fontSize: 25,
-          ),
-          titleMedium: TextStyle(
-            color: Colors.black,
-            fontSize: 20,
-          ),
-          titleSmall: TextStyle(
-            color: Colors.black,
-            fontSize: 18,
-          ),
-          labelMedium: TextStyle(color: Colors.black, fontSize: 15)),
-      appBarTheme: const AppBarTheme(
-          iconTheme: IconThemeData(color: Colors.white),
-          color: Color(0xFFEE7843),
-          titleTextStyle: TextStyle(
-              color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
-      buttonTheme: const ButtonThemeData(
-        buttonColor: Color(0xFFEE7843),
-        textTheme: ButtonTextTheme.primary,
-      ),
-      dialogTheme: const DialogTheme(backgroundColor: Colors.white),
-      floatingActionButtonTheme: const FloatingActionButtonThemeData(
-        backgroundColor: Color(0xFFEE7843),
-      ),
-      scaffoldBackgroundColor: Appcolors.offwhite,
-    );
+        primaryColor: Appcolors.appThemeColor,
+        primarySwatch: createMaterialColor(Appcolors.appThemeColor),
+        colorScheme: ColorScheme.fromSwatch(
+                primarySwatch: createMaterialColor(Appcolors.appThemeColor))
+            .copyWith(secondary: Appcolors.appThemeSecondaryColor),
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+        textTheme: const TextTheme(
+            displayLarge: TextStyle(color: Appcolors.appThemeColor),
+            bodyLarge: TextStyle(
+                color: Colors.black, fontSize: 22, fontWeight: FontWeight.bold),
+            titleLarge: TextStyle(
+              color: Colors.black,
+              fontSize: 25,
+            ),
+            titleMedium: TextStyle(
+              color: Colors.black,
+              fontSize: 20,
+            ),
+            titleSmall: TextStyle(
+              color: Colors.black,
+              fontSize: 18,
+            ),
+            labelMedium: TextStyle(color: Colors.black, fontSize: 15)),
+        appBarTheme: const AppBarTheme(
+            iconTheme: IconThemeData(color: Colors.white),
+            color: Color(0xFFEE7843),
+            titleTextStyle: TextStyle(
+                color: Colors.white,
+                fontSize: 18,
+                fontWeight: FontWeight.bold)),
+        buttonTheme: const ButtonThemeData(
+          buttonColor: Color(0xFFEE7843),
+          textTheme: ButtonTextTheme.primary,
+        ),
+        dialogTheme: const DialogTheme(backgroundColor: Colors.white),
+        floatingActionButtonTheme: const FloatingActionButtonThemeData(
+          backgroundColor: Color(0xFFEE7843),
+        ),
+        scaffoldBackgroundColor: Appcolors.offwhite,
+        drawerTheme: DrawerThemeData(backgroundColor: Colors.white));
   }
 
   Widget sliderIndicators(

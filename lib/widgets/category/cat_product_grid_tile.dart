@@ -1,3 +1,5 @@
+import 'package:bajarbd/utils/Appvars/app_constants.dart';
+
 import '../../utils/Colors/appcolors.dart';
 import 'package:flutter/material.dart';
 
@@ -21,7 +23,26 @@ class CatProductGridTile extends StatelessWidget {
             ),
           ),
         ),
-        child: Image.network(link),
+        child: Image.network(
+          link,
+          loadingBuilder: (context, child, loadingProgress) =>
+              (loadingProgress == null)
+                  ? child
+                  : Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 5),
+                      child: Image.asset(
+                        AppConstants
+                            .appPlaceHolder /* "assets/images/dhakaprokash_logo.png" */,
+                      ),
+                    ),
+          errorBuilder: (context, error, stackTrace) => Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: const Center(child: CircularProgressIndicator()),
+            // Image.asset(
+            //   ApiConstant.imagePlaceHolder /* "assets/images/dhakaprokash_logo.png" */,
+            // ),
+          ),
+        ),
       ),
     );
   }
