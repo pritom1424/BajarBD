@@ -13,4 +13,10 @@ class AppConstants {
   static const wishlistRemoveMessage = "product removed from wishlist!";
   static const wishlistAddFailedMessage = "product addition failed!";
   static const wishlistRemoveMessageFailed = "product removal failed!";
+
+  static const emailORPhoneErrorText =
+      "please enter a valid email address or phone number";
+  static const passErrorText = "please enter a valid password";
+  static const loginErrorText = "login failed! try again!";
+  static const signupErrorText = "Account Creation failed! try again!";
 }

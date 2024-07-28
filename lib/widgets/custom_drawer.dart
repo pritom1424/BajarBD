@@ -1,8 +1,6 @@
-import 'package:bajarbd/utils/Appvars/app_constants.dart';
 import 'package:bajarbd/utils/Appvars/appvars.dart';
 import 'package:bajarbd/utils/Colors/appcolors.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/widgets.dart';
 
 import '../screens/brand_screen.dart';
 import '../screens/category_screen.dart';

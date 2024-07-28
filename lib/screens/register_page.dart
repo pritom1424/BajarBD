@@ -1,3 +1,8 @@
+import 'package:bajarbd/provider/providers.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'profile_page.dart';
 import '../utils/Appvars/app_constants.dart';
 import '../utils/Appvars/appvars.dart';
@@ -16,6 +21,11 @@ class RegisterForm extends StatefulWidget {
 class _RegisterForm extends State<RegisterForm> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passController = TextEditingController();
+  TextEditingController firstNameController = TextEditingController();
+  TextEditingController lastNameController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
+  TextEditingController addressController = TextEditingController();
+
   Color actionButtonBgColor = const Color.fromARGB(255, 68, 156, 204);
   Color actionButtonFgColor = Colors.white;
   final _formInfoKey = GlobalKey<FormState>();
@@ -48,7 +58,7 @@ class _RegisterForm extends State<RegisterForm> {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Container(
-            height: Appvars.screenSize.height * 0.8,
+            //   height: Appvars.screenSize.height * 0.8,
             padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 50),
             child: Form(
               key: _formInfoKey,
@@ -62,17 +72,17 @@ class _RegisterForm extends State<RegisterForm> {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(10),
                       child: Image.asset(
-                        AppConstants.logoLink,
+                        AppConstants.appIcon,
                         width:
                             Appvars.screenSize.width * 0.8, // Adjust as needed
                         height: Appvars.screenSize.height * 0.08,
                       ),
                     ),
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 30),
                   TextFormField(
                     //focusNode: emailFocusNode,
-                    //  controller: emailController,
+                    controller: firstNameController,
                     style: const TextStyle(
                         fontSize: 18, fontWeight: FontWeight.normal),
                     //autofocus: false,
@@ -87,15 +97,46 @@ class _RegisterForm extends State<RegisterForm> {
                       enabledBorder: OutlineInputBorder(
                           borderSide:
                               BorderSide(color: Colors.grey, width: 0.3)),
-                      hintText: 'Name',
-                      labelText: 'Name',
+                      hintText: 'First Name',
+                      labelText: 'First Name',
                       labelStyle: TextStyle(fontSize: 18, color: Colors.grey),
                       prefixIcon:
                           Icon(Icons.email_outlined, color: Colors.grey),
                     ),
                     validator: (value) {
                       if (value != null && value == "") {
-                        //return AppStrings.emailErrorText;
+                        return "Please enter a valid first name";
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  TextFormField(
+                    //focusNode: emailFocusNode,
+                    controller: lastNameController,
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.normal),
+                    //autofocus: false,
+                    enabled: true,
+                    decoration: const InputDecoration(
+                      errorBorder: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.grey, width: 0.3)),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.grey, width: 0.3)),
+                      enabledBorder: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.grey, width: 0.3)),
+                      hintText: 'Last Name',
+                      labelText: 'Last Name',
+                      labelStyle: TextStyle(fontSize: 18, color: Colors.grey),
+                      prefixIcon:
+                          Icon(Icons.email_outlined, color: Colors.grey),
+                    ),
+                    validator: (value) {
+                      if (value != null && value == "") {
+                        return "Please enter a valid last name";
                       }
                       return null;
                     },
@@ -124,12 +165,29 @@ class _RegisterForm extends State<RegisterForm> {
                       prefixIcon:
                           Icon(Icons.email_outlined, color: Colors.grey),
                     ),
-                    validator: (value) {
-                      if (value != null && value == "") {
-                        //return AppStrings.emailErrorText;
-                      }
-                      return null;
-                    },
+                  ),
+                  const SizedBox(height: 20),
+                  TextFormField(
+                    controller: phoneController,
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.normal),
+                    autofocus: false,
+                    decoration: const InputDecoration(
+                      errorBorder: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.grey, width: 0.3)),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.grey, width: 0.3)),
+                      enabledBorder: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.grey, width: 0.3)),
+                      hintText: 'Mobile number',
+                      labelText: 'Mobile Number',
+                      labelStyle: TextStyle(fontSize: 18, color: Colors.grey),
+                      prefixIcon:
+                          Icon(Icons.lock_open_rounded, color: Colors.grey),
+                    ),
                   ),
                   const SizedBox(height: 20),
                   TextFormField(
@@ -157,52 +215,97 @@ class _RegisterForm extends State<RegisterForm> {
                     ),
                     validator: (value) {
                       if (value != null && value == "") {
-                        //return AppStrings.passErrorText;
+                        return AppConstants.passErrorText;
                       }
                       return null;
                     },
                   ),
-                  const SizedBox(height: 50),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 5),
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
-                        ),
-                        backgroundColor: Appcolors.appThemeColor,
-                        foregroundColor: actionButtonFgColor),
-                    onPressed: () async {
-                      FocusScope.of(context).unfocus();
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: (ctx) => const ProfilePage()));
-                      /*  if (_formInfoKey.currentState == null) {
-                        return;
-                      }
-                      if (_formInfoKey.currentState!.validate()) {
-                        _formInfoKey.currentState!.save(); */
-                      /* final prov = Provider.of<HrmsAuthController>(context,
-                            listen: false);
-                        prov.setLoading(true);
-                        final result = await prov.Authenticate(
-                            emailController.text, passController.text);
-        
-                        prov.setLoading(false);
-        
-                        if (result) {
-                          Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(
-                                  builder: (ctx) => RootNavPage()));
-                        } else {
-                          AppMethods().snackBar(
-                              AppStrings.loginErrorMessage, context);
-                        } */
-                      // }
-                    },
-                    child: const Text(
-                      'Create Account',
-                      style: TextStyle(fontSize: 25),
+                  const SizedBox(height: 20),
+                  TextFormField(
+                    controller: addressController,
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.normal),
+                    autofocus: false,
+                    decoration: const InputDecoration(
+                      errorBorder: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.grey, width: 0.3)),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.grey, width: 0.3)),
+                      enabledBorder: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.grey, width: 0.3)),
+                      hintText: 'Address',
+                      labelText: 'Address',
+                      labelStyle: TextStyle(fontSize: 18, color: Colors.grey),
+                      prefixIcon:
+                          Icon(Icons.lock_open_rounded, color: Colors.grey),
                     ),
                   ),
+                  const SizedBox(height: 50),
+                  Consumer(
+                    builder: (ctx, ref, _) => ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(vertical: 5),
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                          ),
+                          backgroundColor: Appcolors.appThemeColor,
+                          foregroundColor: actionButtonFgColor),
+                      onPressed: () async {
+                        FocusScope.of(context).unfocus();
+
+                        if (_formInfoKey.currentState == null) {
+                          return;
+                        }
+                        if (emailController.text.isEmpty &&
+                            phoneController.text.isEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content:
+                                  Text(AppConstants.emailORPhoneErrorText)));
+                        }
+                        if (_formInfoKey.currentState!.validate()) {
+                          _formInfoKey.currentState!.save();
+                          final prov = ref.watch(authProvider);
+                          prov.setLoading(true);
+                          final result = await prov.SignUp(
+                              firstNameController.text,
+                              lastNameController.text,
+                              phoneController.text,
+                              emailController.text,
+                              passController.text,
+                              addressController.text);
+                          prov.setLoading(false);
+                          if (result == -1) {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                content: Text(AppConstants.loginErrorText)));
+                          } else if (result != 1) {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                content: Text("This account is blocked!")));
+                          } else {
+                            Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                    builder: (ctx) => const ProfilePage()));
+                          }
+
+                          /* if (result) {
+                              Navigator.of(context).pushReplacement(
+                                  MaterialPageRoute(
+                                      builder: (ctx) => RootNavPage()));
+                            } else {
+                              AppMethods().snackBar(
+                                  AppStrings.loginErrorMessage, context);
+                            } */
+                        }
+                      },
+                      child: const Text(
+                        'Create Account',
+                        style: TextStyle(fontSize: 25),
+                      ),
+                    ),
+                  ),
+
                   /* const SizedBox(
                     height: 20,
                   ),

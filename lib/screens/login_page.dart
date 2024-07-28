@@ -1,3 +1,5 @@
+import 'package:bajarbd/screens/profile_page.dart';
+
 import '../provider/providers.dart';
 import 'register_page.dart';
 import '../utils/Appvars/app_constants.dart';
@@ -64,7 +66,7 @@ class _LoginFormState extends State<LoginForm> {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(10),
                       child: Image.asset(
-                        AppConstants.logoLink,
+                        AppConstants.appIcon,
                         width:
                             Appvars.screenSize.width * 0.8, // Adjust as needed
                         height: Appvars.screenSize.height * 0.08,
@@ -89,15 +91,15 @@ class _LoginFormState extends State<LoginForm> {
                       enabledBorder: OutlineInputBorder(
                           borderSide:
                               BorderSide(color: Colors.grey, width: 0.3)),
-                      hintText: 'Email',
-                      labelText: 'Email',
+                      hintText: 'Email or Phone number',
+                      labelText: 'Email or Phone number',
                       labelStyle: TextStyle(fontSize: 18, color: Colors.grey),
                       prefixIcon:
                           Icon(Icons.email_outlined, color: Colors.grey),
                     ),
                     validator: (value) {
                       if (value != null && value == "") {
-                        //return AppStrings.emailErrorText;
+                        return AppConstants.emailORPhoneErrorText;
                       }
                       return null;
                     },
@@ -128,7 +130,7 @@ class _LoginFormState extends State<LoginForm> {
                     ),
                     validator: (value) {
                       if (value != null && value == "") {
-                        //return AppStrings.passErrorText;
+                        return AppConstants.passErrorText;
                       }
                       return null;
                     },
@@ -145,29 +147,38 @@ class _LoginFormState extends State<LoginForm> {
                           foregroundColor: actionButtonFgColor),
                       onPressed: () async {
                         FocusScope.of(context).unfocus();
-                        ref.read(profilePageProvider).setLogin(true);
-                        /*  if (_formInfoKey.currentState == null) {
+
+                        if (_formInfoKey.currentState == null) {
                           return;
                         }
                         if (_formInfoKey.currentState!.validate()) {
                           _formInfoKey.currentState!.save();
-                          final prov = Provider.of<HrmsAuthController>(context,
-                              listen: false);
+                          final prov = ref.watch(authProvider);
                           prov.setLoading(true);
-                          final result = await prov.Authenticate(
+                          final result = await prov.Login(
                               emailController.text, passController.text);
-                            
+
+                          if (result == -1) {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                content: Text(AppConstants.loginErrorText)));
+                          } else if (result != 1) {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                content: Text("This account is blocked!")));
+                          }
                           prov.setLoading(false);
-                            
-                          if (result) {
+                          Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                  builder: (ctx) => const ProfilePage()));
+
+                          /* if (result) {
                             Navigator.of(context).pushReplacement(
                                 MaterialPageRoute(
                                     builder: (ctx) => RootNavPage()));
                           } else {
                             AppMethods().snackBar(
                                 AppStrings.loginErrorMessage, context);
-                          }
-                        } */
+                          } */
+                        }
                       },
                       child: const Text(
                         'Login',

@@ -1,3 +1,8 @@
+import 'package:bajarbd/utils/Appvars/app_constants.dart';
+import 'package:bajarbd/utils/Appvars/appvars.dart';
+import 'package:bajarbd/utils/db/user_credential.dart';
+import 'package:bajarbd/widgets/loader_widget.dart';
+
 import '../provider/providers.dart';
 import 'login_page.dart';
 import 'order_history.dart';
@@ -18,31 +23,47 @@ class ProfilePage extends ConsumerWidget {
           centerTitle: true,
           backgroundColor: Colors.blue,
         ), */
-        body: (!ref.watch(profilePageProvider).isLogin)
-            ? const LoginForm()
-            : Padding(
+        body: FutureBuilder(
+            future: ref.read(authProvider).tryAutoLogin(),
+            builder: (context, snap) {
+              if (snap.connectionState == ConnectionState.waiting) {
+                return SizedBox(
+                    height: Appvars.screenSize.height * 0.6,
+                    child: const Center(child: LoaderWidget()));
+              }
+              if (!snap.hasData) {
+                return LoginForm();
+              }
+              if (snap.data == false || UserCredential.status != 1) {
+                return LoginForm();
+              }
+
+              return Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     const SizedBox(height: 20.0),
-                    const CircleAvatar(
+                    /* const CircleAvatar(
                       radius: 50.0,
-                      backgroundImage:
-                          NetworkImage('https://via.placeholder.com/150'),
+                      backgroundImage: AssetImage(AppConstants.appIcon),
+                    ), */
+                    Image.asset(
+                      AppConstants.appIcon,
+                      height: Appvars.screenSize.height * 0.1,
                     ),
                     const SizedBox(height: 20.0),
-                    const Text(
-                      'John Doe',
+                    Text(
+                      UserCredential.emailOrPhone ?? "",
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: 24.0,
+                        fontSize: 20.0,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     const SizedBox(height: 10.0),
                     Text(
-                      'john.doe@example.com',
+                      UserCredential.address ?? "add address",
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 16.0,
@@ -65,7 +86,9 @@ class ProfilePage extends ConsumerWidget {
                     const SizedBox(height: 20.0),
                     ElevatedButton(
                       onPressed: () {
-                        ref.read(profilePageProvider).setLogin(false);
+                        ref.watch(authProvider).logout();
+                        Navigator.of(context).pushReplacement(MaterialPageRoute(
+                            builder: (ctx) => const LoginForm()));
                       },
                       style: ElevatedButton.styleFrom(
                           backgroundColor: Appcolors.appThemeColor,
@@ -74,7 +97,8 @@ class ProfilePage extends ConsumerWidget {
                     ),
                   ],
                 ),
-              ),
+              );
+            }),
       ),
     );
   }

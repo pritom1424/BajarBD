@@ -1,6 +1,4 @@
 import 'package:bajarbd/utils/Appvars/app_constants.dart';
-import 'package:bajarbd/utils/Colors/appcolors.dart';
-import 'package:flutter/widgets.dart';
 
 import 'provider/providers.dart';
 import 'screens/cart_screen.dart';
