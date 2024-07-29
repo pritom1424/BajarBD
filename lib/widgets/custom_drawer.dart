@@ -1,6 +1,9 @@
+import 'package:bajarbd/utils/Appvars/app_constants.dart';
 import 'package:bajarbd/utils/Appvars/appvars.dart';
 import 'package:bajarbd/utils/Colors/appcolors.dart';
+import 'package:bajarbd/utils/db/user_credential.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/widgets.dart';
 
 import '../screens/brand_screen.dart';
 import '../screens/category_screen.dart';
@@ -35,26 +38,22 @@ class CustomDrawer extends StatelessWidget {
                         child: Image.asset(AppConstants.appIcon),
                       ), */
                       CircleAvatar(
-                        radius: 35,
+                        radius: 40,
                         backgroundColor: Colors.white,
                         foregroundColor: Appcolors.appThemeColorDark,
-                        child: Icon(
-                          CupertinoIcons.person_alt,
-                          size: 60,
-                        ),
-                        /* backgroundImage:
-                              AssetImage("assets/images/ecom_icon.png") */
+                        child: Image.asset(AppConstants.appIcon),
                       ),
                       SizedBox(
                         height: 12,
                       ),
                       Text(
-                        'User',
-                        style: TextStyle(fontSize: 25, color: Colors.white),
+                        UserCredential.emailOrPhone ?? "User",
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(fontSize: 12, color: Colors.white),
                       ),
                       Text(
-                        '@user.com',
-                        style: TextStyle(fontSize: 14, color: Colors.white),
+                        AppConstants.companyName,
+                        style: TextStyle(fontSize: 12, color: Colors.yellow),
                       ),
                     ],
                   ),

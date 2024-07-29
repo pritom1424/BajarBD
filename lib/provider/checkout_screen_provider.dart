@@ -17,6 +17,7 @@ class CheckoutScreenProvider with ChangeNotifier {
 
   Future<List<ShippingChargeModel>> getShippingData() async {
     final res = await _checkout_repos.getProducts();
+    print(res);
 
     return res;
   }

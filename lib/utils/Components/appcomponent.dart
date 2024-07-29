@@ -1,3 +1,5 @@
+import 'package:bajarbd/utils/helpers/custom_routes.dart';
+
 import '../../screens/cart_screen.dart';
 import '../../screens/products_overview_scr.dart';
 import '../../screens/products_wishlist.dart';
@@ -30,6 +32,10 @@ class AppComponent {
     return ThemeData(
         primaryColor: Appcolors.appThemeColor,
         primarySwatch: createMaterialColor(Appcolors.appThemeColor),
+        pageTransitionsTheme: PageTransitionsTheme(builders: {
+          TargetPlatform.android: CustomPageTransitionBuilder(),
+          TargetPlatform.iOS: CustomPageTransitionBuilder(),
+        }),
         colorScheme: ColorScheme.fromSwatch(
                 primarySwatch: createMaterialColor(Appcolors.appThemeColor))
             .copyWith(secondary: Appcolors.appThemeSecondaryColor),

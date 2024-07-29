@@ -1,4 +1,5 @@
 import 'package:bajarbd/provider/providers.dart';
+import 'package:bajarbd/screens/login_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -30,6 +31,20 @@ class _RegisterForm extends State<RegisterForm> {
   Color actionButtonFgColor = Colors.white;
   final _formInfoKey = GlobalKey<FormState>();
 
+  bool emailEnabled = true;
+  bool phoneEnabled = true;
+  String contactMethod = 'email';
+  void _handleRadioValueChange(String? value) {
+    setState(() {
+      contactMethod = value!;
+      if (contactMethod == 'email') {
+        phoneController.clear();
+      } else {
+        emailController.clear();
+      }
+    });
+  }
+
   @override
   void initState() {
     if (widget.isLogOut != null) {
@@ -57,7 +72,8 @@ class _RegisterForm extends State<RegisterForm> {
             ),
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Container(
+          child: AnimatedContainer(
+            duration: Duration(milliseconds: 300),
             //   height: Appvars.screenSize.height * 0.8,
             padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 50),
             child: Form(
@@ -80,6 +96,12 @@ class _RegisterForm extends State<RegisterForm> {
                     ),
                   ),
                   const SizedBox(height: 30),
+                  Text(
+                    "Create your account!",
+                    style: Theme.of(context).textTheme.titleLarge,
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 10),
                   TextFormField(
                     //focusNode: emailFocusNode,
                     controller: firstNameController,
@@ -100,8 +122,7 @@ class _RegisterForm extends State<RegisterForm> {
                       hintText: 'First Name',
                       labelText: 'First Name',
                       labelStyle: TextStyle(fontSize: 18, color: Colors.grey),
-                      prefixIcon:
-                          Icon(Icons.email_outlined, color: Colors.grey),
+                      prefixIcon: Icon(Icons.person, color: Colors.grey),
                     ),
                     validator: (value) {
                       if (value != null && value == "") {
@@ -131,8 +152,7 @@ class _RegisterForm extends State<RegisterForm> {
                       hintText: 'Last Name',
                       labelText: 'Last Name',
                       labelStyle: TextStyle(fontSize: 18, color: Colors.grey),
-                      prefixIcon:
-                          Icon(Icons.email_outlined, color: Colors.grey),
+                      prefixIcon: Icon(Icons.person, color: Colors.grey),
                     ),
                     validator: (value) {
                       if (value != null && value == "") {
@@ -142,13 +162,104 @@ class _RegisterForm extends State<RegisterForm> {
                     },
                   ),
                   const SizedBox(height: 20),
-                  TextFormField(
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      /* Row(
+                        children: [
+                          Expanded(
+                            child: RadioListTile<String>(
+                                title: const Text('Email'),
+                                value: 'email',
+                                groupValue: contactMethod,
+                                onChanged: _handleRadioValueChange),
+                          ),
+                          Expanded(
+                            child: RadioListTile<String>(
+                                title: const Text('Phone'),
+                                value: 'phone',
+                                groupValue: contactMethod,
+                                onChanged: _handleRadioValueChange),
+                          ),
+                        ],
+                      ), */
+                      /*  if (contactMethod == 'email') */ const SizedBox(
+                          height: 20),
+                      //  if (contactMethod == 'email')
+                      TextFormField(
+                        controller: emailController,
+                        keyboardType: TextInputType.emailAddress,
+                        style: const TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.normal),
+                        enabled: true /* contactMethod == 'email' */,
+                        decoration: const InputDecoration(
+                          errorBorder: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: Colors.grey, width: 0.3)),
+                          focusedBorder: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: Colors.grey, width: 0.3)),
+                          enabledBorder: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: Colors.grey, width: 0.3)),
+                          hintText: 'Email',
+                          labelText: 'Email',
+                          labelStyle:
+                              TextStyle(fontSize: 18, color: Colors.grey),
+                          prefixIcon:
+                              Icon(Icons.email_outlined, color: Colors.grey),
+                        ),
+                        validator: (value) {
+                          if (contactMethod == 'email' &&
+                              (value == null || value.isEmpty)) {
+                            return 'Please enter your email';
+                          }
+                          return null;
+                        },
+                      ),
+                      /* if (contactMethod == 'phone') */ const SizedBox(
+                          height: 20),
+                      // if (contactMethod == 'phone')
+                      TextFormField(
+                        controller: phoneController,
+                        keyboardType: TextInputType.phone,
+                        style: const TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.normal),
+                        enabled: true /* contactMethod == 'phone' */,
+                        decoration: const InputDecoration(
+                          errorBorder: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: Colors.grey, width: 0.3)),
+                          focusedBorder: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: Colors.grey, width: 0.3)),
+                          enabledBorder: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: Colors.grey, width: 0.3)),
+                          hintText: 'Mobile number',
+                          labelText: 'Mobile Number',
+                          labelStyle:
+                              TextStyle(fontSize: 18, color: Colors.grey),
+                          prefixIcon:
+                              Icon(Icons.phone_android, color: Colors.grey),
+                        ),
+                        validator: (value) {
+                          /* if (contactMethod == 'phone' &&
+                              (value == null || value.isEmpty)) {
+                            return 'Please enter your phone number';
+                          }
+                          return null; */
+                        },
+                      ),
+                    ],
+                  ),
+                  /*  TextFormField(
                     //focusNode: emailFocusNode,
                     controller: emailController,
                     style: const TextStyle(
                         fontSize: 18, fontWeight: FontWeight.normal),
                     //autofocus: false,
-                    enabled: true,
+                    enabled: emailEnabled,
                     decoration: const InputDecoration(
                       errorBorder: OutlineInputBorder(
                           borderSide:
@@ -165,9 +276,15 @@ class _RegisterForm extends State<RegisterForm> {
                       prefixIcon:
                           Icon(Icons.email_outlined, color: Colors.grey),
                     ),
+                    onChanged: (value) {
+                      setState(() {
+                        phoneEnabled = value.isEmpty;
+                      });
+                    },
                   ),
                   const SizedBox(height: 20),
                   TextFormField(
+                    enabled: phoneEnabled,
                     controller: phoneController,
                     style: const TextStyle(
                         fontSize: 18, fontWeight: FontWeight.normal),
@@ -188,7 +305,12 @@ class _RegisterForm extends State<RegisterForm> {
                       prefixIcon:
                           Icon(Icons.lock_open_rounded, color: Colors.grey),
                     ),
-                  ),
+                    onChanged: (value) {
+                      setState(() {
+                        emailEnabled = value.isEmpty;
+                      });
+                    },
+                  ), */
                   const SizedBox(height: 20),
                   TextFormField(
                     controller: passController,
@@ -239,8 +361,7 @@ class _RegisterForm extends State<RegisterForm> {
                       hintText: 'Address',
                       labelText: 'Address',
                       labelStyle: TextStyle(fontSize: 18, color: Colors.grey),
-                      prefixIcon:
-                          Icon(Icons.lock_open_rounded, color: Colors.grey),
+                      prefixIcon: Icon(Icons.location_on, color: Colors.grey),
                     ),
                   ),
                   const SizedBox(height: 50),
@@ -279,7 +400,7 @@ class _RegisterForm extends State<RegisterForm> {
                           prov.setLoading(false);
                           if (result == -1) {
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                content: Text(AppConstants.loginErrorText)));
+                                content: Text(AppConstants.signupErrorText)));
                           } else if (result != 1) {
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                                 content: Text("This account is blocked!")));
@@ -303,6 +424,24 @@ class _RegisterForm extends State<RegisterForm> {
                         'Create Account',
                         style: TextStyle(fontSize: 25),
                       ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 5),
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                        ),
+                        backgroundColor: Appcolors.appThemeSecondaryColor,
+                        foregroundColor: actionButtonFgColor),
+                    onPressed: () async {
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                          builder: (ctx) => const LoginForm()));
+                    },
+                    child: const Text(
+                      'Go back to login',
+                      style: TextStyle(fontSize: 25),
                     ),
                   ),
 

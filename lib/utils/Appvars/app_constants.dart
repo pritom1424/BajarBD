@@ -1,4 +1,5 @@
 class AppConstants {
+  static const String companyName = "bajarBD";
   static const String logoLink = "assets/images/logo.png";
   static const String logoAltLink = "assets/images/logo_alt.png";
   static const String appPlaceHolder = "assets/images/placeholder.jpg";

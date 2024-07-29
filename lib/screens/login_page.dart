@@ -51,7 +51,8 @@ class _LoginFormState extends State<LoginForm> {
             ),
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Container(
+          child: AnimatedContainer(
+            duration: Duration(milliseconds: 300),
             height: Appvars.screenSize.height * 0.8,
             padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 50),
             child: Form(
@@ -72,6 +73,12 @@ class _LoginFormState extends State<LoginForm> {
                         height: Appvars.screenSize.height * 0.08,
                       ),
                     ),
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    "Welcome to login page!",
+                    style: Theme.of(context).textTheme.titleLarge,
+                    textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 10),
                   TextFormField(
@@ -154,21 +161,25 @@ class _LoginFormState extends State<LoginForm> {
                         if (_formInfoKey.currentState!.validate()) {
                           _formInfoKey.currentState!.save();
                           final prov = ref.watch(authProvider);
+                          ScaffoldMessenger.of(context).hideCurrentSnackBar();
                           prov.setLoading(true);
                           final result = await prov.Login(
                               emailController.text, passController.text);
 
                           if (result == -1) {
+                            prov.setLoading(false);
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                                 content: Text(AppConstants.loginErrorText)));
                           } else if (result != 1) {
+                            prov.setLoading(false);
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                                 content: Text("This account is blocked!")));
+                          } else {
+                            prov.setLoading(false);
+                            Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                    builder: (context) => const ProfilePage()));
                           }
-                          prov.setLoading(false);
-                          Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(
-                                  builder: (ctx) => const ProfilePage()));
 
                           /* if (result) {
                             Navigator.of(context).pushReplacement(
