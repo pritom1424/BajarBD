@@ -1,4 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter/cupertino.dart';
 import '../model/models/cart_model.dart';
 import '../provider/providers.dart';
 import '../root_page.dart';
@@ -196,67 +197,79 @@ class ProductDetailsScreen extends StatelessWidget {
                               children: [
                                 Expanded(
                                   child: ElevatedButton(
-                                      onPressed: () async {
-                                        if (!isdisableFavorite) {
-                                          isdisableFavorite = true;
-                                          bool didAdd = await ref2
-                                              .watch(wishlistPageProvider)
-                                              .addToWishList(snapshot.data!,
-                                                  imageLinks[0]);
+                                    onPressed: () async {
+                                      if (!isdisableFavorite) {
+                                        isdisableFavorite = true;
+                                        bool didAdd = await ref2
+                                            .watch(wishlistPageProvider)
+                                            .addToWishList(
+                                                snapshot.data!, imageLinks[0]);
 
-                                          if (context.mounted) {
-                                            ScaffoldMessenger.of(context)
-                                                .hideCurrentSnackBar();
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(SnackBar(
-                                                    content: Text((didAdd)
-                                                        ? AppConstants
-                                                            .wishlistAddMessage
-                                                        : AppConstants
-                                                            .wishlistAddFailedMessage)));
-                                          }
-                                        } else {
-                                          isdisableFavorite = false;
-                                          bool didAdd = await ref2
-                                              .watch(wishlistPageProvider)
-                                              .deleteFromWishlist(id);
-
-                                          if (context.mounted) {
-                                            ScaffoldMessenger.of(context)
-                                                .hideCurrentSnackBar();
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(SnackBar(
-                                                    content: Text((didAdd)
-                                                        ? AppConstants
-                                                            .wishlistRemoveMessage
-                                                        : AppConstants
-                                                            .wishlistRemoveMessageFailed)));
-                                          }
+                                        if (context.mounted) {
+                                          ScaffoldMessenger.of(context)
+                                              .hideCurrentSnackBar();
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(SnackBar(
+                                                  content: Text((didAdd)
+                                                      ? AppConstants
+                                                          .wishlistAddMessage
+                                                      : AppConstants
+                                                          .wishlistAddFailedMessage)));
                                         }
-                                      },
-                                      style: ElevatedButton.styleFrom(
-                                          backgroundColor:
-                                              Appcolors.appThemeSecondaryColor,
-                                          foregroundColor: Colors.white,
-                                          padding: const EdgeInsets.all(10),
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(10))
-                                          /* shape: RoundedRectangleBorder(
+                                      } else {
+                                        isdisableFavorite = false;
+                                        bool didAdd = await ref2
+                                            .watch(wishlistPageProvider)
+                                            .deleteFromWishlist(id);
+
+                                        if (context.mounted) {
+                                          ScaffoldMessenger.of(context)
+                                              .hideCurrentSnackBar();
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(SnackBar(
+                                                  content: Text((didAdd)
+                                                      ? AppConstants
+                                                          .wishlistRemoveMessage
+                                                      : AppConstants
+                                                          .wishlistRemoveMessageFailed)));
+                                        }
+                                      }
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                        backgroundColor:
+                                            Appcolors.appThemeSecondaryColor,
+                                        foregroundColor: Colors.white,
+                                        padding: const EdgeInsets.all(10),
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10))
+                                        /* shape: RoundedRectangleBorder(
                                           borderRadius: BorderRadius.only(
                                               topLeft: Radius.circular(50))) */
-                                          ),
-                                      child: FittedBox(
-                                        child: Text(
-                                          (isdisableFavorite)
-                                              ? "Added to Wishlist"
-                                              : "Add to Wishlist",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .titleMedium
-                                              ?.copyWith(color: Colors.white),
                                         ),
-                                      )),
+                                    child: Row(
+                                      children: [
+                                        Icon((isdisableFavorite)
+                                            ? Icons.favorite
+                                            : Icons.favorite_outline),
+                                        const SizedBox(
+                                          width: 10,
+                                        ),
+                                        Expanded(
+                                          child: Text(
+                                            (isdisableFavorite)
+                                                ? "Added To Wishlist"
+                                                : "Add To Wishlist",
+                                            maxLines: 1,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium
+                                                ?.copyWith(color: Colors.white),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                                 ),
                                 const SizedBox(
                                   width: 10,
@@ -304,11 +317,31 @@ class ProductDetailsScreen extends StatelessWidget {
                                           shape: RoundedRectangleBorder(
                                               borderRadius:
                                                   BorderRadius.circular(10))),
-                                      child: Text("Add to cart",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .titleMedium
-                                              ?.copyWith(color: Colors.white))),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Icon((isdisableToCart)
+                                              ? Icons.shopping_cart
+                                              : Icons.shopping_cart_outlined),
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          Expanded(
+                                            child: Text(
+                                                (isdisableToCart)
+                                                    ? "Added To Cart"
+                                                    : "Add To Cart",
+                                                maxLines: 1,
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyMedium
+                                                    ?.copyWith(
+                                                      color: Colors.white,
+                                                    )),
+                                          ),
+                                        ],
+                                      )),
                                 )
                               ],
                             ),

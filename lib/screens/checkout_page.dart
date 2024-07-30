@@ -1,3 +1,8 @@
+import 'package:bajarbd/model/models/shipping_address_model.dart';
+import 'package:bajarbd/utils/Colors/appcolors.dart';
+import 'package:bajarbd/utils/db/user_credential.dart';
+import 'package:bajarbd/widgets/checkout/ship_address_form.dart';
+
 import '../model/models/cart_model.dart';
 import '../provider/providers.dart';
 import '../utils/Appvars/appvars.dart';
@@ -19,21 +24,10 @@ class CheckoutPage extends StatefulWidget {
 }
 
 class _CheckoutPageState extends State<CheckoutPage> {
-  final fullNameController = TextEditingController();
-  final mobileController = TextEditingController();
-  final fulladdressController = TextEditingController();
-  @override
-  void dispose() {
-    fullNameController.dispose();
-    mobileController.dispose();
-    fulladdressController.dispose();
-    // TODO: implement dispose
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     double discount = 0.0, shipping = 0.0;
+    ShippingAddressModel? sModel;
 
     return Scaffold(
       appBar: AppBar(
@@ -200,7 +194,11 @@ class _CheckoutPageState extends State<CheckoutPage> {
                 ),
               ),
               const SizedBox(height: 20),
-              const Text('Payment Method', style: TextStyle(fontSize: 16)),
+              Text(
+                'Payment Method',
+                style: Theme.of(context).textTheme.bodyLarge,
+                textAlign: TextAlign.center,
+              ),
               const SizedBox(height: 10),
               Row(
                 children: [
@@ -261,70 +259,135 @@ class _CheckoutPageState extends State<CheckoutPage> {
                 ],
               ),
               const SizedBox(height: 20),
-              const Text('Personal Info', style: TextStyle(fontSize: 16)),
-              const SizedBox(height: 10),
-              TextField(
-                controller: fullNameController,
-                style: const TextStyle(
-                    fontSize: 18, fontWeight: FontWeight.normal),
-                //autofocus: false,
-                enabled: true,
-                decoration: const InputDecoration(
-                  errorBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey, width: 0.3)),
-                  focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey, width: 0.3)),
-                  enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey, width: 0.3)),
-                  hintText: 'Full Name',
-                  labelText: 'Full Name',
-                  labelStyle: TextStyle(
-                      fontSize: 15,
-                      color: Colors.grey,
-                      fontWeight: FontWeight.normal),
-                  hintStyle: TextStyle(
-                      fontSize: 15,
-                      color: Colors.grey,
-                      fontWeight: FontWeight.normal),
-                  prefixIcon: Icon(
-                    Icons.person,
-                    color: Colors.grey,
-                    size: 20,
+              Card(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 5),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        'Billing Info',
+                        style: Theme.of(context).textTheme.bodyLarge,
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 20),
+                      Container(
+                        child: Column(
+                          children: [
+                            Text("Name will be here"),
+                            Text("Mobile number will be here")
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
-              const SizedBox(height: 10),
-              TextField(
-                controller: mobileController,
-                style: const TextStyle(
-                    fontSize: 18, fontWeight: FontWeight.normal),
-                //autofocus: false,
-                keyboardType: TextInputType.phone,
-                enabled: true,
-                decoration: const InputDecoration(
-                  errorBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey, width: 0.3)),
-                  focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey, width: 0.3)),
-                  enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey, width: 0.3)),
-                  hintText: 'Mobile Number',
-                  labelText: 'Mobile Number',
-                  labelStyle: TextStyle(
-                      fontSize: 15,
-                      color: Colors.grey,
-                      fontWeight: FontWeight.normal),
-                  hintStyle: TextStyle(
-                      fontSize: 15,
-                      color: Colors.grey,
-                      fontWeight: FontWeight.normal),
-                  prefixIcon: Icon(
-                    Icons.phone_android_rounded,
-                    color: Colors.grey,
-                    size: 20,
-                  ),
-                ),
-              ),
+              const SizedBox(height: 20),
+              Consumer(builder: (ctx, refAddressRead, ch) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    if (!refAddressRead.read(checkoutPageProvider).isEdit)
+                      FutureBuilder(
+                          future: refAddressRead
+                              .read(checkoutPageProvider)
+                              .getShippingAddress(UserCredential.userId!),
+                          builder: (ctx, snapGetAddreees) {
+                            if (snapGetAddreees.connectionState ==
+                                ConnectionState.waiting) {
+                              return SizedBox.shrink();
+                            }
+                            if (!snapGetAddreees.hasData) {
+                              refAddressRead
+                                  .read(checkoutPageProvider)
+                                  .setEdit(true);
+
+                              return ShippingAddressForm(
+                                  refCheck: refAddressRead);
+                            }
+
+                            sModel = snapGetAddreees.data!;
+                            return Card(
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 5),
+                                child: Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        Expanded(child: SizedBox()),
+                                        Expanded(
+                                          child: FittedBox(
+                                            child: Text(
+                                              'Shipping Info',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyLarge,
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: IconButton(
+                                              onPressed: () {
+                                                refAddressRead
+                                                    .watch(checkoutPageProvider)
+                                                    .setEdit(true);
+                                              },
+                                              icon: Icon(Icons.edit)),
+                                        )
+                                      ],
+                                    ),
+                                    const SizedBox(height: 10),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          "${snapGetAddreees.data!.addressLineOne}",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontStyle: FontStyle.italic),
+                                        ),
+                                      ],
+                                    ),
+                                    Text(
+                                      "${snapGetAddreees.data!.postOffice},${snapGetAddreees.data!.thana}",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontStyle: FontStyle.italic),
+                                    ),
+                                    Text(
+                                      "${snapGetAddreees.data!.district}-${snapGetAddreees.data!.postalCode}",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontStyle: FontStyle.italic),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            );
+                          }),
+                    if (refAddressRead.read(checkoutPageProvider).isEdit)
+                      ShippingAddressForm(
+                        refCheck: refAddressRead,
+                        houseFlat: sModel?.addressLineOne,
+                        postOFFICE: sModel?.postOffice,
+                        thanaName: sModel?.thana,
+                        postalCodeName: sModel?.postalCode,
+                        districtName: sModel?.district,
+                      )
+                  ],
+                );
+              }),
               Consumer(
                 builder: (ctxCharge, refCharge, _) => Container(
                   padding: const EdgeInsets.only(left: 10),
@@ -401,37 +464,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
                         ),
                       ),
                     ],
-                  ),
-                ),
-              ),
-              TextField(
-                controller: fulladdressController,
-                style: const TextStyle(
-                    fontSize: 18, fontWeight: FontWeight.normal),
-                //autofocus: false,
-                maxLines: 1,
-                enabled: true,
-                decoration: const InputDecoration(
-                  errorBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey, width: 0.3)),
-                  focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey, width: 0.3)),
-                  enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey, width: 0.3)),
-                  hintText: 'Full Address',
-                  labelText: 'Full Address',
-                  labelStyle: TextStyle(
-                      fontSize: 15,
-                      color: Colors.grey,
-                      fontWeight: FontWeight.normal),
-                  hintStyle: TextStyle(
-                      fontSize: 15,
-                      color: Colors.grey,
-                      fontWeight: FontWeight.normal),
-                  prefixIcon: Icon(
-                    Icons.home,
-                    color: Colors.grey,
-                    size: 20,
                   ),
                 ),
               ),

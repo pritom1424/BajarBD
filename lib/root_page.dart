@@ -28,7 +28,7 @@ class RootPage extends ConsumerWidget {
     List<Widget?> navViews() {
       return [
         const ProductsOverviewScr(),
-        const CartScreen(),
+        CartScreen(ref),
         const ProductsWishlist(),
         const ProfilePage()
       ];
@@ -112,7 +112,7 @@ class RootPage extends ConsumerWidget {
             },
           ),
           drawer: const CustomDrawer(),
-          body: AppComponent().navViews()[ref
+          body: AppComponent().navViews(ref)[ref
               .read(rootPageProvider)
               .navPageIndex] //navViews()[ref.read(rootPageProvider).navPageIndex],
           ),

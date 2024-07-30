@@ -7,7 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class CartScreen extends ConsumerWidget {
-  const CartScreen({super.key});
+  final WidgetRef rootRef;
+  const CartScreen(this.rootRef, {super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -33,10 +34,15 @@ class CartScreen extends ConsumerWidget {
                 height: 5,
               ),
               if (snap.data != null && snap.data!.isNotEmpty)
-                TotalCartTile(
-                  total: ref.watch(cartPageProvider).calculateTotalCost(),
-                  cModels: snap.data!,
-                )
+                FutureBuilder(
+                    future: ref.read(authProvider).tryAutoLogin(),
+                    builder: (context, snapLogin) {
+                      return TotalCartTile(
+                        total: ref.watch(cartPageProvider).calculateTotalCost(),
+                        cModels: snap.data!,
+                        ref: rootRef,
+                      );
+                    })
             ]);
           }),
     );

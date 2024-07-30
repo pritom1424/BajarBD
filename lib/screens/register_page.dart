@@ -74,6 +74,7 @@ class _RegisterForm extends State<RegisterForm> {
         child: SingleChildScrollView(
           child: AnimatedContainer(
             duration: Duration(milliseconds: 300),
+            curve: Curves.linear,
             //   height: Appvars.screenSize.height * 0.8,
             padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 50),
             child: Form(

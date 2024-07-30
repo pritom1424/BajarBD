@@ -1,4 +1,5 @@
 import 'package:bajarbd/utils/helpers/custom_routes.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../screens/cart_screen.dart';
 import '../../screens/products_overview_scr.dart';
@@ -102,10 +103,10 @@ class AppComponent {
     );
   }
 
-  List<Widget?> navViews() {
+  List<Widget?> navViews(WidgetRef ref) {
     return [
       const ProductsOverviewScr(),
-      const CartScreen(),
+      CartScreen(ref),
       const ProductsWishlist(),
       const ProfilePage()
     ];
