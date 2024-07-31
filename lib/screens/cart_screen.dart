@@ -16,11 +16,11 @@ class CartScreen extends ConsumerWidget {
       body: FutureBuilder(
           future: ref.read(cartPageProvider).carts,
           builder: (ctx, snap) {
-            if (snap.connectionState == ConnectionState.waiting) {
+            /*   if (snap.connectionState == ConnectionState.waiting) {
               return SizedBox(
                   height: Appvars.screenSize.height * 0.6,
                   child: const Center(child: LoaderWidget()));
-            }
+            } */
             if (!snap.hasData || snap.data!.isEmpty) {
               return SizedBox(
                   height: Appvars.screenSize.height * 0.8,

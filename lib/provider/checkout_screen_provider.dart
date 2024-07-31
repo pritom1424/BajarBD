@@ -10,14 +10,24 @@ class CheckoutScreenProvider with ChangeNotifier {
   final _checkout_repos = CheckoutPageRepos();
   final _shipping_add_repos = ShippingAddressRespos();
   bool _isEdit = false;
+  String? _selectedShippingCharge;
   ShippingChargeModel? _shipping;
 
   ShippingChargeModel? get shipCharge {
     return _shipping;
   }
 
+  String? get selectedShippingCharge {
+    return _selectedShippingCharge;
+  }
+
   bool get isEdit {
     return _isEdit;
+  }
+
+  void setCurrentShipping(String? chargeName) {
+    _selectedShippingCharge = chargeName;
+    notifyListeners();
   }
 
   void setEdit(bool didEdit) {

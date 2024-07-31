@@ -1,7 +1,10 @@
 import 'package:bajarbd/model/models/shipping_address_model.dart';
+import 'package:bajarbd/model/models/shipping_charge_model.dart';
 import 'package:bajarbd/utils/Colors/appcolors.dart';
 import 'package:bajarbd/utils/db/user_credential.dart';
 import 'package:bajarbd/widgets/checkout/ship_address_form.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/widgets.dart';
 
 import '../model/models/cart_model.dart';
 import '../provider/providers.dart';
@@ -24,11 +27,22 @@ class CheckoutPage extends StatefulWidget {
 }
 
 class _CheckoutPageState extends State<CheckoutPage> {
+  double discount = 0.0, shipping = 0.0;
+  ShippingAddressModel? sModel;
+  String? chargeName;
+  void _handleRadioValueChange(
+      String? value, WidgetRef rf, ShippingChargeModel? shippingChargeModel) {
+    rf.watch(checkoutPageProvider).setCurrentShipping(value);
+    chargeName = rf.read(checkoutPageProvider).selectedShippingCharge;
+    rf.read(checkoutPageProvider).setShipping(shippingChargeModel);
+
+    shipping =
+        double.tryParse(rf.read(checkoutPageProvider).shipCharge!.amount) ??
+            0.0;
+  }
+
   @override
   Widget build(BuildContext context) {
-    double discount = 0.0, shipping = 0.0;
-    ShippingAddressModel? sModel;
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Checkout'),
@@ -53,24 +67,84 @@ class _CheckoutPageState extends State<CheckoutPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Column(
-                        children: List.generate(
-                      widget.carts.length,
-                      (ind) => ListTile(
-                        title: Text(
-                          widget.carts[ind].title,
-                          style: Theme.of(context).textTheme.bodyMedium,
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: List.generate(
+                            widget.carts.length,
+                            (index) => Padding(
+                              padding: EdgeInsets.symmetric(vertical: 5),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Container(
+                                    height: Appvars.screenSize.height * 0.05,
+                                    child: Image.network(
+                                      widget.carts[index].imageLink,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Container(
+                                        width: Appvars.screenSize.width * 0.5,
+                                        child: Text(
+                                          widget.carts[index].title,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyMedium,
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 1,
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 3),
+                                        child: Text(
+                                            "(${widget.carts[index].price} X ${widget.carts[index].amount})"),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
                         ),
-                        subtitle: Text(
-                            "(${widget.carts[ind].price} X ${widget.carts[ind].amount})"),
-                        trailing: Text(
-                          '${widget.carts[ind].total} Tk',
-                          style: Theme.of(context).textTheme.labelMedium,
-                        ),
-                      ),
-                    )),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: List.generate(
+                            widget.carts.length,
+                            (index) => Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 20),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    '${widget.carts[index].total} Tk',
+                                    maxLines: 1,
+                                    textAlign: TextAlign.end,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .labelMedium!
+                                        .copyWith(
+                                            fontWeight: FontWeight.normal),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
                     const Divider(
                       color: Colors.grey,
                       thickness: 0.3,
@@ -194,71 +268,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
                 ),
               ),
               const SizedBox(height: 20),
-              Text(
-                'Payment Method',
-                style: Theme.of(context).textTheme.bodyLarge,
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 10),
-              Row(
-                children: [
-                  Expanded(
-                    child: ElevatedButton.icon(
-                      onPressed: () async {
-                        var sslCred = SslCredential.instance;
-
-                        var sslCommerz = Sslcommerz(
-                          initializer: SSLCommerzInitialization(
-                            ipn_url: sslCred.ipn,
-                            store_id: sslCred.storeId,
-                            store_passwd: sslCred.storePass,
-                            total_amount: sslCred.totalAmount,
-                            currency: sslCred.currency,
-                            tran_id: sslCred.transactionId,
-                            product_category: sslCred.productCategory,
-                            sdkType: SSLCSdkType.TESTBOX,
-                          ),
-                        );
-
-                        try {
-                          var result = await sslCommerz.payNow();
-                          if (result is PlatformException) {
-                            print("Platform Error: ${result.status}");
-                          } else {
-                            print("Payment Result: $result");
-                          }
-                        } catch (e) {
-                          print("Error: $e");
-                        }
-                        // Handle credit card payment
-                      },
-                      icon: const Icon(Icons.credit_card),
-                      label: const Text('Online Payment'),
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8)),
-                        padding: const EdgeInsets.symmetric(vertical: 12),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: ElevatedButton.icon(
-                      onPressed: () {
-                        // Handle PayPal payment
-                      },
-                      icon: const Icon(Icons.account_balance_wallet),
-                      label: const Text('Cash on Delivary'),
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8)),
-                        padding: const EdgeInsets.symmetric(vertical: 12),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
               Card(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 5),
@@ -322,14 +331,13 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                       children: [
                                         Expanded(child: SizedBox()),
                                         Expanded(
-                                          child: FittedBox(
-                                            child: Text(
-                                              'Shipping Info',
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyLarge,
-                                              textAlign: TextAlign.center,
-                                            ),
+                                          flex: 2,
+                                          child: Text(
+                                            'Shipping Info',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyLarge,
+                                            textAlign: TextAlign.center,
                                           ),
                                         ),
                                         Expanded(
@@ -388,20 +396,72 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   ],
                 );
               }),
+              SizedBox(
+                height: 20,
+              ),
               Consumer(
                 builder: (ctxCharge, refCharge, _) => Container(
                   padding: const EdgeInsets.only(left: 10),
-                  child: Row(
+                  child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Expanded(
+                      FittedBox(
                         child: Text(
                           "Shipping Charge",
-                          style: TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.bold),
+                          style: Theme.of(context).textTheme.bodyLarge,
                         ),
                       ),
-                      DropdownButtonHideUnderline(
+                      FutureBuilder(
+                          future: refCharge
+                              .read(checkoutPageProvider)
+                              .getShippingData(),
+                          builder: (ctx, snapShip) => (!snapShip.hasData)
+                              ? const SizedBox.shrink()
+                              : Row(
+                                  children: List.generate(
+                                    snapShip.data!.length,
+                                    (index) => Expanded(
+                                      child: RadioListTile<String>(
+                                          title: FittedBox(
+                                            child: Text(
+                                              snapShip.data![index]
+                                                  .shippingChargeName,
+                                              maxLines: 1,
+                                            ),
+                                          ),
+                                          value: snapShip
+                                              .data![index].shippingChargeName,
+                                          groupValue: chargeName,
+                                          onChanged: (val) {
+                                            _handleRadioValueChange(
+                                                val,
+                                                refCharge,
+                                                snapShip.data![index]);
+                                          }),
+                                    ),
+                                  ),
+                                )
+
+                          /*  [
+                                  Expanded(
+                                    child: RadioListTile<String>(
+                                        title:  Text(snapShip.data![index]
+                                                  .shippingChargeName),
+                                        value: 'email',
+                                        groupValue: contactMethod,
+                                        onChanged: _handleRadioValueChange),
+                                  ),
+                                  Expanded(
+                                    child: RadioListTile<String>(
+                                        title: const Text('Phone'),
+                                        value: 'phone',
+                                        groupValue: contactMethod,
+                                        onChanged: _handleRadioValueChange),
+                                  ),
+                                ], */
+                          ),
+
+                      /*  DropdownButtonHideUnderline(
                         child: Expanded(
                           flex: 2,
                           child: Container(
@@ -462,11 +522,143 @@ class _CheckoutPageState extends State<CheckoutPage> {
                             ),
                           ),
                         ),
-                      ),
+                      ), */
                     ],
                   ),
                 ),
               ),
+              const SizedBox(height: 20),
+              Text(
+                'Payment Method',
+                style: Theme.of(context).textTheme.bodyLarge,
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 10),
+              Consumer(builder: (context, refPay, ch) {
+                return Container(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      ElevatedButton.icon(
+                        onPressed: () async {
+                          var sslCred = SslCredential.instance;
+
+                          var sslCommerz = Sslcommerz(
+                            initializer: SSLCommerzInitialization(
+                              ipn_url: sslCred.ipn,
+                              store_id: sslCred.storeId,
+                              store_passwd: sslCred.storePass,
+                              total_amount: sslCred.totalAmount,
+                              currency: sslCred.currency,
+                              tran_id: sslCred.transactionId,
+                              product_category: sslCred.productCategory,
+                              sdkType: SSLCSdkType.TESTBOX,
+                            ),
+                          );
+
+                          try {
+                            if (chargeName == null) {
+                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                  content: Text(
+                                      "Please select your shipping charge!")));
+                              refPay
+                                  .watch(checkoutPageProvider)
+                                  .setCurrentShipping(null);
+                              return null;
+                            }
+                            if (refPay.read(checkoutPageProvider).isEdit) {
+                              ScaffoldMessenger.of(context)
+                                  .hideCurrentSnackBar();
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                      content: Text(
+                                          "Please fill up shipping address!")));
+                              refPay.watch(checkoutPageProvider).setRebuild();
+                              return null;
+                            }
+                            if (chargeName == null) {
+                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                  content: Text(
+                                      "Please select your shipping charge!")));
+                              refPay
+                                  .watch(checkoutPageProvider)
+                                  .setCurrentShipping(null);
+                              return null;
+                            }
+                            var result = await sslCommerz.payNow();
+                            if (result is PlatformException) {
+                              print("Platform Error: ${result.status}");
+                            } else {
+                              print("Payment Result: $result");
+                            }
+                          } catch (e) {
+                            print("Error: $e");
+                          }
+                          // Handle credit card payment
+                        },
+                        icon: const Icon(Icons.credit_card),
+                        label: Text(
+                          'Online Payment',
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleSmall!
+                              .copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Appcolors.appThemeColor,
+                          foregroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5)),
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      ElevatedButton.icon(
+                        onPressed: () {
+                          if (chargeName == null) {
+                            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                content: Text(
+                                    "Please select your shipping charge!")));
+                            refPay
+                                .watch(checkoutPageProvider)
+                                .setCurrentShipping(null);
+                            return null;
+                          }
+                          if (refPay.read(checkoutPageProvider).isEdit) {
+                            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                content:
+                                    Text("Please fill up shipping address!")));
+                            refPay.watch(checkoutPageProvider).setRebuild();
+                            return null;
+                          }
+                          // Handle PayPal payment
+                        },
+                        icon: const Icon(Icons.account_balance_wallet),
+                        label: Text(
+                          'Cash on Delivary',
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleSmall!
+                              .copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Appcolors.appThemeSecondaryColor,
+                          foregroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5)),
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }),
             ],
           ),
         ),

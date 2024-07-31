@@ -216,6 +216,19 @@ class _LoginFormState extends State<LoginForm> {
                       style: TextStyle(fontSize: 25),
                     ),
                   ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Consumer(
+                      builder: (ctx, refload, child) =>
+                          (refload.watch(authProvider).isLoading)
+                              ? Center(
+                                  child: CircularProgressIndicator(
+                                    color: Appcolors.appThemeColorDark,
+                                  ),
+                                )
+                              : SizedBox.shrink())
+
                   /* const SizedBox(
                     height: 20,
                   ),

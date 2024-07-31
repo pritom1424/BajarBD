@@ -102,7 +102,7 @@ class _ShippingAddressFormState extends State<ShippingAddressForm> {
             controller: postOfficeController,
             style: const TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
             //autofocus: false,
-            keyboardType: TextInputType.phone,
+
             enabled: true,
             decoration: const InputDecoration(
               errorBorder: OutlineInputBorder(

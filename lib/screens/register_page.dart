@@ -25,7 +25,7 @@ class _RegisterForm extends State<RegisterForm> {
   TextEditingController firstNameController = TextEditingController();
   TextEditingController lastNameController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
-  TextEditingController addressController = TextEditingController();
+  TextEditingController confirmPasswordController = TextEditingController();
 
   Color actionButtonBgColor = const Color.fromARGB(255, 68, 156, 204);
   Color actionButtonFgColor = Colors.white;
@@ -33,17 +33,6 @@ class _RegisterForm extends State<RegisterForm> {
 
   bool emailEnabled = true;
   bool phoneEnabled = true;
-  String contactMethod = 'email';
-  void _handleRadioValueChange(String? value) {
-    setState(() {
-      contactMethod = value!;
-      if (contactMethod == 'email') {
-        phoneController.clear();
-      } else {
-        emailController.clear();
-      }
-    });
-  }
 
   @override
   void initState() {
@@ -129,6 +118,10 @@ class _RegisterForm extends State<RegisterForm> {
                       if (value != null && value == "") {
                         return "Please enter a valid first name";
                       }
+                      final regex = RegExp(r'^[a-zA-Z]+$');
+                      if (!regex.hasMatch(value!)) {
+                        return "First name must contain only letters";
+                      }
                       return null;
                     },
                   ),
@@ -158,6 +151,10 @@ class _RegisterForm extends State<RegisterForm> {
                     validator: (value) {
                       if (value != null && value == "") {
                         return "Please enter a valid last name";
+                      }
+                      final regex = RegExp(r'^[a-zA-Z]+$');
+                      if (!regex.hasMatch(value!)) {
+                        return "Last name must contain only letters";
                       }
                       return null;
                     },
@@ -211,9 +208,13 @@ class _RegisterForm extends State<RegisterForm> {
                               Icon(Icons.email_outlined, color: Colors.grey),
                         ),
                         validator: (value) {
-                          if (contactMethod == 'email' &&
-                              (value == null || value.isEmpty)) {
+                          if (value == null || value.isEmpty) {
                             return 'Please enter your email';
+                          }
+                          final regex = RegExp(
+                              r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
+                          if (!regex.hasMatch(value)) {
+                            return "Please enter a valid email address";
                           }
                           return null;
                         },
@@ -245,11 +246,23 @@ class _RegisterForm extends State<RegisterForm> {
                               Icon(Icons.phone_android, color: Colors.grey),
                         ),
                         validator: (value) {
-                          /* if (contactMethod == 'phone' &&
-                              (value == null || value.isEmpty)) {
-                            return 'Please enter your phone number';
+                          if (value != null) {
+                            final regex = RegExp(r'^\+?[1-9]\d{1,14}$');
+                            if (!regex.hasMatch(value)) {
+                              return "Please enter a valid mobile number";
+                              /* rejected numbers
+                                +0123456789 (starts with 0 after the +)
+                            0123456789 (starts with 0)
++12345678901234567 (more than 15 digits)
+12345678901234567 (more than 15 digits)
++ (only a + without digits)
++1 234 567 890 (contains spaces)
+123-456-7890 (contains dashes)
+123456789O (contains a letter 'O' instead of zero '0') */
+                            }
                           }
-                          return null; */
+
+                          return null;
                         },
                       ),
                     ],
@@ -340,15 +353,18 @@ class _RegisterForm extends State<RegisterForm> {
                       if (value != null && value == "") {
                         return AppConstants.passErrorText;
                       }
+
                       return null;
                     },
                   ),
                   const SizedBox(height: 20),
                   TextFormField(
-                    controller: addressController,
+                    controller: confirmPasswordController,
                     style: const TextStyle(
                         fontSize: 18, fontWeight: FontWeight.normal),
                     autofocus: false,
+                    obscureText: true,
+                    obscuringCharacter: "*",
                     decoration: const InputDecoration(
                       errorBorder: OutlineInputBorder(
                           borderSide:
@@ -359,11 +375,17 @@ class _RegisterForm extends State<RegisterForm> {
                       enabledBorder: OutlineInputBorder(
                           borderSide:
                               BorderSide(color: Colors.grey, width: 0.3)),
-                      hintText: 'Address',
-                      labelText: 'Address',
+                      hintText: 'Confirm Password',
+                      labelText: 'Confirm Password',
                       labelStyle: TextStyle(fontSize: 18, color: Colors.grey),
-                      prefixIcon: Icon(Icons.location_on, color: Colors.grey),
+                      prefixIcon: Icon(Icons.lock, color: Colors.grey),
                     ),
+                    validator: (value) {
+                      if (value != null && value != passController.text) {
+                        return "Password did not match!";
+                      }
+                      return null;
+                    },
                   ),
                   const SizedBox(height: 50),
                   Consumer(
@@ -397,7 +419,7 @@ class _RegisterForm extends State<RegisterForm> {
                               phoneController.text,
                               emailController.text,
                               passController.text,
-                              addressController.text);
+                              confirmPasswordController.text);
                           prov.setLoading(false);
                           if (result == -1) {
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -445,7 +467,18 @@ class _RegisterForm extends State<RegisterForm> {
                       style: TextStyle(fontSize: 25),
                     ),
                   ),
-
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Consumer(
+                      builder: (ctx, refload, child) =>
+                          (refload.read(authProvider).isLoading)
+                              ? Center(
+                                  child: CircularProgressIndicator(
+                                    color: Appcolors.appThemeColorDark,
+                                  ),
+                                )
+                              : SizedBox.shrink())
                   /* const SizedBox(
                     height: 20,
                   ),
