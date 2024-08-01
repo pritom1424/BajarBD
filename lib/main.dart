@@ -1,3 +1,6 @@
+import 'package:bajarbd/screens/order_success_page.dart';
+import 'package:bajarbd/screens/track_order.dart';
+
 import 'root_page.dart';
 import 'utils/Components/appcomponent.dart';
 import 'utils/db/db_helper.dart';
@@ -20,9 +23,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: AppComponent.theme,
-      home: const RootPage(),
-    );
+        title: 'Flutter Demo',
+        theme: AppComponent.theme,
+        home: TrackOrder() /* RootPage() */);
   }
 }

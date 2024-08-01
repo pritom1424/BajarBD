@@ -1,5 +1,7 @@
+import 'package:bajarbd/model/models/cod_model.dart';
 import 'package:bajarbd/model/models/shipping_address_model.dart';
 import 'package:bajarbd/model/models/shipping_charge_model.dart';
+import 'package:bajarbd/screens/order_success_page.dart';
 import 'package:bajarbd/utils/Colors/appcolors.dart';
 import 'package:bajarbd/utils/db/user_credential.dart';
 import 'package:bajarbd/widgets/checkout/ship_address_form.dart';
@@ -20,7 +22,14 @@ import 'package:flutter_sslcommerz/sslcommerz.dart';
 class CheckoutPage extends StatefulWidget {
   final List<CartModel> carts;
   final double totalCost;
-  const CheckoutPage({super.key, required this.carts, required this.totalCost});
+  final WidgetRef rootref;
+
+  const CheckoutPage({
+    super.key,
+    required this.carts,
+    required this.totalCost,
+    required this.rootref,
+  });
 
   @override
   State<CheckoutPage> createState() => _CheckoutPageState();
@@ -616,7 +625,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                       ),
                       const SizedBox(height: 10),
                       ElevatedButton.icon(
-                        onPressed: () {
+                        onPressed: () async {
                           if (chargeName == null) {
                             ScaffoldMessenger.of(context).hideCurrentSnackBar();
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -634,6 +643,55 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                     Text("Please fill up shipping address!")));
                             refPay.watch(checkoutPageProvider).setRebuild();
                             return null;
+                          }
+                          final payAmount =
+                              widget.totalCost + discount + shipping;
+
+                          List<Cart> carts = List.generate(
+                                  widget.carts.length,
+                                  (index) => Cart(
+                                      name: widget.carts[index].title,
+                                      qty: widget.carts[index].amount,
+                                      price: widget.carts[index].price,
+                                      subtotal: widget.carts[index].total,
+                                      image: widget.carts[index].imageLink
+                                          .split('/')
+                                          .last)) /* CartModel(
+                                  id: widget.carts[index].id,
+                                  title: widget.carts[index].title,
+                                  price: widget.carts[index].price,
+                                  amount: widget.carts[index].amount,
+                                  total: widget.carts[index].total,
+                                  imageLink: widget.carts[index].imageLink)) */
+                              ;
+
+                          CodModel cModel = CodModel(
+                              userId: UserCredential.userId!,
+                              paymentMethod: "COD",
+                              payableAmount: payAmount,
+                              carts: carts);
+                          final res = await refPay
+                              .read(checkoutPageProvider)
+                              .postOrder(cModel);
+
+                          /*    await ScaffoldMessenger.of(context)
+                              .showSnackBar(SnackBar(content: Text(res))); */
+                          if (res['isSuccess'] == true) {
+                            for (int i = 0; i < widget.carts.length; i++) {
+                              await refPay
+                                  .read(cartPageProvider)
+                                  .deleteCart(widget.carts[i].id);
+                            }
+                            // refPay.watch(checkoutPageProvider).setRebuild();
+                            Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                    builder: (ctx) => OrderSuccess(
+                                        ref: widget.rootref,
+                                        successMessage: res['message'])));
+                          } else {
+                            await ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text(res['message'])));
+                            refPay.watch(checkoutPageProvider).setRebuild();
                           }
                           // Handle PayPal payment
                         },

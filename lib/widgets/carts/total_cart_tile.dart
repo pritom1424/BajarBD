@@ -47,6 +47,7 @@ class TotalCartTile extends StatelessWidget {
                 } else {
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (ctx) => CheckoutPage(
+                            rootref: ref,
                             carts: cModels,
                             totalCost: total,
                           )));
