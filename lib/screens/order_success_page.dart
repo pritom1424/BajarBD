@@ -1,5 +1,6 @@
 import 'package:bajarbd/provider/providers.dart';
 import 'package:bajarbd/root_page.dart';
+import 'package:bajarbd/screens/track_order.dart';
 import 'package:bajarbd/utils/Appvars/appvars.dart';
 import 'package:bajarbd/utils/Colors/appcolors.dart';
 import 'package:flutter/cupertino.dart';
@@ -50,7 +51,12 @@ class OrderSuccess extends StatelessWidget {
                       ),
                 ),
                 TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                          builder: (ctx) => TrackOrder(
+                                rootRef: ref,
+                              )));
+                    },
                     child: Text("Track order",
                         style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                             fontWeight: FontWeight.normal,

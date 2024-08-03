@@ -1,3 +1,4 @@
+import 'package:bajarbd/screens/track_order.dart';
 import 'package:bajarbd/utils/Appvars/app_constants.dart';
 import 'package:bajarbd/utils/Appvars/appvars.dart';
 import 'package:bajarbd/utils/Colors/appcolors.dart';
@@ -88,6 +89,26 @@ class CustomDrawer extends StatelessWidget {
                 ),
                 ListTile(
                   leading: const Icon(
+                    Icons.track_changes,
+                  ),
+                  title: Text(
+                    "Track Order",
+                    style: Theme.of(context).textTheme.titleSmall!,
+                  ),
+                  onTap: () {
+                    //Navigator.of(context).pop();
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (ctx) => TrackOrder(
+                              rootRef: null,
+                            )));
+                  },
+                ),
+                const Divider(
+                  thickness: 0.3,
+                  color: Appcolors.appThemeSecondaryColor,
+                ),
+                ListTile(
+                  leading: const Icon(
                     Icons.category,
                   ),
                   title: Text(
@@ -129,20 +150,6 @@ class CustomDrawer extends StatelessWidget {
                 const Divider(
                   thickness: 0.3,
                   color: Appcolors.appThemeSecondaryColor,
-                ),
-                ListTile(
-                  leading: const Icon(
-                    Icons.exit_to_app,
-                  ),
-                  title: Text(
-                    "Logout",
-                    style: Theme.of(context).textTheme.titleSmall!,
-                  ),
-                  onTap: () {
-                    //Navigator.of(context).pop();
-                    /*  Navigator.of(context).pushReplacementNamed("/");
-            Provider.of<Auth>(context, listen: false).logout(); */
-                  },
                 ),
               ],
             ),

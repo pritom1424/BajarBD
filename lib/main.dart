@@ -23,8 +23,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Flutter Demo',
-        theme: AppComponent.theme,
-        home: TrackOrder() /* RootPage() */);
+        title: 'Flutter Demo', theme: AppComponent.theme, home: RootPage());
   }
 }
