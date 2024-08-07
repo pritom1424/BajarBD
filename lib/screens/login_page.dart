@@ -23,6 +23,7 @@ class _LoginFormState extends State<LoginForm> {
   Color actionButtonBgColor = const Color.fromARGB(255, 68, 156, 204);
   Color actionButtonFgColor = Colors.white;
   final _formInfoKey = GlobalKey<FormState>();
+  bool didHidePass = true;
 
   @override
   void initState() {
@@ -89,7 +90,7 @@ class _LoginFormState extends State<LoginForm> {
                         fontSize: 18, fontWeight: FontWeight.normal),
                     //autofocus: false,
                     enabled: true,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       errorBorder: OutlineInputBorder(
                           borderSide:
                               BorderSide(color: Colors.grey, width: 0.3)),
@@ -113,36 +114,51 @@ class _LoginFormState extends State<LoginForm> {
                     },
                   ),
                   const SizedBox(height: 20),
-                  TextFormField(
-                    controller: passController,
-                    style: const TextStyle(
-                        fontSize: 18, fontWeight: FontWeight.normal),
-                    autofocus: false,
-                    obscureText: true,
-                    obscuringCharacter: "*",
-                    decoration: const InputDecoration(
-                      errorBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.grey, width: 0.3)),
-                      focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.grey, width: 0.3)),
-                      enabledBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.grey, width: 0.3)),
-                      hintText: 'Password',
-                      labelText: 'Password',
-                      labelStyle: TextStyle(fontSize: 18, color: Colors.grey),
-                      prefixIcon:
-                          Icon(Icons.lock_open_rounded, color: Colors.grey),
-                    ),
-                    validator: (value) {
-                      if (value != null && value == "") {
-                        return AppConstants.passErrorText;
-                      }
-                      return null;
-                    },
-                  ),
+                  Consumer(builder: (context, refVisible, ch) {
+                    return TextFormField(
+                      controller: passController,
+                      style: const TextStyle(
+                          fontSize: 18, fontWeight: FontWeight.normal),
+                      autofocus: false,
+                      obscureText: didHidePass,
+                      obscuringCharacter: "*",
+                      decoration: InputDecoration(
+                        constraints: BoxConstraints(
+                            maxHeight: Appvars.screenSize.height * 0.07),
+                        errorBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Colors.grey, width: 0.3)),
+                        focusedBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Colors.grey, width: 0.3)),
+                        enabledBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Colors.grey, width: 0.3)),
+                        hintText: 'Password',
+                        labelText: 'Password',
+                        labelStyle: TextStyle(fontSize: 18, color: Colors.grey),
+                        prefixIcon:
+                            Icon(Icons.lock_open_rounded, color: Colors.grey),
+                        suffix: IconButton(
+                            onPressed: () {
+                              didHidePass = !didHidePass;
+                              refVisible.watch(authProvider).setRebuild();
+                            },
+                            icon: Icon(
+                              (didHidePass)
+                                  ? Icons.visibility_off
+                                  : Icons.visibility,
+                              color: Colors.grey,
+                            )),
+                      ),
+                      validator: (value) {
+                        if (value != null && value == "") {
+                          return AppConstants.passErrorText;
+                        }
+                        return null;
+                      },
+                    );
+                  }),
                   const SizedBox(height: 50),
                   Consumer(
                     builder: (ctx, ref, _) => ElevatedButton(

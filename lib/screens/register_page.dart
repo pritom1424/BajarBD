@@ -1,7 +1,5 @@
 import 'package:bajarbd/provider/providers.dart';
 import 'package:bajarbd/screens/login_page.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'profile_page.dart';
@@ -20,6 +18,8 @@ class RegisterForm extends StatefulWidget {
 }
 
 class _RegisterForm extends State<RegisterForm> {
+  bool hidePass = true;
+  bool confirmHidePass = true;
   TextEditingController emailController = TextEditingController();
   TextEditingController passController = TextEditingController();
   TextEditingController firstNameController = TextEditingController();
@@ -252,13 +252,13 @@ class _RegisterForm extends State<RegisterForm> {
                               return "Please enter a valid mobile number";
                               /* rejected numbers
                                 +0123456789 (starts with 0 after the +)
-                            0123456789 (starts with 0)
-+12345678901234567 (more than 15 digits)
-12345678901234567 (more than 15 digits)
-+ (only a + without digits)
-+1 234 567 890 (contains spaces)
-123-456-7890 (contains dashes)
-123456789O (contains a letter 'O' instead of zero '0') */
+                                0123456789 (starts with 0)
+                              +12345678901234567 (more than 15 digits)
+                              12345678901234567 (more than 15 digits)
+                              + (only a + without digits)
+                              +1 234 567 890 (contains spaces)
+                              123-456-7890 (contains dashes)
+                              123456789O (contains a letter 'O' instead of zero '0') */
                             }
                           }
 
@@ -326,67 +326,95 @@ class _RegisterForm extends State<RegisterForm> {
                     },
                   ), */
                   const SizedBox(height: 20),
-                  TextFormField(
-                    controller: passController,
-                    style: const TextStyle(
-                        fontSize: 18, fontWeight: FontWeight.normal),
-                    autofocus: false,
-                    obscureText: true,
-                    obscuringCharacter: "*",
-                    decoration: const InputDecoration(
-                      errorBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.grey, width: 0.3)),
-                      focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.grey, width: 0.3)),
-                      enabledBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.grey, width: 0.3)),
-                      hintText: 'Password',
-                      labelText: 'Password',
-                      labelStyle: TextStyle(fontSize: 18, color: Colors.grey),
-                      prefixIcon:
-                          Icon(Icons.lock_open_rounded, color: Colors.grey),
-                    ),
-                    validator: (value) {
-                      if (value != null && value == "") {
-                        return AppConstants.passErrorText;
-                      }
+                  Consumer(builder: (context, refPass, ch) {
+                    return TextFormField(
+                      controller: passController,
+                      style: const TextStyle(
+                          fontSize: 18, fontWeight: FontWeight.normal),
+                      autofocus: false,
+                      obscureText: hidePass,
+                      obscuringCharacter: "*",
+                      decoration: InputDecoration(
+                          constraints: BoxConstraints(
+                              maxHeight: Appvars.screenSize.height * 0.07),
+                          errorBorder: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: Colors.grey, width: 0.3)),
+                          focusedBorder: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: Colors.grey, width: 0.3)),
+                          enabledBorder: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: Colors.grey, width: 0.3)),
+                          hintText: 'Password',
+                          labelText: 'Password',
+                          labelStyle:
+                              TextStyle(fontSize: 18, color: Colors.grey),
+                          prefixIcon:
+                              Icon(Icons.lock_open_rounded, color: Colors.grey),
+                          suffix: IconButton(
+                              onPressed: () {
+                                hidePass = !hidePass;
+                                refPass.watch(authProvider).setRebuild();
+                              },
+                              icon: Icon(
+                                (hidePass)
+                                    ? Icons.visibility_off
+                                    : Icons.visibility,
+                                color: Colors.grey,
+                              ))),
+                      validator: (value) {
+                        if (value != null && value == "") {
+                          return AppConstants.passErrorText;
+                        }
 
-                      return null;
-                    },
-                  ),
+                        return null;
+                      },
+                    );
+                  }),
                   const SizedBox(height: 20),
-                  TextFormField(
-                    controller: confirmPasswordController,
-                    style: const TextStyle(
-                        fontSize: 18, fontWeight: FontWeight.normal),
-                    autofocus: false,
-                    obscureText: true,
-                    obscuringCharacter: "*",
-                    decoration: const InputDecoration(
-                      errorBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.grey, width: 0.3)),
-                      focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.grey, width: 0.3)),
-                      enabledBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.grey, width: 0.3)),
-                      hintText: 'Confirm Password',
-                      labelText: 'Confirm Password',
-                      labelStyle: TextStyle(fontSize: 18, color: Colors.grey),
-                      prefixIcon: Icon(Icons.lock, color: Colors.grey),
-                    ),
-                    validator: (value) {
-                      if (value != null && value != passController.text) {
-                        return "Password did not match!";
-                      }
-                      return null;
-                    },
-                  ),
+                  Consumer(builder: (context, refConfPass, ch) {
+                    return TextFormField(
+                      controller: confirmPasswordController,
+                      style: const TextStyle(
+                          fontSize: 18, fontWeight: FontWeight.normal),
+                      autofocus: false,
+                      obscureText: confirmHidePass,
+                      obscuringCharacter: "*",
+                      decoration: InputDecoration(
+                          errorBorder: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: Colors.grey, width: 0.3)),
+                          focusedBorder: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: Colors.grey, width: 0.3)),
+                          enabledBorder: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: Colors.grey, width: 0.3)),
+                          hintText: 'Confirm Password',
+                          labelText: 'Confirm Password',
+                          labelStyle:
+                              TextStyle(fontSize: 18, color: Colors.grey),
+                          prefixIcon: Icon(Icons.lock, color: Colors.grey),
+                          suffix: IconButton(
+                              onPressed: () {
+                                confirmHidePass = !confirmHidePass;
+                                refConfPass.watch(authProvider).setRebuild();
+                              },
+                              icon: Icon(
+                                (confirmHidePass)
+                                    ? Icons.visibility_off
+                                    : Icons.visibility,
+                                color: Colors.grey,
+                              ))),
+                      validator: (value) {
+                        if (value != null && value != passController.text) {
+                          return "Password did not match!";
+                        }
+                        return null;
+                      },
+                    );
+                  }),
                   const SizedBox(height: 50),
                   Consumer(
                     builder: (ctx, ref, _) => ElevatedButton(
