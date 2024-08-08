@@ -5,9 +5,7 @@ import 'package:bajarbd/screens/order_success_page.dart';
 import 'package:bajarbd/utils/Colors/appcolors.dart';
 import 'package:bajarbd/utils/db/user_credential.dart';
 import 'package:bajarbd/widgets/checkout/ship_address_form.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/widgets.dart';
-
+import 'package:bajarbd/widgets/loader_widget.dart';
 import '../model/models/cart_model.dart';
 import '../provider/providers.dart';
 import '../utils/Appvars/appvars.dart';
@@ -277,30 +275,61 @@ class _CheckoutPageState extends State<CheckoutPage> {
                 ),
               ),
               const SizedBox(height: 20),
-              Card(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 5),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        'Billing Info',
-                        style: Theme.of(context).textTheme.bodyLarge,
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 20),
-                      Container(
-                        child: Column(
-                          children: [
-                            Text("Name will be here"),
-                            Text("Mobile number will be here")
-                          ],
+              Consumer(builder: (context, refBill, ch) {
+                return Card(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 5),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          'Billing Info',
+                          style: Theme.of(context).textTheme.bodyLarge,
+                          textAlign: TextAlign.center,
                         ),
-                      ),
-                    ],
+                        const SizedBox(height: 20),
+                        FutureBuilder(
+                            future: refBill
+                                .read(checkoutPageProvider)
+                                .getCustomerInfo(),
+                            builder: (context, snapBill) {
+                              if (snapBill.connectionState ==
+                                  ConnectionState.waiting) {
+                                return Center(
+                                  child: LoaderWidget(),
+                                );
+                              }
+                              if (!snapBill.hasData) {
+                                return Text("No Billing info available");
+                              }
+                              return Container(
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      snapBill.data!.firstName +
+                                          " " +
+                                          snapBill.data!.lastName,
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                          fontStyle: FontStyle.italic),
+                                    ),
+                                    if (snapBill.data!.phone != null)
+                                      Text(
+                                        snapBill.data!.phone!,
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontStyle: FontStyle.italic),
+                                      )
+                                  ],
+                                ),
+                              );
+                            }),
+                      ],
+                    ),
                   ),
-                ),
-              ),
+                );
+              }),
               const SizedBox(height: 20),
               Consumer(builder: (ctx, refAddressRead, ch) {
                 return Column(
@@ -666,6 +695,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                               ;
 
                           CodModel cModel = CodModel(
+                              shipping_charge: shipping.toString(),
                               userId: UserCredential.userId!,
                               paymentMethod: "COD",
                               payableAmount: payAmount,

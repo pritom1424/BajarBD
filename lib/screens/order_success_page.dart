@@ -3,10 +3,9 @@ import 'package:bajarbd/root_page.dart';
 import 'package:bajarbd/screens/track_order.dart';
 import 'package:bajarbd/utils/Appvars/appvars.dart';
 import 'package:bajarbd/utils/Colors/appcolors.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class OrderSuccess extends StatelessWidget {

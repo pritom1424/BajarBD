@@ -1,6 +1,8 @@
 import 'package:bajarbd/model/data/cod_repos.dart';
+import 'package:bajarbd/model/data/customer_details_repos.dart';
 import 'package:bajarbd/model/data/shipping_address_repos.dart';
 import 'package:bajarbd/model/models/cod_model.dart';
+import 'package:bajarbd/model/models/customer_details.dart';
 import 'package:bajarbd/model/models/shipping_address_model.dart';
 import 'package:bajarbd/utils/db/user_credential.dart';
 
@@ -11,6 +13,7 @@ import 'package:flutter/material.dart';
 class CheckoutScreenProvider with ChangeNotifier {
   final _checkout_repos = CheckoutPageRepos();
   final _shipping_add_repos = ShippingAddressRespos();
+  final _customer_details_repo = CustomerDetailsRepos();
   final _codRepos = CodRepos();
   bool _isEdit = false;
   String? _selectedShippingCharge;
@@ -67,6 +70,15 @@ class CheckoutScreenProvider with ChangeNotifier {
 
   Future<Map<String, dynamic>> postOrder(CodModel cdModel) async {
     final res = _codRepos.postCodOrder(cdModel);
+    return res;
+  }
+
+  Future<CustomerDetails?> getCustomerInfo() async {
+    if (UserCredential.userId == null) {
+      return null;
+    }
+    final res =
+        _customer_details_repo.getCustomerDetails(UserCredential.userId!);
     return res;
   }
 }
