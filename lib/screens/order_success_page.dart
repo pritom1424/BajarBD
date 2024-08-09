@@ -1,8 +1,8 @@
-import 'package:bajarbd/provider/providers.dart';
-import 'package:bajarbd/root_page.dart';
-import 'package:bajarbd/screens/track_order.dart';
-import 'package:bajarbd/utils/Appvars/appvars.dart';
-import 'package:bajarbd/utils/Colors/appcolors.dart';
+import '../provider/providers.dart';
+import '../root_page.dart';
+import 'track_order.dart';
+import '../utils/Appvars/appvars.dart';
+import '../utils/Colors/appcolors.dart';
 
 import 'package:flutter/material.dart';
 

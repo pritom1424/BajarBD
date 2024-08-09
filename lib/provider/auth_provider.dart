@@ -1,6 +1,6 @@
 import 'dart:async';
-import 'package:bajarbd/model/data/auth_repos.dart';
-import 'package:bajarbd/utils/db/user_credential.dart';
+import '../model/data/auth_repos.dart';
+import '../utils/db/user_credential.dart';
 
 import 'package:flutter/material.dart';
 

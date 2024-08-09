@@ -1,6 +1,6 @@
-import 'package:bajarbd/model/models/shipping_address_model.dart';
-import 'package:bajarbd/utils/Appvars/api_links.dart';
-import 'package:bajarbd/utils/Appvars/app_constants.dart';
+import '../models/shipping_address_model.dart';
+import '../../utils/Appvars/api_links.dart';
+import '../../utils/Appvars/app_constants.dart';
 import 'package:http/http.dart' as http;
 
 class ShippingAddressRespos {

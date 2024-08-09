@@ -1,5 +1,5 @@
-import 'package:bajarbd/screens/order_success_page.dart';
-import 'package:bajarbd/screens/track_order.dart';
+import 'screens/order_success_page.dart';
+import 'screens/track_order.dart';
 
 import 'root_page.dart';
 import 'utils/Components/appcomponent.dart';

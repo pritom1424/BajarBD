@@ -1,10 +1,10 @@
-import 'package:bajarbd/model/data/cod_repos.dart';
-import 'package:bajarbd/model/data/customer_details_repos.dart';
-import 'package:bajarbd/model/data/shipping_address_repos.dart';
-import 'package:bajarbd/model/models/cod_model.dart';
-import 'package:bajarbd/model/models/customer_details.dart';
-import 'package:bajarbd/model/models/shipping_address_model.dart';
-import 'package:bajarbd/utils/db/user_credential.dart';
+import '../model/data/cod_repos.dart';
+import '../model/data/customer_details_repos.dart';
+import '../model/data/shipping_address_repos.dart';
+import '../model/models/cod_model.dart';
+import '../model/models/customer_details.dart';
+import '../model/models/shipping_address_model.dart';
+import '../utils/db/user_credential.dart';
 
 import '../model/data/checkout_page_repos.dart';
 import '../model/models/shipping_charge_model.dart';

@@ -1,10 +1,10 @@
 import 'dart:convert';
 
-import 'package:bajarbd/model/models/cod_model.dart';
-import 'package:bajarbd/model/models/customer_details.dart';
+import '../models/cod_model.dart';
+import '../models/customer_details.dart';
 
-import 'package:bajarbd/utils/Appvars/api_links.dart';
-import 'package:bajarbd/utils/Appvars/app_constants.dart';
+import '../../utils/Appvars/api_links.dart';
+import '../../utils/Appvars/app_constants.dart';
 import 'package:http/http.dart' as http;
 
 class CustomerDetailsRepos {

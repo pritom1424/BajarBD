@@ -1,4 +1,4 @@
-import 'package:bajarbd/utils/Appvars/app_constants.dart';
+import '../../utils/Appvars/app_constants.dart';
 
 import '../../utils/Colors/appcolors.dart';
 import 'package:flutter/material.dart';

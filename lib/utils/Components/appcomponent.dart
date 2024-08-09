@@ -1,4 +1,4 @@
-import 'package:bajarbd/utils/helpers/custom_routes.dart';
+import '../helpers/custom_routes.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../screens/cart_screen.dart';

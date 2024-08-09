@@ -1,4 +1,4 @@
-import 'package:bajarbd/screens/profile_page.dart';
+import 'profile_page.dart';
 
 import '../provider/providers.dart';
 import 'register_page.dart';

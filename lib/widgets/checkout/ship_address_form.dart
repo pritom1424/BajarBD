@@ -1,6 +1,6 @@
-import 'package:bajarbd/model/models/shipping_address_model.dart';
-import 'package:bajarbd/provider/providers.dart';
-import 'package:bajarbd/utils/Colors/appcolors.dart';
+import '../../model/models/shipping_address_model.dart';
+import '../../provider/providers.dart';
+import '../../utils/Colors/appcolors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

@@ -1,5 +1,5 @@
-import 'package:bajarbd/provider/providers.dart';
-import 'package:bajarbd/utils/db/user_credential.dart';
+import '../../provider/providers.dart';
+import '../../utils/db/user_credential.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../model/models/cart_model.dart';

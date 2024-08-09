@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:bajarbd/model/models/register_model.dart';
-import 'package:bajarbd/utils/Appvars/api_links.dart';
-import 'package:bajarbd/utils/db/user_credential.dart';
+import '../models/register_model.dart';
+import '../../utils/Appvars/api_links.dart';
+import '../../utils/db/user_credential.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:http/http.dart' as http;

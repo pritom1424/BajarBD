@@ -1,5 +1,5 @@
-import 'package:bajarbd/provider/providers.dart';
-import 'package:bajarbd/screens/login_page.dart';
+import '../provider/providers.dart';
+import 'login_page.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'profile_page.dart';

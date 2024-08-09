@@ -1,8 +1,8 @@
-import 'package:bajarbd/screens/track_order.dart';
-import 'package:bajarbd/utils/Appvars/app_constants.dart';
-import 'package:bajarbd/utils/Appvars/appvars.dart';
-import 'package:bajarbd/utils/Colors/appcolors.dart';
-import 'package:bajarbd/utils/db/user_credential.dart';
+import '../screens/track_order.dart';
+import '../utils/Appvars/app_constants.dart';
+import '../utils/Appvars/appvars.dart';
+import '../utils/Colors/appcolors.dart';
+import '../utils/db/user_credential.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
 

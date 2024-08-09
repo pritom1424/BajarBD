@@ -1,4 +1,4 @@
-import 'package:bajarbd/provider/auth_provider.dart';
+import 'auth_provider.dart';
 
 import 'brand_screen_provider.dart';
 import 'cart_screen_provider.dart';

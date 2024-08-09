@@ -1,10 +1,10 @@
-import '../provider/providers.dart';
-import '../utils/Appvars/appvars.dart';
-import '../widgets/carts/total_cart_tile.dart';
-import '../widgets/carts/cart_tile_list.dart';
-import '../widgets/loader_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../provider/providers.dart';
+import '../utils/Appvars/appvars.dart';
+import '../widgets/carts/cart_tile_list.dart';
+import '../widgets/carts/total_cart_tile.dart';
 
 class CartScreen extends ConsumerWidget {
   final WidgetRef rootRef;

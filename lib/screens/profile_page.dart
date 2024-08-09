@@ -1,7 +1,7 @@
-import 'package:bajarbd/utils/Appvars/app_constants.dart';
-import 'package:bajarbd/utils/Appvars/appvars.dart';
-import 'package:bajarbd/utils/db/user_credential.dart';
-import 'package:bajarbd/widgets/loader_widget.dart';
+import '../utils/Appvars/app_constants.dart';
+import '../utils/Appvars/appvars.dart';
+import '../utils/db/user_credential.dart';
+import '../widgets/loader_widget.dart';
 
 import '../provider/providers.dart';
 import 'login_page.dart';
