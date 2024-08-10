@@ -1,3 +1,6 @@
+import 'package:bajarbd/model/data/online_pay_repos.dart';
+import 'package:bajarbd/model/models/online_pay_model.dart';
+
 import '../model/data/cod_repos.dart';
 import '../model/data/customer_details_repos.dart';
 import '../model/data/shipping_address_repos.dart';
@@ -15,6 +18,7 @@ class CheckoutScreenProvider with ChangeNotifier {
   final _shipping_add_repos = ShippingAddressRespos();
   final _customer_details_repo = CustomerDetailsRepos();
   final _codRepos = CodRepos();
+  final _onlinePayRepos = OnlinePayRepos();
   bool _isEdit = false;
   String? _selectedShippingCharge;
   ShippingChargeModel? _shipping;
@@ -70,6 +74,11 @@ class CheckoutScreenProvider with ChangeNotifier {
 
   Future<Map<String, dynamic>> postOrder(CodModel cdModel) async {
     final res = _codRepos.postCodOrder(cdModel);
+    return res;
+  }
+
+  Future<Map<String, dynamic>> postOnlinePayOrder(OnlinePayModel oModel) async {
+    final res = _onlinePayRepos.postCodOrder(oModel);
     return res;
   }
 

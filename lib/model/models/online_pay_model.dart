@@ -4,48 +4,46 @@
 
 import 'dart:convert';
 
-CodModel codModelFromJson(String str) => CodModel.fromJson(json.decode(str));
+OnlinePayModel onlinePayModelFromJson(String str) =>
+    OnlinePayModel.fromJson(json.decode(str));
 
-String codModelToJson(CodModel data) => json.encode(data.toJson());
+String onlinePayModelToJson(OnlinePayModel data) => json.encode(data.toJson());
 
-class CodModel {
+class OnlinePayModel {
   int userId;
-  String? paymentMethod;
   double payableAmount;
-  List<Cart> carts;
+  List<CartOnline> carts;
   String shipping_charge;
 
-  CodModel(
+  OnlinePayModel(
       {required this.userId,
-      required this.paymentMethod,
       required this.payableAmount,
       required this.carts,
       required this.shipping_charge});
 
-  factory CodModel.fromJson(Map<String, dynamic> json) => CodModel(
+  factory OnlinePayModel.fromJson(Map<String, dynamic> json) => OnlinePayModel(
       userId: json["user_id"],
-      paymentMethod: json["payment_method"],
       payableAmount: json["payable_amount"],
-      carts: List<Cart>.from(json["carts"].map((x) => Cart.fromJson(x))),
+      carts: List<CartOnline>.from(
+          json["carts"].map((x) => CartOnline.fromJson(x))),
       shipping_charge: json["shipping_charge"]);
 
   Map<String, dynamic> toJson() => {
         "user_id": userId,
-        "payment_method": paymentMethod,
         "payable_amount": payableAmount,
         "carts": List<dynamic>.from(carts.map((x) => x.toJson())),
         "shipping_charge": shipping_charge
       };
 }
 
-class Cart {
+class CartOnline {
   String name;
   int qty;
   double price;
   double subtotal;
   String image;
 
-  Cart({
+  CartOnline({
     required this.name,
     required this.qty,
     required this.price,
@@ -53,7 +51,7 @@ class Cart {
     required this.image,
   });
 
-  factory Cart.fromJson(Map<String, dynamic> json) => Cart(
+  factory CartOnline.fromJson(Map<String, dynamic> json) => CartOnline(
         name: json["name"],
         qty: json["qty"],
         price: json["price"],

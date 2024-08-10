@@ -1,3 +1,6 @@
+import 'package:bajarbd/model/models/online_pay_model.dart';
+import 'package:flutter_sslcommerz/model/SSLCurrencyType.dart';
+
 import '../model/models/cod_model.dart';
 import '../model/models/shipping_address_model.dart';
 import '../model/models/shipping_charge_model.dart';
@@ -583,13 +586,13 @@ class _CheckoutPageState extends State<CheckoutPage> {
 
                           var sslCommerz = Sslcommerz(
                             initializer: SSLCommerzInitialization(
-                              ipn_url: sslCred.ipn,
                               store_id: sslCred.storeId,
                               store_passwd: sslCred.storePass,
-                              total_amount: sslCred.totalAmount,
-                              currency: sslCred.currency,
-                              tran_id: sslCred.transactionId,
-                              product_category: sslCred.productCategory,
+                              total_amount:
+                                  widget.totalCost + discount + shipping,
+                              currency: SSLCurrencyType.BDT,
+                              tran_id: sslCred.getTransId(),
+                              product_category: "",
                               sdkType: SSLCSdkType.TESTBOX,
                             ),
                           );
@@ -623,14 +626,75 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                   .setCurrentShipping(null);
                               return null;
                             }
+
                             var result = await sslCommerz.payNow();
+
+                            final payAmount =
+                                widget.totalCost + discount + shipping;
+
+                            List<CartOnline> carts = List.generate(
+                                widget.carts.length,
+                                (index) => CartOnline(
+                                    name: widget.carts[index].title,
+                                    qty: widget.carts[index].amount,
+                                    price: widget.carts[index].price,
+                                    subtotal: widget.carts[index].total,
+                                    image: widget.carts[index].imageLink
+                                        .split('/')
+                                        .last));
+                            OnlinePayModel cModel = OnlinePayModel(
+                                shipping_charge: shipping.toString(),
+                                userId: UserCredential.userId!,
+                                payableAmount: payAmount,
+                                carts: carts);
+                            final res = await refPay
+                                .read(checkoutPageProvider)
+                                .postOnlinePayOrder(cModel);
+
+                            print("Result online: $res");
+
                             if (result is PlatformException) {
+                              /* print(
+                                  "apiConnect: ${result.aPIConnect},'amount' ${result.amount},'bankTransId': ${result.bankTranId},baseFair: ${result.baseFair},cardBrand ${result.cardBrand} cardIssuer ${result.cardIssuer} cardIssuerCountry ${result.cardIssuerCountry} cardIssueCC ${result.cardIssuerCountryCode} 'cardno' ${result.cardNo} 'cardType' ${result.cardType} 'currencyAmount': ${result.currencyAmount} currency rate : ${result.currencyRate} curr type: ${result.currencyType} 'session key': ${result.sessionkey} status: ${result.status} storeAmount: ${result.storeAmount} trans date: ${result.tranDate} trans id:  ${result.tranId} val id: ${result.valId} val on ${result.validatedOn}"); */
                               print("Platform Error: ${result.status}");
+                              print("resultJson:${result.toJson()}");
                             } else {
+                              if (result.status == "VALID") {
+                                Navigator.of(context).pushReplacement(
+                                    MaterialPageRoute(
+                                        builder: (ctx) => OrderSuccess(
+                                            ref: widget.rootref,
+                                            successMessage:
+                                                "Online payment successful!")));
+                              } else {
+                                print("resultJson:${result.toJson()}");
+                                if (result.status == "FAILED") {
+                                  ScaffoldMessenger.of(context)
+                                      .hideCurrentSnackBar();
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                          content:
+                                              Text("Online Payment Failed!")));
+                                  refPay
+                                      .watch(checkoutPageProvider)
+                                      .setRebuild();
+                                } else {
+                                  ScaffoldMessenger.of(context)
+                                      .hideCurrentSnackBar();
+
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                          content: Text(
+                                              "Online Payment Canceled!")));
+                                  refPay
+                                      .watch(checkoutPageProvider)
+                                      .setRebuild();
+                                }
+                              }
                               print("Payment Result: $result");
                             }
                           } catch (e) {
-                            print("Error: $e");
+                            print("SSLError: $e");
                           }
                           // Handle credit card payment
                         },

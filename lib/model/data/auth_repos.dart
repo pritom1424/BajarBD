@@ -67,7 +67,6 @@ class AuthRepos {
       final response = await http.post(Uri.parse(ApiLinks.baseurl + endPoint),
           body: jsonEncode(data), headers: _headers);
       if (response.statusCode == 200) {
-        print("login success");
         final jsonResponse = registerResponseModelFromJson(response.body);
 
         final token = jsonResponse.accessToken;
@@ -86,7 +85,7 @@ class AuthRepos {
           'address': address,
           'password': password
         });
-        print("login success $token $userId $expiryDate");
+
         prefs.remove('userData');
 
         prefs.setString('userData', userData);
@@ -103,14 +102,13 @@ class AuthRepos {
   Future<bool> logout() async {
     UserCredential.reset();
 
-    print("cleared before");
     //notifyListeners();
     try {
       final prefs = await SharedPreferences.getInstance();
-      print("cleared");
+
       prefs.remove('userData');
       prefs.clear();
-      print("cleared");
+
       return true;
     } catch (e) {
       return false;
@@ -120,7 +118,6 @@ class AuthRepos {
   Future<bool> tryAutoLogin() async {
     final prefs = await SharedPreferences.getInstance();
     if (!prefs.containsKey("userData")) {
-      print("Data stored");
       return false;
     }
 
