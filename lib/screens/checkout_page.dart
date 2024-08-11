@@ -583,6 +583,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                       ElevatedButton.icon(
                         onPressed: () async {
                           var sslCred = SslCredential.instance;
+                          var customTransId = sslCred.getTransId();
 
                           var sslCommerz = Sslcommerz(
                             initializer: SSLCommerzInitialization(
@@ -591,7 +592,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                               total_amount:
                                   widget.totalCost + discount + shipping,
                               currency: SSLCurrencyType.BDT,
-                              tran_id: sslCred.getTransId(),
+                              tran_id: customTransId,
                               product_category: "",
                               sdkType: SSLCSdkType.TESTBOX,
                             ),
@@ -626,12 +627,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                   .setCurrentShipping(null);
                               return null;
                             }
-
-                            var result = await sslCommerz.payNow();
-
                             final payAmount =
                                 widget.totalCost + discount + shipping;
-
                             List<CartOnline> carts = List.generate(
                                 widget.carts.length,
                                 (index) => CartOnline(
@@ -646,12 +643,15 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                 shipping_charge: shipping.toString(),
                                 userId: UserCredential.userId!,
                                 payableAmount: payAmount,
-                                carts: carts);
+                                carts: carts,
+                                transaction_id: customTransId);
+                            print("custom transaction id $customTransId");
                             final res = await refPay
                                 .read(checkoutPageProvider)
                                 .postOnlinePayOrder(cModel);
 
                             print("Result online: $res");
+                            var result = await sslCommerz.payNow();
 
                             if (result is PlatformException) {
                               /* print(
@@ -660,6 +660,18 @@ class _CheckoutPageState extends State<CheckoutPage> {
                               print("resultJson:${result.toJson()}");
                             } else {
                               if (result.status == "VALID") {
+                                print("valid custom ${customTransId}");
+                                final resSuccess = await refPay
+                                    .read(checkoutPageProvider)
+                                    .onlinePaySuccess(
+                                        customTransId,
+                                        result.bankTranId!,
+                                        result.cardBrand ?? "not defined");
+                                for (int i = 0; i < widget.carts.length; i++) {
+                                  await refPay
+                                      .read(cartPageProvider)
+                                      .deleteCart(widget.carts[i].id);
+                                }
                                 Navigator.of(context).pushReplacement(
                                     MaterialPageRoute(
                                         builder: (ctx) => OrderSuccess(
@@ -667,8 +679,10 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                             successMessage:
                                                 "Online payment successful!")));
                               } else {
-                                print("resultJson:${result.toJson()}");
                                 if (result.status == "FAILED") {
+                                  await refPay
+                                      .read(checkoutPageProvider)
+                                      .onlinePayFail(customTransId);
                                   ScaffoldMessenger.of(context)
                                       .hideCurrentSnackBar();
                                   ScaffoldMessenger.of(context).showSnackBar(
@@ -679,6 +693,9 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                       .watch(checkoutPageProvider)
                                       .setRebuild();
                                 } else {
+                                  await refPay
+                                      .read(checkoutPageProvider)
+                                      .onlinePayFail(customTransId);
                                   ScaffoldMessenger.of(context)
                                       .hideCurrentSnackBar();
 

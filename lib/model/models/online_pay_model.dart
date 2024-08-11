@@ -14,25 +14,29 @@ class OnlinePayModel {
   double payableAmount;
   List<CartOnline> carts;
   String shipping_charge;
+  String? transaction_id;
 
   OnlinePayModel(
       {required this.userId,
       required this.payableAmount,
       required this.carts,
-      required this.shipping_charge});
+      required this.shipping_charge,
+      required this.transaction_id});
 
   factory OnlinePayModel.fromJson(Map<String, dynamic> json) => OnlinePayModel(
       userId: json["user_id"],
       payableAmount: json["payable_amount"],
       carts: List<CartOnline>.from(
           json["carts"].map((x) => CartOnline.fromJson(x))),
-      shipping_charge: json["shipping_charge"]);
+      shipping_charge: json["shipping_charge"],
+      transaction_id: json["transaction_id"]);
 
   Map<String, dynamic> toJson() => {
         "user_id": userId,
         "payable_amount": payableAmount,
         "carts": List<dynamic>.from(carts.map((x) => x.toJson())),
-        "shipping_charge": shipping_charge
+        "shipping_charge": shipping_charge,
+        "tnx_id": transaction_id
       };
 }
 

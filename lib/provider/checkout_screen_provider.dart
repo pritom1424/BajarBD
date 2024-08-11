@@ -78,7 +78,8 @@ class CheckoutScreenProvider with ChangeNotifier {
   }
 
   Future<Map<String, dynamic>> postOnlinePayOrder(OnlinePayModel oModel) async {
-    final res = _onlinePayRepos.postCodOrder(oModel);
+    final res = await _onlinePayRepos.postOnlineOrder(oModel);
+    print("custom transaction id $res");
     return res;
   }
 
@@ -89,5 +90,14 @@ class CheckoutScreenProvider with ChangeNotifier {
     final res =
         _customer_details_repo.getCustomerDetails(UserCredential.userId!);
     return res;
+  }
+
+  Future<void> onlinePaySuccess(
+      String transId, String paymentTransid, String paymentMethod) async {
+    await _onlinePayRepos.paySuccess(transId, paymentTransid, paymentMethod);
+  }
+
+  Future<void> onlinePayFail(String transId) async {
+    await _onlinePayRepos.payFail(transId);
   }
 }

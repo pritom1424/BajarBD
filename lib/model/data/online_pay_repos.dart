@@ -31,12 +31,14 @@ class OnlinePayRepos {
     }
   } */
 
-  Future<Map<String, dynamic>> postCodOrder(OnlinePayModel model) async {
+  Future<Map<String, dynamic>> postOnlineOrder(OnlinePayModel model) async {
     try {
       final url = ApiLinks.baseurl + endPoint;
+      print("online json model" + onlinePayModelToJson(model));
       final response = await http.post(Uri.parse(url),
           body: onlinePayModelToJson(model), headers: _headers);
       if (response.statusCode == AppConstants.api_success_StatusCode) {
+        print("success_message: ${jsonDecode(response.body)['success']}");
         return {
           "message": jsonDecode(response.body)['success'],
           "isSuccess": true
@@ -46,5 +48,30 @@ class OnlinePayRepos {
     } catch (e) {
       return {"message": "Order placement error!", "isSuccess": false};
     }
+  }
+
+  Future<void> paySuccess(
+      String transId, String paymentTransid, String pMethod) async {
+    String endPoint = "/success";
+    final url = ApiLinks.baseurl + endPoint;
+    final data = {
+      "tnx_id": transId,
+      "payment_transaction_id": paymentTransid,
+      "payment_method": pMethod
+    };
+    final response = await http.post(Uri.parse(url),
+        body: json.encode(data), headers: _headers);
+    print("response online pay ${response.body}");
+  }
+
+  Future<void> payFail(String transId) async {
+    String endPoint = "/fail-cancel";
+    final url = ApiLinks.baseurl + endPoint;
+    final data = {
+      "tnx_id": transId,
+    };
+    final response = await http.post(Uri.parse(url),
+        body: json.encode(data), headers: _headers);
+    print("response online pay fail ${response.body}");
   }
 }

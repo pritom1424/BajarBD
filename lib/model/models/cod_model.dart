@@ -15,26 +15,29 @@ class CodModel {
   List<Cart> carts;
   String shipping_charge;
 
-  CodModel(
-      {required this.userId,
-      required this.paymentMethod,
-      required this.payableAmount,
-      required this.carts,
-      required this.shipping_charge});
+  CodModel({
+    required this.userId,
+    required this.paymentMethod,
+    required this.payableAmount,
+    required this.carts,
+    required this.shipping_charge,
+  });
 
   factory CodModel.fromJson(Map<String, dynamic> json) => CodModel(
-      userId: json["user_id"],
-      paymentMethod: json["payment_method"],
-      payableAmount: json["payable_amount"],
-      carts: List<Cart>.from(json["carts"].map((x) => Cart.fromJson(x))),
-      shipping_charge: json["shipping_charge"]);
+        userId: json["user_id"],
+        paymentMethod: json["payment_method"],
+        payableAmount: json["payable_amount"],
+        carts: List<Cart>.from(json["carts"].map((x) => Cart.fromJson(x))),
+        shipping_charge: json["shipping_charge"],
+      );
 
   Map<String, dynamic> toJson() => {
         "user_id": userId,
         "payment_method": paymentMethod,
         "payable_amount": payableAmount,
         "carts": List<dynamic>.from(carts.map((x) => x.toJson())),
-        "shipping_charge": shipping_charge
+        "shipping_charge": shipping_charge,
+        //'tnx_id': '123'
       };
 }
 
