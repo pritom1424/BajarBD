@@ -1,3 +1,5 @@
+import 'package:bajarbd/screens/settings_scr.dart';
+
 import '../screens/track_order.dart';
 import '../utils/Appvars/app_constants.dart';
 import '../utils/Appvars/appvars.dart';
@@ -145,7 +147,10 @@ class CustomDrawer extends StatelessWidget {
                     "Settings",
                     style: Theme.of(context).textTheme.titleSmall!,
                   ),
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.of(context).push(
+                        MaterialPageRoute(builder: (ctx) => SettingsScreen()));
+                  },
                 ),
                 const Divider(
                   thickness: 0.3,

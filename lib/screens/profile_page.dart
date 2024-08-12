@@ -1,4 +1,4 @@
-import 'package:bajarbd/widgets/settings/settings_scr.dart';
+import 'package:bajarbd/screens/settings_scr.dart';
 import 'package:flutter/widgets.dart';
 
 import '../utils/Appvars/app_constants.dart';
