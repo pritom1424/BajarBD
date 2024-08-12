@@ -7,7 +7,22 @@ class CatProductItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ExpansionTile(
+    return Container(
+      margin: EdgeInsets.only(bottom: 30),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(
+            catName,
+            style: Theme.of(context).textTheme.bodyLarge,
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          CategoryProductGrid(),
+        ],
+      ),
+    ); /* ExpansionTile(
       title: Container(
         padding: const EdgeInsets.all(8),
         decoration: const BoxDecoration(
@@ -18,6 +33,6 @@ class CatProductItem extends StatelessWidget {
         ),
       ),
       children: const [CategoryProductGrid()],
-    );
+    ); */
   }
 }

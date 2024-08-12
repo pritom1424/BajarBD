@@ -12,14 +12,9 @@ class CategoryScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Categories"),
       ),
-      body: SizedBox(
-        height: Appvars.screenSize.height * 1,
-        child: const Row(
-          children: [
-            Expanded(child: SideScreen()),
-            Expanded(flex: 3, child: CatProductScreen())
-          ],
-        ),
+      body: SingleChildScrollView(
+        padding: EdgeInsets.all(8),
+        child: CatProductScreen(),
       ),
     );
   }

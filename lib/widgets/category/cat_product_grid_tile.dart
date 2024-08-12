@@ -1,3 +1,5 @@
+import 'package:bajarbd/screens/catwise_screen.dart';
+
 import '../../utils/Appvars/app_constants.dart';
 
 import '../../utils/Colors/appcolors.dart';
@@ -11,7 +13,12 @@ class CatProductGridTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (ctx) => CatWiseScreen(
+                  title: "product",
+                )));
+      },
       child: GridTile(
         footer: Container(
           color: Appcolors.appThemeColor,

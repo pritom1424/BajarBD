@@ -74,7 +74,7 @@ class RootPage extends ConsumerWidget {
             },
           ), */
             actions: [
-              PopupMenuButton(
+              /*  PopupMenuButton(
                   iconColor: Colors.white,
                   /*  onSelected: (filterOptions selectedVal) {
                   setState(() {
@@ -95,7 +95,7 @@ class RootPage extends ConsumerWidget {
                           child: Text("Show All"),
                           //   value: filterOptions.All,
                         ),
-                      ]),
+                      ]), */
               const Padding(
                 padding: EdgeInsets.all(5),
                 child: Icon(

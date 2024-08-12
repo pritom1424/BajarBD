@@ -15,12 +15,16 @@ class CatProductScreen extends StatelessWidget {
       "Eyewear",
       "Jewellery"
     ];
-    return ListView.builder(
-        itemCount: categories.length,
-        itemBuilder: (ctx, ind) {
-          return CatProductItem(
-            catName: categories[ind],
-          );
-        });
+    return Column(children: [
+      ListView.builder(
+          itemCount: categories.length,
+          physics: NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          itemBuilder: (ctx, ind) {
+            return CatProductItem(
+              catName: categories[ind],
+            );
+          }),
+    ]);
   }
 }

@@ -1,3 +1,6 @@
+import 'package:bajarbd/widgets/settings/settings_scr.dart';
+import 'package:flutter/widgets.dart';
+
 import '../utils/Appvars/app_constants.dart';
 import '../utils/Appvars/appvars.dart';
 import '../utils/db/user_credential.dart';
@@ -21,6 +24,16 @@ class _ProfilePageState extends State<ProfilePage> {
   TextEditingController addressControl = TextEditingController();
   bool? isEdit;
 
+  double inbetweenHeight = 10;
+
+  Widget trailing = Icon(
+    Icons.arrow_right,
+    size: 30,
+  );
+  double? listFontSize = 18;
+  Color? listFontColor = Colors.black;
+  Color? listTileColor = Colors.white;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -42,6 +55,7 @@ class _ProfilePageState extends State<ProfilePage> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
+        backgroundColor: Appcolors.offwhite,
         /*  appBar: AppBar(
             title: Text('Profile'),
             centerTitle: true,
@@ -63,8 +77,8 @@ class _ProfilePageState extends State<ProfilePage> {
                   return LoginForm();
                 }
 
-                return Padding(
-                  padding: const EdgeInsets.all(20.0),
+                return Container(
+                  padding: const EdgeInsets.symmetric(vertical: 5.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
@@ -86,7 +100,10 @@ class _ProfilePageState extends State<ProfilePage> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      const SizedBox(height: 10.0),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      /*  const SizedBox(height: 10.0),
                       Consumer(
                         builder: (ctx, refEdit, child) {
                           return Row(
@@ -140,22 +157,126 @@ class _ProfilePageState extends State<ProfilePage> {
                             ],
                           );
                         },
+                      ), */
+                      ListTile(
+                        tileColor: listTileColor,
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (ctx) => const HistoryPage()));
+                        },
+                        leading: Icon(Icons.history),
+                        title: Text(
+                          'Order History',
+                          style: TextStyle(
+                              fontSize: listFontSize, color: listFontColor),
+                          // style: TextStyle(fontSize: 18),
+                        ),
+                        trailing: trailing,
                       ),
-                      const SizedBox(height: 20.0),
+                      SizedBox(height: inbetweenHeight),
+                      ListTile(
+                          tileColor: listTileColor,
+                          onTap: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (ctx) => SettingsScreen()));
+                          },
+                          leading: Icon(Icons.settings),
+                          title: Text(
+                            'Settings',
+                            style: TextStyle(
+                                fontSize: listFontSize, color: listFontColor),
+                            //style: TextStyle(fontSize: 18),
+                          ),
+                          trailing: trailing),
+                      SizedBox(height: inbetweenHeight),
+                      ListTile(
+                        tileColor: listTileColor,
+                        onTap: () {
+                          ref.watch(authProvider).logout();
+                          Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                  builder: (context) => const LoginForm()));
+                        },
+                        leading: Icon(Icons.logout),
+                        title: Text(
+                          'Logout',
+                          style: TextStyle(
+                              fontSize: listFontSize, color: listFontColor),
+                        ),
+                        trailing: trailing,
+                      ),
+                      /*  const SizedBox(height: 20.0),
                       ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            elevation: 0.5,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10))),
                         onPressed: () {
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (ctx) => const HistoryPage()));
                         },
-                        child: const Text('Order History'),
+                        child: Row(
+                          children: [
+                            Icon(Icons.history),
+                            SizedBox(
+                              width: 20,
+                            ),
+                            const Text(
+                              'Order History',
+                              style: TextStyle(fontSize: 18),
+                            ),
+                          ],
+                        ),
                       ),
                       const SizedBox(height: 10.0),
                       ElevatedButton(
-                        onPressed: () {},
-                        child: const Text('Settings'),
+                        style: ElevatedButton.styleFrom(
+                            elevation: 0.5,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10))),
+                        onPressed: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (ctx) => SettingsScreen()));
+                        },
+                        child: Row(
+                          children: [
+                            Icon(Icons.settings),
+                            SizedBox(
+                              width: 20,
+                            ),
+                            const Text(
+                              'Settings',
+                              style: TextStyle(fontSize: 18),
+                            ),
+                          ],
+                        ),
                       ),
                       const SizedBox(height: 20.0),
                       ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            elevation: 0.5,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10))),
+                        onPressed: () {
+                          ref.watch(authProvider).logout();
+                          Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                  builder: (context) => const LoginForm()));
+                        },
+                        child: Row(
+                          children: [
+                            Icon(Icons.logout),
+                            SizedBox(
+                              width: 20,
+                            ),
+                            const Text(
+                              'Logout',
+                              style: TextStyle(fontSize: 18),
+                            ),
+                          ],
+                        ),
+                      ), */
+                      /*  ElevatedButton(
                         onPressed: () {
                           ref.watch(authProvider).logout();
                           Navigator.of(context).pushReplacement(
@@ -166,7 +287,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             backgroundColor: Appcolors.appThemeColor,
                             foregroundColor: Colors.white),
                         child: const Text('Logout'),
-                      ),
+                      ), */
                     ],
                   ),
                 );

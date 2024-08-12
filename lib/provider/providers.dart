@@ -1,3 +1,5 @@
+import 'package:bajarbd/provider/category_wise_provider.dart';
+
 import 'auth_provider.dart';
 
 import 'brand_screen_provider.dart';
@@ -35,3 +37,5 @@ final checkoutPageProvider = ChangeNotifierProvider<CheckoutScreenProvider>(
     (ref) => CheckoutScreenProvider());
 final authProvider =
     ChangeNotifierProvider<AuthProvider>((ref) => AuthProvider());
+final catWiseProvider =
+    ChangeNotifierProvider<CatWiseProvider>((ref) => CatWiseProvider());
