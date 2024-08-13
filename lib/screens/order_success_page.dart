@@ -1,3 +1,5 @@
+import 'package:bajarbd/screens/order_history.dart';
+
 import '../provider/providers.dart';
 import '../root_page.dart';
 import 'track_order.dart';
@@ -52,11 +54,13 @@ class OrderSuccess extends StatelessWidget {
                 TextButton(
                     onPressed: () {
                       Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: (ctx) => TrackOrder(
+                          builder: (ctx) =>
+                              HistoryPage() /* TrackOrder(
                                 rootRef: ref,
-                              )));
+                              ) */
+                          ));
                     },
-                    child: Text("Track order",
+                    child: Text("Check order",
                         style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                             fontWeight: FontWeight.normal,
                             decoration: TextDecoration.underline,

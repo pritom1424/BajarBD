@@ -1,3 +1,5 @@
+import 'package:bajarbd/utils/Appvars/app_constants.dart';
+
 import '../helpers/custom_routes.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -31,6 +33,7 @@ class AppComponent {
 
   static ThemeData get theme {
     return ThemeData(
+        fontFamily: AppConstants.defaultfontFamily,
         primaryColor: Appcolors.appThemeColor,
         primarySwatch: createMaterialColor(Appcolors.appThemeColor),
         pageTransitionsTheme: PageTransitionsTheme(builders: {
@@ -42,9 +45,14 @@ class AppComponent {
             .copyWith(secondary: Appcolors.appThemeSecondaryColor),
         visualDensity: VisualDensity.adaptivePlatformDensity,
         textTheme: const TextTheme(
-            displayLarge: TextStyle(color: Appcolors.appThemeColor),
+            displayLarge: TextStyle(
+              color: Appcolors.appThemeColor,
+            ),
             bodyLarge: TextStyle(
-                color: Colors.black, fontSize: 22, fontWeight: FontWeight.bold),
+              color: Colors.black,
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+            ),
             titleLarge: TextStyle(
               color: Colors.black,
               fontSize: 25,
@@ -57,14 +65,18 @@ class AppComponent {
               color: Colors.black,
               fontSize: 18,
             ),
-            labelMedium: TextStyle(color: Colors.black, fontSize: 15)),
+            labelMedium: TextStyle(
+              color: Colors.black,
+              fontSize: 15,
+            )),
         appBarTheme: const AppBarTheme(
             iconTheme: IconThemeData(color: Colors.white),
             color: Color(0xFFEE7843),
             titleTextStyle: TextStyle(
                 color: Colors.white,
                 fontSize: 18,
-                fontWeight: FontWeight.bold)),
+                fontWeight: FontWeight.bold,
+                fontFamily: AppConstants.defaultfontFamily)),
         buttonTheme: const ButtonThemeData(
           buttonColor: Color(0xFFEE7843),
           textTheme: ButtonTextTheme.primary,

@@ -21,9 +21,15 @@ class ProductDetailsScreen extends StatelessWidget {
   final int id;
   final bool isDisable;
   final bool isFav;
+  final bool? disableNavbar;
 
-  const ProductDetailsScreen(this.id, this.isDisable,
-      {super.key, required this.isFav});
+  const ProductDetailsScreen(
+    this.id,
+    this.isDisable, {
+    super.key,
+    required this.isFav,
+    this.disableNavbar,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -53,14 +59,16 @@ class ProductDetailsScreen extends StatelessWidget {
     return Consumer(
       builder: (ctx, ref, _) => Scaffold(
         appBar: AppBar(title: const Text("Product Details")),
-        bottomNavigationBar: NavBarWidget(
-          currentIndex: ref.read(rootPageProvider).navPageIndex,
-          onTap: (ind) {
-            AppMethods().onNavButtonTap(ind, ref);
-            Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (ctx) => const RootPage()));
-          },
-        ),
+        bottomNavigationBar: (disableNavbar == null || disableNavbar == false)
+            ? NavBarWidget(
+                currentIndex: ref.read(rootPageProvider).navPageIndex,
+                onTap: (ind) {
+                  AppMethods().onNavButtonTap(ind, ref);
+                  Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(builder: (ctx) => const RootPage()));
+                },
+              )
+            : null,
         body: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 10),
           child: FutureBuilder(

@@ -1,4 +1,6 @@
 import 'package:bajarbd/provider/category_wise_provider.dart';
+import 'package:bajarbd/provider/order_history_provider.dart';
+import 'package:bajarbd/provider/order_track_provider.dart';
 import 'package:bajarbd/provider/settings_provider.dart';
 
 import 'auth_provider.dart';
@@ -42,3 +44,7 @@ final catWiseProvider =
     ChangeNotifierProvider<CatWiseProvider>((ref) => CatWiseProvider());
 final settingsProvider =
     ChangeNotifierProvider<SettingsProvider>((ref) => SettingsProvider());
+final orderHistoryProvider = ChangeNotifierProvider<OrderHistoryProvider>(
+    (ref) => OrderHistoryProvider());
+final orderTrackProvider =
+    ChangeNotifierProvider<OrderTrackProvider>((ref) => OrderTrackProvider());

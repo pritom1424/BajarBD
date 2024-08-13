@@ -71,15 +71,21 @@ class CustomDrawer extends StatelessWidget {
             child: ListView(
               children: [
                 ListTile(
-                    leading: const Icon(
-                      Icons.payment,
-                    ),
+                    leading: Icon(Icons.payment,
+                        color: (UserCredential.userId == null)
+                            ? Colors.grey
+                            : Colors.black),
                     title: Text(
                       "Order History",
-                      style: Theme.of(context).textTheme.titleSmall!,
+                      style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                          color: (UserCredential.userId == null)
+                              ? Colors.grey
+                              : Colors.black),
                     ),
-                    onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                        builder: (ctx) => const HistoryPage()))
+                    onTap: () => (UserCredential.userId) == null
+                        ? null
+                        : Navigator.of(context).push(MaterialPageRoute(
+                            builder: (ctx) => const HistoryPage()))
                     //  Navigator.of(context).pushReplacementNamed(OrderScreen.routeName),
                     // Navigator.of(context).pushReplacement(CustomeRoute(
                     //   builder: (context) => OrderScreen(),
@@ -89,7 +95,7 @@ class CustomDrawer extends StatelessWidget {
                   thickness: 0.3,
                   color: Appcolors.appThemeSecondaryColor,
                 ),
-                ListTile(
+                /* ListTile(
                   leading: const Icon(
                     Icons.track_changes,
                   ),
@@ -108,7 +114,7 @@ class CustomDrawer extends StatelessWidget {
                 const Divider(
                   thickness: 0.3,
                   color: Appcolors.appThemeSecondaryColor,
-                ),
+                ), */
                 ListTile(
                   leading: const Icon(
                     Icons.category,
@@ -140,17 +146,23 @@ class CustomDrawer extends StatelessWidget {
                   color: Appcolors.appThemeSecondaryColor,
                 ),
                 ListTile(
-                  leading: const Icon(
-                    Icons.settings,
-                  ),
+                  leading: Icon(Icons.settings,
+                      color: (UserCredential.userId == null)
+                          ? Colors.grey
+                          : Colors.black),
                   title: Text(
                     "Settings",
-                    style: Theme.of(context).textTheme.titleSmall!,
+                    style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                        color: (UserCredential.userId == null)
+                            ? Colors.grey
+                            : Colors.black),
                   ),
-                  onTap: () {
-                    Navigator.of(context).push(
-                        MaterialPageRoute(builder: (ctx) => SettingsScreen()));
-                  },
+                  onTap: (UserCredential.userId) == null
+                      ? null
+                      : () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (ctx) => SettingsScreen()));
+                        },
                 ),
                 const Divider(
                   thickness: 0.3,

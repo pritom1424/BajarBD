@@ -12,9 +12,13 @@ class CatProductItem extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text(
-            catName,
-            style: Theme.of(context).textTheme.bodyLarge,
+          Container(
+            color: Colors.black12,
+            child: Text(
+              catName,
+              style: Theme.of(context).textTheme.bodyLarge,
+              textAlign: TextAlign.center,
+            ),
           ),
           SizedBox(
             height: 10,

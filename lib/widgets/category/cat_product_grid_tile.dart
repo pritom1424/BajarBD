@@ -1,4 +1,5 @@
 import 'package:bajarbd/screens/catwise_screen.dart';
+import 'package:flutter/widgets.dart';
 
 import '../../utils/Appvars/app_constants.dart';
 
@@ -20,7 +21,7 @@ class CatProductGridTile extends StatelessWidget {
                 )));
       },
       child: GridTile(
-        footer: Container(
+        /*   footer: Container(
           color: Appcolors.appThemeColor,
           child: Text(
             title,
@@ -29,26 +30,39 @@ class CatProductGridTile extends StatelessWidget {
               color: Colors.white,
             ),
           ),
-        ),
-        child: Image.network(
-          link,
-          loadingBuilder: (context, child, loadingProgress) =>
-              (loadingProgress == null)
-                  ? child
-                  : Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 5),
-                      child: Image.asset(
-                        AppConstants
-                            .appPlaceHolder /* "assets/images/dhakaprokash_logo.png" */,
-                      ),
-                    ),
-          errorBuilder: (context, error, stackTrace) => Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: const Center(child: CircularProgressIndicator()),
-            // Image.asset(
-            //   ApiConstant.imagePlaceHolder /* "assets/images/dhakaprokash_logo.png" */,
-            // ),
-          ),
+        ), */
+        child: Column(
+          children: [
+            Expanded(
+              child: Image.network(
+                link,
+                loadingBuilder: (context, child, loadingProgress) =>
+                    (loadingProgress == null)
+                        ? child
+                        : Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 5),
+                            child: Image.asset(
+                              AppConstants
+                                  .appPlaceHolder /* "assets/images/dhakaprokash_logo.png" */,
+                            ),
+                          ),
+                errorBuilder: (context, error, stackTrace) => Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: const Center(child: CircularProgressIndicator()),
+                  // Image.asset(
+                  //   ApiConstant.imagePlaceHolder /* "assets/images/dhakaprokash_logo.png" */,
+                  // ),
+                ),
+              ),
+            ),
+            Text(
+              title,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                color: Colors.black,
+              ),
+            ),
+          ],
         ),
       ),
     );

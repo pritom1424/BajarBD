@@ -6,7 +6,6 @@ import 'package:bajarbd/utils/db/user_credential.dart';
 import 'package:bajarbd/widgets/checkout/ship_address_form.dart';
 import 'package:bajarbd/widgets/settings/settings_address_form.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -16,9 +15,9 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen> {
   final _formKey = GlobalKey<FormState>();
-  String currentPassword = '';
+/*   String currentPassword = '';
   String newPassword = '';
-  String confirmPassword = '';
+  String confirmPassword = ''; */
 
   bool didHidePassNew = true;
   bool didHidePassConfirm = true;
@@ -285,12 +284,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                       children: [
                                         Expanded(child: SizedBox()),
                                         Expanded(
-                                          flex: 2,
+                                          flex: 3,
                                           child: Text(
                                             "Shipping Address",
+                                            textAlign: TextAlign.center,
                                             style: Theme.of(context)
                                                 .textTheme
-                                                .titleMedium
+                                                .titleLarge
                                                 ?.copyWith(
                                                     color: Appcolors
                                                         .appThemeColorDark),

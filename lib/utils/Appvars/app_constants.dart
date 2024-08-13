@@ -20,4 +20,5 @@ class AppConstants {
   static const passErrorText = "please enter a valid password";
   static const loginErrorText = "login failed! try again!";
   static const signupErrorText = "Account Creation failed! try again!";
+  static const defaultfontFamily = "Lato";
 }

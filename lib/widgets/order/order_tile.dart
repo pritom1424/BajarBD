@@ -1,20 +1,15 @@
+import 'package:bajarbd/model/models/order_history_model.dart';
+import 'package:bajarbd/screens/track_order.dart';
+import 'package:bajarbd/utils/Appvars/appvars.dart';
+import 'package:bajarbd/utils/Colors/appcolors.dart';
+import 'package:bajarbd/utils/app_methods.dart';
 import 'package:flutter/material.dart';
 
 class OrderTile extends StatelessWidget {
-  final String date, institute, address, items, logo;
-  final int price;
-  final double rating;
-  final orderState;
+  final OrderHistoryModel orderHistoryModel;
   const OrderTile({
     super.key,
-    required this.date,
-    required this.institute,
-    required this.address,
-    required this.items,
-    required this.logo,
-    required this.price,
-    required this.rating,
-    this.orderState,
+    required this.orderHistoryModel,
   });
 
   @override
@@ -26,42 +21,66 @@ class OrderTile extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(date, style: const TextStyle(fontWeight: FontWeight.bold)),
+            Text(AppMethods().orderDate(orderHistoryModel.orderDate),
+                style: const TextStyle(fontWeight: FontWeight.bold)),
             const SizedBox(height: 10),
             Row(
               children: [
-                const Icon(Icons.person),
+                const Icon(Icons.file_copy),
                 // Image.asset(logo, width: 40, height: 40),
                 const SizedBox(width: 10),
                 Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(institute,
-                          style: const TextStyle(fontWeight: FontWeight.normal)),
-                      Text(
-                        address,
-                        style: const TextStyle(
-                          fontSize: 12,
+                  child: Container(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Text("order no:${orderHistoryModel.orderNumber}",
+                            style:
+                                const TextStyle(fontWeight: FontWeight.normal)),
+                        Text(
+                          "transaction id: ${orderHistoryModel.tnxId}",
+                          style: const TextStyle(
+                            fontSize: 12,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-                const Spacer(),
-                Text('৳$price', style: const TextStyle(fontWeight: FontWeight.bold)),
+
+                Text('৳${orderHistoryModel.payableAmount}',
+                    style: const TextStyle(fontWeight: FontWeight.bold)),
               ],
             ),
             const SizedBox(height: 10),
-            Text(items),
-            const SizedBox(height: 10),
+            // Text(items),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(orderState, style: const TextStyle(color: Colors.red)),
                 Row(
+                  children: [
+                    Text("Payment Status: "),
+                    Text(
+                        (orderHistoryModel.paymentStatus == 0)
+                            ? "Unpaid"
+                            : "Paid",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: (orderHistoryModel.paymentStatus == 0)
+                                ? Colors.red
+                                : Colors.green)),
+                  ],
+                ),
+                /*  if (orderHistoryModel.paymentStatus == 0)
+                  TextButton(
+                      onPressed: () {},
+                      child: Text(
+                        "Paynow",
+                        style: Theme.of(context).textTheme.labelSmall,
+                      )) */
+                /* Row(
                   children: List.generate(5, (index) {
                     return Icon(
                       index < rating ? Icons.star : Icons.star_border,
@@ -69,7 +88,51 @@ class OrderTile extends StatelessWidget {
                       size: 20,
                     );
                   }),
+                ), */
+              ],
+            ),
+            const SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    Text("Order Status:"),
+                    Text(
+                        "${AppMethods().orderStatusChecker(orderHistoryModel.orderStatus ?? -1)}",
+                        style: const TextStyle(
+                            color: Colors.black, fontWeight: FontWeight.bold)),
+                  ],
                 ),
+                /* Row(
+                  children: List.generate(5, (index) {
+                    return Icon(
+                      index < rating ? Icons.star : Icons.star_border,
+                      color: Colors.orange,
+                      size: 20,
+                    );
+                  }),
+                ), */
+
+                ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                          builder: (ctx) => TrackOrder(
+                              orderNum: orderHistoryModel.orderNumber ?? "")));
+                    },
+                    style: ElevatedButton.styleFrom(
+                        padding: EdgeInsets.all(0),
+                        backgroundColor: Appcolors.appThemeColor,
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10))),
+                    child: Text(
+                      "Track",
+                      style: Theme.of(context)
+                          .textTheme
+                          .labelMedium
+                          ?.copyWith(color: Colors.white),
+                    ))
               ],
             ),
           ],

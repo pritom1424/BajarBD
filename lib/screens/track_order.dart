@@ -1,3 +1,10 @@
+import 'package:bajarbd/model/models/order_track_model.dart';
+import 'package:bajarbd/screens/product_details_screen.dart';
+import 'package:bajarbd/utils/app_methods.dart';
+import 'package:bajarbd/utils/db/user_credential.dart';
+import 'package:bajarbd/widgets/loader_widget.dart';
+import 'package:flutter/cupertino.dart';
+
 import '../provider/providers.dart';
 import '../root_page.dart';
 import '../utils/Appvars/app_constants.dart';
@@ -9,422 +16,440 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class TrackOrder extends StatelessWidget {
-  final WidgetRef? rootRef;
+  final String orderNum;
 
-  const TrackOrder({super.key, required this.rootRef});
+  const TrackOrder({super.key, required this.orderNum});
   @override
   Widget build(BuildContext context) {
+    Map<String, String> orderNames = {
+      "Order placed": "We have received your order!",
+      "Order confirmed": "Order has been confirmed successfully!",
+      "Order processing": "Order is processing!",
+      "Order picked": "Order is picked!",
+      "Order shipped": "Order has been shipped!",
+      "Order delivered": "Order has been delivered!",
+      "Order cancelled": "Order has been cancelled!",
+      "Order refunded": "Order has been refunded!",
+      "Order returned": "Order has been returned",
+    };
     return SafeArea(
       child: Scaffold(
-        appBar: (rootRef != null)
-            ? null
-            : AppBar(
-                automaticallyImplyLeading: true,
-                title: Text("Track Order"),
-              ),
+        appBar: AppBar(
+          automaticallyImplyLeading: true,
+          title: Text("Track Order"),
+        ),
+        backgroundColor: Appcolors.offwhite,
         /*   appBar: AppBar(
           title: Text('Order Confirmation'),
         ), */
         body: SingleChildScrollView(
           padding: EdgeInsets.symmetric(vertical: 0),
-          child: Container(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Container(
-                  color: Appcolors.appThemeColor,
-                  child: Image.asset(
-                    AppConstants.logoAltLink, // Replace with actual image URL
-                    height: Appvars.screenSize.height * 0.2,
+          child: Consumer(builder: (context, refTrackOrder, ch) {
+            return FutureBuilder(
+                future: refTrackOrder
+                    .read(orderTrackProvider)
+                    .getOrderTrack(orderNum),
+                builder: (context, snapTrackOrder) {
+                  if (snapTrackOrder.connectionState ==
+                      ConnectionState.waiting) {
+                    return SizedBox(
+                      height: Appvars.screenSize.height * 0.6,
+                      child: Center(
+                        child: LoaderWidget(),
+                      ),
+                    );
+                  }
+                  if (!snapTrackOrder.hasData) {
+                    return SizedBox(
+                      height: Appvars.screenSize.height,
+                      child: Center(
+                        child: Text("No order to track!"),
+                      ),
+                    );
+                  }
 
-                    width: double.infinity,
-                    fit: BoxFit.contain,
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Text(
-                        'Order ID: POU03161209',
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(height: 8),
-                      Row(
-                        children: [
-                          Text(
-                            'Estimated delivery today by 15:30.',
-                            style: TextStyle(color: Colors.grey),
+                  return Container(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Container(
+                          color: Appcolors.appThemeColor,
+                          padding: EdgeInsets.symmetric(horizontal: 25),
+                          child: Image.asset(
+                            AppConstants
+                                .logoAltLink, // Replace with actual image URL
+                            height: Appvars.screenSize.height * 0.2,
+
+                            width: double.infinity,
+                            fit: BoxFit.contain,
                           ),
-                          Spacer(),
-                          Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 12, vertical: 4),
-                            decoration: BoxDecoration(
-                              color: Colors.grey[200],
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: Text('IN PROGRESS'),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 16),
-                      Row(
-                        children: [
-                          Image.network(
-                            "https://ecom.szamantech.com/storage/product/product-108934.jpg", // Replace with actual image URL
-                            height: Appvars.screenSize.height * 0.1,
-                            //width: 60,
-                          ),
-                          /* SizedBox(width: 8),
-                          Image.network(
-                            'https://example.com/product2.jpg', // Replace with actual image URL
-                            height: 60,
-                            width: 60,
-                          ), */
-                        ],
-                      ),
-                      SizedBox(height: 16),
-                      /*  GestureDetector(
-                        onTap: () {
-                          // Navigate to order details page
-                        },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'VIEW ORDER DETAILS',
-                              style: TextStyle(color: Colors.blue),
-                            ),
-                            Icon(Icons.arrow_forward, color: Colors.blue),
-                          ],
                         ),
-                      ),
-                      Divider(height: 32), */
-                      Row(
-                        children: [
-                          Icon(Icons.email, color: Colors.grey),
-                          SizedBox(width: 8),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                        Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
-                              Text('An email confirmation has been sent to:'),
-                              Text(
-                                "test@gmail.com",
-                                style: Theme.of(context).textTheme.labelMedium,
-                              )
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    'Order Number: ${snapTrackOrder.data!.orderNumber}',
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  Spacer(),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        "Payment",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .labelMedium
+                                            ?.copyWith(
+                                                fontWeight: FontWeight.bold),
+                                      ),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      Container(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 12, vertical: 4),
+                                        decoration: BoxDecoration(
+                                          color: Colors.blue[200],
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                        child: Text(((snapTrackOrder
+                                                    .data!.paymentStatus ==
+                                                0)
+                                            ? "Unpaid"
+                                            : "Paid")),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 8),
+                              Row(
+                                children: [
+                                  Text(
+                                    'Transaction id: ${snapTrackOrder.data!.tnxId}',
+                                    style: TextStyle(color: Colors.grey),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 16),
+                              SizedBox(
+                                height: Appvars.screenSize.height * 0.15,
+                                child: FutureBuilder(
+                                    future: refTrackOrder
+                                        .read(wishlistPageProvider)
+                                        .getWishlist,
+                                    builder: (context, snapWishList) {
+                                      return ListView.builder(
+                                        scrollDirection: Axis.horizontal,
+                                        itemCount: snapTrackOrder
+                                            .data!.orderDetail.length,
+                                        itemBuilder: (ctx, ind) => InkWell(
+                                          onTap: () {
+                                            bool didDisableFav = (snapWishList
+                                                        .data !=
+                                                    null &&
+                                                snapWishList.data!.any((itm) =>
+                                                    itm.id ==
+                                                    snapTrackOrder.data!
+                                                        .orderDetail[ind].id));
+                                            Navigator.of(context).push(
+                                                MaterialPageRoute(
+                                                    builder: (ctx) =>
+                                                        ProductDetailsScreen(
+                                                            disableNavbar: true,
+                                                            snapTrackOrder
+                                                                .data!
+                                                                .orderDetail[
+                                                                    ind]
+                                                                .id,
+                                                            false,
+                                                            isFav:
+                                                                didDisableFav)));
+                                          },
+                                          child: Container(
+                                              width: Appvars.screenSize.width *
+                                                  0.2,
+                                              child: Column(
+                                                children: [
+                                                  Image.network(
+                                                    "https://ecom.szamantech.com/storage/product/${snapTrackOrder.data!.orderDetail[ind].image}", // Replace with actual image URL
+                                                    height: Appvars
+                                                            .screenSize.height *
+                                                        0.1,
+                                                    //width: 60,
+                                                  ),
+                                                  Text(
+                                                    snapTrackOrder
+                                                            .data!
+                                                            .orderDetail[ind]
+                                                            .productName ??
+                                                        "product",
+                                                    maxLines: 1,
+                                                    style:
+                                                        TextStyle(fontSize: 12),
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                  Row(
+                                                    children: [
+                                                      Text(
+                                                        "${snapTrackOrder.data!.orderDetail[ind].price}Tk",
+                                                        maxLines: 1,
+                                                        style: TextStyle(
+                                                            fontSize: 12),
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                      ),
+                                                      SizedBox(
+                                                        width: 5,
+                                                      ),
+                                                      Text(
+                                                        "(${snapTrackOrder.data!.orderDetail[ind].qty})",
+                                                        maxLines: 1,
+                                                        style: TextStyle(
+                                                            fontSize: 12),
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                      )
+                                                    ],
+                                                  )
+                                                ],
+                                              )),
+                                        ),
+                                      );
+                                    }),
+                              ),
+                              /* Row(
+                                children: [
+                                  Image.network(
+                                    "https://ecom.szamantech.com/storage/product/product-108934.jpg", // Replace with actual image URL
+                                    height: Appvars.screenSize.height * 0.1,
+                                    //width: 60,
+                                  ),
+                                  /* SizedBox(width: 8),
+                                  Image.network(
+                                    'https://example.com/product2.jpg', // Replace with actual image URL
+                                    height: 60,
+                                    width: 60,
+                                  ), */
+                                ],
+                              ), */
+                              SizedBox(height: 16),
+                              /*  GestureDetector(
+                                onTap: () {
+                                  // Navigate to order details page
+                                },
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      'VIEW ORDER DETAILS',
+                                      style: TextStyle(color: Colors.blue),
+                                    ),
+                                    Icon(Icons.arrow_forward, color: Colors.blue),
+                                  ],
+                                ),
+                              ),
+                              Divider(height: 32), */
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    "Payment Method:",
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                  SizedBox(
+                                    width: 5,
+                                  ),
+                                  Text("${snapTrackOrder.data!.paymentMethod}"),
+                                  Spacer(),
+                                  Text(
+                                    "Total",
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                  SizedBox(
+                                    width: 5,
+                                  ),
+                                  Text("${snapTrackOrder.data!.payableAmount}")
+                                ],
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Row(
+                                children: [
+                                  Icon(Icons.email, color: Colors.grey),
+                                  SizedBox(width: 8),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                          'An email confirmation has been sent to:'),
+                                      Text(
+                                        "test@gmail.com",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .labelMedium,
+                                      )
+                                    ],
+                                  ),
+                                ],
+                              ),
+
+                              /* Divider(height: 32),
+                              Row(
+                                children: [
+                                  Icon(Icons.card_giftcard, color: Colors.grey),
+                                  SizedBox(width: 8),
+                                  Text('Earn 18,800 Amber points with this purchase.'),
+                                ],
+                              ), */
+                              Divider(height: 32),
+                              Text('TRACK ORDER',
+                                  style:
+                                      Theme.of(context).textTheme.titleMedium),
+                              SizedBox(height: 16),
+                              Column(
+                                  children:
+                                      List.generate(orderNames.length, (index) {
+                                var restrictedList = [6, 7, 8, 9];
+                                if (restrictedList.indexOf(
+                                        snapTrackOrder.data!.orderStatus!) !=
+                                    -1) {
+                                  restrictedList.removeAt(
+                                      restrictedList.indexOf(
+                                          snapTrackOrder.data!.orderStatus!));
+                                }
+                                return trackList(snapTrackOrder, index,
+                                    orderNames, restrictedList);
+                              }))
+
+                              /*  Container(
+                                width: double.infinity,
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                                  children: [
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                                      children: [
+                                       
+                                      ],
+                                    )
+                                  ],
+                                ),
+                              ) */
                             ],
                           ),
-                        ],
-                      ),
-
-                      /* Divider(height: 32),
-                      Row(
-                        children: [
-                          Icon(Icons.card_giftcard, color: Colors.grey),
-                          SizedBox(width: 8),
-                          Text('Earn 18,800 Amber points with this purchase.'),
-                        ],
-                      ), */
-                      Divider(height: 32),
-                      Text('TRACK ORDER',
-                          style: Theme.of(context).textTheme.titleMedium),
-                      SizedBox(height: 16),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    FittedBox(
-                                      child: Column(
-                                        children: [
-                                          Icon(
-                                            Icons.check_circle,
-                                            color: Colors.red,
-                                            size: 15,
-                                          ),
-                                          SizedBox(
-                                            height: Appvars.screenSize.height *
-                                                0.05,
-                                            child: VerticalDivider(
-                                              color: Colors.green,
-                                              thickness: 1,
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Row(
-                                            children: [
-                                              /* Icon(
-                                                Icons.shopping_cart,
-                                                size: 15,
-                                                color: Appcolors.appThemeColor,
-                                              ),
-                                              SizedBox(
-                                                width: 5,
-                                              ), */
-                                              Text('Order placed',
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: Appcolors
-                                                          .appThemeColor)),
-                                            ],
-                                          ),
-                                          SizedBox(height: 8),
-                                          Text(
-                                            'We have received your order!',
-                                            style:
-                                                TextStyle(color: Colors.black),
-                                          ),
-                                        ],
-                                      ),
-                                    )
-                                  ],
-                                ),
-                                SizedBox(height: 16),
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    FittedBox(
-                                      child: Column(
-                                        children: [
-                                          Icon(
-                                            Icons.check_circle,
-                                            color: Colors.red,
-                                            size: 15,
-                                          ),
-                                          SizedBox(
-                                            height: Appvars.screenSize.height *
-                                                0.05,
-                                            child: VerticalDivider(
-                                              color: Colors.green,
-                                              thickness: 1,
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Row(
-                                            children: [
-                                              /* Icon(
-                                                Icons.check_circle,
-                                                size: 15,
-                                                color: Appcolors.appThemeColor,
-                                              ),
-                                              SizedBox(
-                                                width: 5,
-                                              ), */
-                                              Text('Order Confirmed!',
-                                                  style: TextStyle(
-                                                      color: Appcolors
-                                                          .appThemeColor,
-                                                      fontWeight:
-                                                          FontWeight.bold)),
-                                            ],
-                                          ),
-                                          SizedBox(height: 8),
-                                          Text(
-                                            'Order has been confirmed successfully',
-                                            style:
-                                                TextStyle(color: Colors.black),
-                                          ),
-                                        ],
-                                      ),
-                                    )
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 16,
-                                ),
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    FittedBox(
-                                      child: Column(
-                                        children: [
-                                          Icon(
-                                            Icons.radio_button_checked,
-                                            color: Colors.blue,
-                                            size: 15,
-                                          ),
-                                          SizedBox(
-                                            height: Appvars.screenSize.height *
-                                                0.05,
-                                            child: VerticalDivider(
-                                              color: Colors.grey,
-                                              thickness: 1,
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Row(
-                                            children: [
-                                              /* Icon(
-                                                Icons.local_shipping,
-                                                color: Appcolors.appThemeColor,
-                                                size: 15,
-                                              ),
-                                              SizedBox(
-                                                width: 5,
-                                              ), */
-                                              Text('Order in Transit',
-                                                  style: TextStyle(
-                                                      color: Appcolors
-                                                          .appThemeColor,
-                                                      fontWeight:
-                                                          FontWeight.bold)),
-                                            ],
-                                          ),
-                                          SizedBox(height: 8),
-                                          Text(
-                                            'Order has been loaded for shipping',
-                                            style:
-                                                TextStyle(color: Colors.black),
-                                          ),
-                                        ],
-                                      ),
-                                    )
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 16,
-                                ),
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    FittedBox(
-                                      child: Column(
-                                        children: [
-                                          Icon(
-                                            Icons.radio_button_checked,
-                                            color: Colors.blue,
-                                            size: 15,
-                                          ),
-                                          SizedBox(
-                                            height: Appvars.screenSize.height *
-                                                0.05,
-                                            child: VerticalDivider(
-                                              color: Colors.grey,
-                                              thickness: 1,
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Row(
-                                            children: [
-                                              /*  Icon(
-                                                Icons.thumb_up,
-                                                color: Appcolors.appThemeColor,
-                                                size: 15,
-                                              ),
-                                              SizedBox(
-                                                width: 5,
-                                              ), */
-                                              Text('Delivered Successfully',
-                                                  style: TextStyle(
-                                                      color: Appcolors
-                                                          .appThemeColor,
-                                                      fontWeight:
-                                                          FontWeight.bold)),
-                                            ],
-                                          ),
-                                          SizedBox(height: 8),
-                                          Text(
-                                            'Order has been delivered successfully',
-                                            style:
-                                                TextStyle(color: Colors.black),
-                                          ),
-                                        ],
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      )
-
-                      /*  Container(
-                        width: double.infinity,
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                               
-                              ],
-                            )
-                          ],
                         ),
-                      ) */
-                    ],
-                  ),
-                ),
-                if (rootRef != null)
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: Appcolors.appThemeColor,
-                            foregroundColor: Colors.white,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(5))),
-                        onPressed: () {
-                          rootRef!.read(rootPageProvider).setNavPageIndex(0);
-                          Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(builder: (ctx) => RootPage()));
-                        },
-                        child: Text("Back To Shopping")),
-                  )
-              ],
-            ),
-          ),
+                        /* if (rootRef != null)
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    backgroundColor: Appcolors.appThemeColor,
+                                    foregroundColor: Colors.white,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(5))),
+                                onPressed: () {
+                                  rootRef!.read(rootPageProvider).setNavPageIndex(0);
+                                  Navigator.of(context).pushReplacement(
+                                      MaterialPageRoute(builder: (ctx) => RootPage()));
+                                },
+                                child: Text("Back To Shopping")),
+                          ) */
+                      ],
+                    ),
+                  );
+                });
+          }),
         ),
       ),
+    );
+  }
+
+  Widget trackList(AsyncSnapshot<OrderTrackModel?> snapTrackOrder, int index,
+      Map<String, String> orderNames, List<int> restricted) {
+    if (restricted.any((element) => (index == element))) {
+      return SizedBox.shrink();
+    }
+    return Row(
+      children: [
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  FittedBox(
+                    child: Column(
+                      children: [
+                        Icon(
+                          (snapTrackOrder.data!.orderStatus! >= index)
+                              ? Icons.check_circle
+                              : Icons.radio_button_checked,
+                          color: (snapTrackOrder.data!.orderStatus! >= index)
+                              ? Colors.red
+                              : Colors.blue,
+                          size: 15,
+                        ),
+                        SizedBox(
+                          height: Appvars.screenSize.height * 0.05,
+                          child: VerticalDivider(
+                            color: Colors.grey,
+                            thickness: 1,
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Text(orderNames.keys.toList()[index],
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: (snapTrackOrder.data!.orderStatus! >=
+                                          index)
+                                      ? Appcolors.appThemeColor
+                                      : Colors.blue)),
+                        ],
+                      ),
+                      SizedBox(height: 8),
+                      Text(
+                        orderNames.values.toList()[index],
+                        style: TextStyle(color: Colors.black),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 16),
+                ],
+              )
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
