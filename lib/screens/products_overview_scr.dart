@@ -29,6 +29,7 @@ class _ProductsOverviewScrState extends State<ProductsOverviewScr> {
         padding: const EdgeInsets.all(8.0),
         child: TextField(
           controller: searchController,
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
           decoration: InputDecoration(
               filled: true,
               fillColor: Colors.white,

@@ -1,3 +1,4 @@
+import 'package:bajarbd/utils/Appvars/app_constants.dart';
 import 'package:flutter/material.dart';
 
 class Appvars {
@@ -15,9 +16,9 @@ class Appvars {
     ],
   );
   static TextStyle customHintTextStyle = TextStyle(
-    color: Colors.grey.withOpacity(0.5),
-    fontSize: 15, /*  fontFamily: AppStrings.currentFontFamily */
-  );
+      color: Colors.grey.withOpacity(0.5),
+      fontSize: 15,
+      fontFamily: AppConstants.defaultfontFamily);
 
   static EdgeInsets inputContentPadding =
       const EdgeInsets.symmetric(horizontal: 20);

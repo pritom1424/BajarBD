@@ -149,15 +149,17 @@ class ProductDetailsScreen extends StatelessWidget {
                       style: Theme.of(context).textTheme.bodyLarge,
                     ),
 
-                    const SizedBox(
-                      height: 10,
+                    const Divider(
+                      height: 40,
+                      color: Colors.grey,
+                      thickness: 0.3,
                     ),
                     Container(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 20, horizontal: 10),
-                      decoration: BoxDecoration(
+                      /*  padding: const EdgeInsets.symmetric(
+                          vertical: 20, horizontal: 10), */
+                      /*  decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(0),
-                          border: Border.all(width: 0.5, color: Colors.grey)),
+                          border: Border.all(width: 0.5, color: Colors.grey)), */
 
                       // color: Colors.green,
                       child: Column(
@@ -197,7 +199,7 @@ class ProductDetailsScreen extends StatelessWidget {
                             ],
                           ),
                           const SizedBox(
-                            height: 10,
+                            height: 20,
                           ),
                           Consumer(
                             builder: (ctx2, ref2, _) => Row(
@@ -250,12 +252,14 @@ class ProductDetailsScreen extends StatelessWidget {
                                         padding: const EdgeInsets.all(10),
                                         shape: RoundedRectangleBorder(
                                             borderRadius:
-                                                BorderRadius.circular(10))
+                                                BorderRadius.circular(5))
                                         /* shape: RoundedRectangleBorder(
                                           borderRadius: BorderRadius.only(
                                               topLeft: Radius.circular(50))) */
                                         ),
                                     child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: [
                                         Icon((isdisableFavorite)
                                             ? Icons.favorite
@@ -263,24 +267,22 @@ class ProductDetailsScreen extends StatelessWidget {
                                         const SizedBox(
                                           width: 10,
                                         ),
-                                        Expanded(
-                                          child: Text(
-                                            (isdisableFavorite)
-                                                ? "Added To Wishlist"
-                                                : "Add To Wishlist",
-                                            maxLines: 1,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodyMedium
-                                                ?.copyWith(color: Colors.white),
-                                          ),
+                                        Text(
+                                          (isdisableFavorite)
+                                              ? "Added To Wishlist"
+                                              : "Add To Wishlist",
+                                          maxLines: 1,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyMedium
+                                              ?.copyWith(color: Colors.white),
                                         ),
                                       ],
                                     ),
                                   ),
                                 ),
-                                const SizedBox(
-                                  width: 10,
+                                SizedBox(
+                                  width: 30,
                                 ),
                                 Expanded(
                                   child: ElevatedButton(
@@ -324,10 +326,10 @@ class ProductDetailsScreen extends StatelessWidget {
                                           foregroundColor: Colors.white,
                                           shape: RoundedRectangleBorder(
                                               borderRadius:
-                                                  BorderRadius.circular(10))),
+                                                  BorderRadius.circular(5))),
                                       child: Row(
                                         mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
+                                            MainAxisAlignment.center,
                                         children: [
                                           Icon((isdisableToCart)
                                               ? Icons.shopping_cart
@@ -335,19 +337,18 @@ class ProductDetailsScreen extends StatelessWidget {
                                           SizedBox(
                                             width: 10,
                                           ),
-                                          Expanded(
-                                            child: Text(
-                                                (isdisableToCart)
-                                                    ? "Added To Cart"
-                                                    : "Add To Cart",
-                                                maxLines: 1,
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .bodyMedium
-                                                    ?.copyWith(
-                                                      color: Colors.white,
-                                                    )),
-                                          ),
+                                          Text(
+                                              (isdisableToCart)
+                                                  ? "Added To Cart"
+                                                  : "Add To Cart",
+                                              maxLines: 1,
+                                              textAlign: TextAlign.center,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyMedium
+                                                  ?.copyWith(
+                                                    color: Colors.white,
+                                                  )),
                                         ],
                                       )),
                                 )
@@ -357,8 +358,10 @@ class ProductDetailsScreen extends StatelessWidget {
                         ],
                       ),
                     ),
-                    const SizedBox(
-                      height: 10,
+                    const Divider(
+                      height: 20,
+                      thickness: 0.3,
+                      color: Colors.grey,
                     ),
                     //description
 

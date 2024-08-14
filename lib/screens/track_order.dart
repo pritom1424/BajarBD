@@ -136,10 +136,11 @@ class TrackOrder extends StatelessWidget {
                               SizedBox(height: 8),
                               Row(
                                 children: [
-                                  Text(
-                                    'Transaction id: ${snapTrackOrder.data!.tnxId}',
-                                    style: TextStyle(color: Colors.grey),
-                                  ),
+                                  if (snapTrackOrder.data!.tnxId != null)
+                                    Text(
+                                      'Transaction id: ${snapTrackOrder.data!.tnxId}',
+                                      style: TextStyle(color: Colors.grey),
+                                    ),
                                 ],
                               ),
                               SizedBox(height: 16),

@@ -2,6 +2,7 @@ import 'package:bajarbd/model/models/shipping_address_model.dart';
 import 'package:bajarbd/provider/providers.dart';
 import 'package:bajarbd/utils/Appvars/appvars.dart';
 import 'package:bajarbd/utils/Colors/appcolors.dart';
+import 'package:bajarbd/utils/Components/appcomponent.dart';
 import 'package:bajarbd/utils/db/user_credential.dart';
 import 'package:bajarbd/widgets/checkout/ship_address_form.dart';
 import 'package:bajarbd/widgets/settings/settings_address_form.dart';
@@ -23,6 +24,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   bool didHidePassConfirm = true;
   TextEditingController newPassController = TextEditingController();
   TextEditingController newPassConfirmController = TextEditingController();
+
   @override
   void dispose() {
     newPassController.dispose();
@@ -110,6 +112,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           SizedBox(height: 10.0), */
                         TextFormField(
                           controller: newPassController,
+                          style: const TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.normal),
                           decoration: InputDecoration(
                             constraints: BoxConstraints(
                                 maxHeight: Appvars.screenSize.height * 0.07),
@@ -124,8 +128,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                     BorderSide(color: Colors.grey, width: 0.3)),
                             hintText: 'New Password',
                             labelText: 'New Password',
-                            labelStyle:
-                                TextStyle(fontSize: 18, color: Colors.grey),
+                            labelStyle: TextStyle(
+                                fontSize: 18,
+                                color: Colors.grey,
+                                fontWeight: FontWeight.normal),
+                            hintStyle: Appvars.customHintTextStyle,
                             prefixIcon: Icon(Icons.lock, color: Colors.grey),
                             suffix: IconButton(
                                 onPressed: () {
@@ -153,6 +160,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         SizedBox(height: 10.0),
                         TextFormField(
                           controller: newPassConfirmController,
+                          style: const TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.normal),
                           decoration: InputDecoration(
                             constraints: BoxConstraints(
                                 maxHeight: Appvars.screenSize.height * 0.07),
@@ -167,10 +176,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                     BorderSide(color: Colors.grey, width: 0.3)),
                             hintText: 'Confirm New Password',
                             labelText: 'Confirm New Password',
-                            labelStyle:
-                                TextStyle(fontSize: 18, color: Colors.grey),
+                            labelStyle: TextStyle(
+                                fontSize: 18,
+                                color: Colors.grey,
+                                fontWeight: FontWeight.normal),
                             prefixIcon:
                                 Icon(Icons.lock_outline, color: Colors.grey),
+                            hintStyle: Appvars.customHintTextStyle,
                             suffix: IconButton(
                                 onPressed: () {
                                   didHidePassConfirm = !didHidePassConfirm;
