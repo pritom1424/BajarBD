@@ -18,7 +18,6 @@ class _ProductsOverviewScrState extends State<ProductsOverviewScr> {
   @override
   void dispose() {
     searchController.dispose();
-    // TODO: implement dispose
     super.dispose();
   }
 

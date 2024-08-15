@@ -115,7 +115,7 @@ class AppComponent {
     );
   }
 
-  List<Widget?> navViews(WidgetRef ref) {
+  List<Widget> navViews(WidgetRef ref) {
     return [
       const ProductsOverviewScr(),
       CartScreen(ref),

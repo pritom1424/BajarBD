@@ -46,4 +46,21 @@ class OrderTrackRespos {
       return null;
     }
   }
+
+  Future<bool> cancelOrder(int id, String orderNum) async {
+    try {
+      final endPoint = "/order/cancel";
+      final url = ApiLinks.baseurl + endPoint;
+      var data = {"order_number": orderNum, "user_id": id};
+      final response = await http.post(Uri.parse(url),
+          body: jsonEncode(data), headers: _headers);
+      if (response.statusCode == AppConstants.api_success_StatusCode) {
+        //  final model = orderTrackModelFromJson(response.body);
+        return true;
+      }
+      return false;
+    } catch (e) {
+      return false;
+    }
+  }
 }

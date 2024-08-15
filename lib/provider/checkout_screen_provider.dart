@@ -1,5 +1,8 @@
 import 'package:bajarbd/model/data/online_pay_repos.dart';
+import 'package:bajarbd/model/data/ssl_cred_repos.dart';
 import 'package:bajarbd/model/models/online_pay_model.dart';
+import 'package:bajarbd/model/models/ssl_cred_model.dart';
+import 'package:bajarbd/utils/ssl/ssl_payment.dart';
 
 import '../model/data/cod_repos.dart';
 import '../model/data/customer_details_repos.dart';
@@ -19,6 +22,7 @@ class CheckoutScreenProvider with ChangeNotifier {
   final _customer_details_repo = CustomerDetailsRepos();
   final _codRepos = CodRepos();
   final _onlinePayRepos = OnlinePayRepos();
+  final SSLCredRepos _sslCredRepos = SSLCredRepos();
   bool _isEdit = false;
   String? _selectedShippingCharge;
   ShippingChargeModel? _shipping;
@@ -95,6 +99,10 @@ class CheckoutScreenProvider with ChangeNotifier {
   Future<void> onlinePaySuccess(
       String transId, String paymentTransid, String paymentMethod) async {
     await _onlinePayRepos.paySuccess(transId, paymentTransid, paymentMethod);
+  }
+
+  Future<SsLCredModel?> getSSLCred() async {
+    return await _sslCredRepos.getCred();
   }
 
   Future<void> onlinePayFail(String transId) async {

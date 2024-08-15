@@ -1,4 +1,5 @@
 import 'package:bajarbd/model/models/online_pay_model.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_sslcommerz/model/SSLCurrencyType.dart';
 
 import '../model/models/cod_model.dart';
@@ -580,159 +581,194 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      ElevatedButton.icon(
-                        onPressed: () async {
-                          var sslCred = SslCredential.instance;
-                          var customTransId = sslCred.getTransId();
+                      FutureBuilder(
+                          future:
+                              refPay.read(checkoutPageProvider).getSSLCred(),
+                          builder: (context, snapSSL) {
+                            return ElevatedButton.icon(
+                              onPressed: (!snapSSL.hasData)
+                                  ? null
+                                  : () async {
+                                      var sslCred = SslCredential();
+                                      var customTransId = sslCred.getTransId();
 
-                          var sslCommerz = Sslcommerz(
-                            initializer: SSLCommerzInitialization(
-                              store_id: sslCred.storeId,
-                              store_passwd: sslCred.storePass,
-                              total_amount:
-                                  widget.totalCost + discount + shipping,
-                              currency: SSLCurrencyType.BDT,
-                              tran_id: customTransId,
-                              product_category: "",
-                              sdkType: SSLCSdkType.TESTBOX,
-                            ),
-                          );
+                                      var sslCommerz = Sslcommerz(
+                                        initializer: SSLCommerzInitialization(
+                                          store_id: snapSSL.data!.storeId,
+                                          store_passwd:
+                                              snapSSL.data!.storePassword,
+                                          total_amount: widget.totalCost +
+                                              discount +
+                                              shipping,
+                                          currency: SSLCurrencyType.BDT,
+                                          tran_id: customTransId,
+                                          product_category: "",
+                                          sdkType: (snapSSL.data!.isLive == 0)
+                                              ? SSLCSdkType.TESTBOX
+                                              : SSLCSdkType.LIVE,
+                                        ),
+                                      );
 
-                          try {
-                            if (chargeName == null) {
-                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                  content: Text(
-                                      "Please select your shipping charge!")));
-                              refPay
-                                  .watch(checkoutPageProvider)
-                                  .setCurrentShipping(null);
-                              return null;
-                            }
-                            if (refPay.read(checkoutPageProvider).isEdit) {
-                              ScaffoldMessenger.of(context)
-                                  .hideCurrentSnackBar();
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                      content: Text(
-                                          "Please fill up shipping address!")));
-                              refPay.watch(checkoutPageProvider).setRebuild();
-                              return null;
-                            }
-                            if (chargeName == null) {
-                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                  content: Text(
-                                      "Please select your shipping charge!")));
-                              refPay
-                                  .watch(checkoutPageProvider)
-                                  .setCurrentShipping(null);
-                              return null;
-                            }
-                            final payAmount =
-                                widget.totalCost + discount + shipping;
-                            List<CartOnline> carts = List.generate(
-                                widget.carts.length,
-                                (index) => CartOnline(
-                                    name: widget.carts[index].title,
-                                    qty: widget.carts[index].amount,
-                                    price: widget.carts[index].price,
-                                    subtotal: widget.carts[index].total,
-                                    image: widget.carts[index].imageLink
-                                        .split('/')
-                                        .last));
-                            OnlinePayModel cModel = OnlinePayModel(
-                                shipping_charge: shipping.toString(),
-                                userId: UserCredential.userId!,
-                                payableAmount: payAmount,
-                                carts: carts,
-                                transaction_id: customTransId);
-                            print("custom transaction id $customTransId");
-                            final res = await refPay
-                                .read(checkoutPageProvider)
-                                .postOnlinePayOrder(cModel);
+                                      try {
+                                        if (chargeName == null) {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(SnackBar(
+                                                  content: Text(
+                                                      "Please select your shipping charge!")));
+                                          refPay
+                                              .watch(checkoutPageProvider)
+                                              .setCurrentShipping(null);
+                                          return null;
+                                        }
+                                        if (refPay
+                                            .read(checkoutPageProvider)
+                                            .isEdit) {
+                                          ScaffoldMessenger.of(context)
+                                              .hideCurrentSnackBar();
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(SnackBar(
+                                                  content: Text(
+                                                      "Please fill up shipping address!")));
+                                          refPay
+                                              .watch(checkoutPageProvider)
+                                              .setRebuild();
+                                          return null;
+                                        }
+                                        if (chargeName == null) {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(SnackBar(
+                                                  content: Text(
+                                                      "Please select your shipping charge!")));
+                                          refPay
+                                              .watch(checkoutPageProvider)
+                                              .setCurrentShipping(null);
+                                          return null;
+                                        }
+                                        final payAmount = widget.totalCost +
+                                            discount +
+                                            shipping;
+                                        List<CartOnline> carts = List.generate(
+                                            widget.carts.length,
+                                            (index) => CartOnline(
+                                                name: widget.carts[index].title,
+                                                qty: widget.carts[index].amount,
+                                                price:
+                                                    widget.carts[index].price,
+                                                subtotal:
+                                                    widget.carts[index].total,
+                                                image: widget
+                                                    .carts[index].imageLink
+                                                    .split('/')
+                                                    .last));
+                                        OnlinePayModel cModel = OnlinePayModel(
+                                            shipping_charge:
+                                                shipping.toString(),
+                                            userId: UserCredential.userId!,
+                                            payableAmount: payAmount,
+                                            carts: carts,
+                                            transaction_id: customTransId);
+                                        print(
+                                            "custom transaction id $customTransId");
+                                        final res = await refPay
+                                            .read(checkoutPageProvider)
+                                            .postOnlinePayOrder(cModel);
 
-                            print("Result online: $res");
-                            var result = await sslCommerz.payNow();
+                                        print("Result online: $res");
+                                        var result = await sslCommerz.payNow();
 
-                            if (result is PlatformException) {
-                              /* print(
-                                  "apiConnect: ${result.aPIConnect},'amount' ${result.amount},'bankTransId': ${result.bankTranId},baseFair: ${result.baseFair},cardBrand ${result.cardBrand} cardIssuer ${result.cardIssuer} cardIssuerCountry ${result.cardIssuerCountry} cardIssueCC ${result.cardIssuerCountryCode} 'cardno' ${result.cardNo} 'cardType' ${result.cardType} 'currencyAmount': ${result.currencyAmount} currency rate : ${result.currencyRate} curr type: ${result.currencyType} 'session key': ${result.sessionkey} status: ${result.status} storeAmount: ${result.storeAmount} trans date: ${result.tranDate} trans id:  ${result.tranId} val id: ${result.valId} val on ${result.validatedOn}"); */
-                              print("Platform Error: ${result.status}");
-                              print("resultJson:${result.toJson()}");
-                            } else {
-                              if (result.status == "VALID") {
-                                print("valid custom ${customTransId}");
-                                final resSuccess = await refPay
-                                    .read(checkoutPageProvider)
-                                    .onlinePaySuccess(
-                                        customTransId,
-                                        result.bankTranId!,
-                                        result.cardBrand ?? "not defined");
-                                for (int i = 0; i < widget.carts.length; i++) {
-                                  await refPay
-                                      .read(cartPageProvider)
-                                      .deleteCart(widget.carts[i].id);
-                                }
-                                Navigator.of(context).pushReplacement(
-                                    MaterialPageRoute(
-                                        builder: (ctx) => OrderSuccess(
-                                            ref: widget.rootref,
-                                            successMessage:
-                                                "Online payment successful!")));
-                              } else {
-                                if (result.status == "FAILED") {
-                                  await refPay
-                                      .read(checkoutPageProvider)
-                                      .onlinePayFail(customTransId);
-                                  ScaffoldMessenger.of(context)
-                                      .hideCurrentSnackBar();
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                          content:
-                                              Text("Online Payment Failed!")));
-                                  refPay
-                                      .watch(checkoutPageProvider)
-                                      .setRebuild();
-                                } else {
-                                  await refPay
-                                      .read(checkoutPageProvider)
-                                      .onlinePayFail(customTransId);
-                                  ScaffoldMessenger.of(context)
-                                      .hideCurrentSnackBar();
+                                        if (result is PlatformException) {
+                                          /* print(
+                                      "apiConnect: ${result.aPIConnect},'amount' ${result.amount},'bankTransId': ${result.bankTranId},baseFair: ${result.baseFair},cardBrand ${result.cardBrand} cardIssuer ${result.cardIssuer} cardIssuerCountry ${result.cardIssuerCountry} cardIssueCC ${result.cardIssuerCountryCode} 'cardno' ${result.cardNo} 'cardType' ${result.cardType} 'currencyAmount': ${result.currencyAmount} currency rate : ${result.currencyRate} curr type: ${result.currencyType} 'session key': ${result.sessionkey} status: ${result.status} storeAmount: ${result.storeAmount} trans date: ${result.tranDate} trans id:  ${result.tranId} val id: ${result.valId} val on ${result.validatedOn}"); */
+                                          print(
+                                              "Platform Error: ${result.status}");
+                                          print(
+                                              "resultJson:${result.toJson()}");
+                                        } else {
+                                          if (result.status == "VALID") {
+                                            print(
+                                                "resultJson:${result.toJson()}");
+                                            print(
+                                                "valid custom ${customTransId}");
+                                            final resSuccess = await refPay
+                                                .read(checkoutPageProvider)
+                                                .onlinePaySuccess(
+                                                    customTransId,
+                                                    result.bankTranId!,
+                                                    result.cardBrand ??
+                                                        "not defined");
+                                            for (int i = 0;
+                                                i < widget.carts.length;
+                                                i++) {
+                                              await refPay
+                                                  .read(cartPageProvider)
+                                                  .deleteCart(
+                                                      widget.carts[i].id);
+                                            }
+                                            Navigator.of(context).pushReplacement(
+                                                MaterialPageRoute(
+                                                    builder: (ctx) => OrderSuccess(
+                                                        ref: widget.rootref,
+                                                        successMessage:
+                                                            "Online payment successful!")));
+                                          } else {
+                                            if (result.status == "FAILED") {
+                                              await refPay
+                                                  .read(checkoutPageProvider)
+                                                  .onlinePayFail(customTransId);
+                                              ScaffoldMessenger.of(context)
+                                                  .hideCurrentSnackBar();
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(SnackBar(
+                                                      content: Text(
+                                                          "Online Payment Failed!")));
+                                              refPay
+                                                  .watch(checkoutPageProvider)
+                                                  .setRebuild();
+                                            } else {
+                                              await refPay
+                                                  .read(checkoutPageProvider)
+                                                  .onlinePayFail(customTransId);
+                                              ScaffoldMessenger.of(context)
+                                                  .hideCurrentSnackBar();
 
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                          content: Text(
-                                              "Online Payment Canceled!")));
-                                  refPay
-                                      .watch(checkoutPageProvider)
-                                      .setRebuild();
-                                }
-                              }
-                              print("Payment Result: $result");
-                            }
-                          } catch (e) {
-                            print("SSLError: $e");
-                          }
-                          // Handle credit card payment
-                        },
-                        icon: const Icon(Icons.credit_card),
-                        label: Text(
-                          'Online Payment',
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleSmall!
-                              .copyWith(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Appcolors.appThemeColor,
-                          foregroundColor: Colors.white,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5)),
-                          padding: const EdgeInsets.symmetric(vertical: 12),
-                        ),
-                      ),
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(SnackBar(
+                                                      content: Text(
+                                                          "Online Payment Canceled!")));
+                                              refPay
+                                                  .watch(checkoutPageProvider)
+                                                  .setRebuild();
+                                            }
+                                          }
+                                          print("Payment Result: $result");
+                                        }
+                                      } catch (e) {
+                                        print("SSLError: $e");
+                                      }
+                                      // Handle credit card payment
+                                    },
+                              icon: const Icon(Icons.credit_card),
+                              label: Text(
+                                'Online Payment',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleSmall!
+                                    .copyWith(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white),
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: (!snapSSL.hasData)
+                                    ? Colors.grey
+                                    : Appcolors.appThemeColor,
+                                foregroundColor: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(5)),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 12),
+                              ),
+                            );
+                          }),
                       const SizedBox(height: 10),
                       ElevatedButton.icon(
                         onPressed: () async {

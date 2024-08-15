@@ -25,15 +25,6 @@ class RootPage extends ConsumerWidget {
       ref.watch(rootPageProvider).setNavPageIndex(ind);
     } */
 
-    List<Widget?> navViews() {
-      return [
-        const ProductsOverviewScr(),
-        CartScreen(ref),
-        const ProductsWishlist(),
-        const ProfilePage()
-      ];
-    }
-
     return SafeArea(
       child: Scaffold(
           appBar: AppBar(
@@ -112,9 +103,12 @@ class RootPage extends ConsumerWidget {
             },
           ),
           drawer: const CustomDrawer(),
-          body: AppComponent().navViews(ref)[ref
-              .read(rootPageProvider)
-              .navPageIndex] //navViews()[ref.read(rootPageProvider).navPageIndex],
+          body: FutureBuilder(
+              future: ref.read(authProvider).tryAutoLogin(),
+              builder: (context, snapLoginCheck) {
+                return AppComponent()
+                    .navViews(ref)[ref.read(rootPageProvider).navPageIndex];
+              }) //navViews()[ref.read(rootPageProvider).navPageIndex],
           ),
     );
   }

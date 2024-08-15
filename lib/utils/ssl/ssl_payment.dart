@@ -3,7 +3,7 @@ import 'package:uuid/uuid.dart';
 Uuid _uuid = Uuid();
 
 class SslCredential {
-  final String _storeId;
+  /*  final String _storeId;
   final String _storePass;
 
   SslCredential._internal(this._storeId, this._storePass);
@@ -17,7 +17,7 @@ class SslCredential {
   static SslCredential get instance => _instance;
 
   String get storeId => _storeId;
-  String get storePass => _storePass;
+  String get storePass => _storePass; */
 
   String getTransId() {
     String id = _uuid.v4().substring(0, 22);

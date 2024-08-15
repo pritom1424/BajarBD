@@ -326,20 +326,30 @@ class TrackOrder extends StatelessWidget {
                                   style:
                                       Theme.of(context).textTheme.titleMedium),
                               SizedBox(height: 16),
-                              Column(
-                                  children:
-                                      List.generate(orderNames.length, (index) {
-                                var restrictedList = [6, 7, 8, 9];
-                                if (restrictedList.indexOf(
-                                        snapTrackOrder.data!.orderStatus!) !=
-                                    -1) {
-                                  restrictedList.removeAt(
-                                      restrictedList.indexOf(
-                                          snapTrackOrder.data!.orderStatus!));
-                                }
-                                return trackList(snapTrackOrder, index,
-                                    orderNames, restrictedList);
-                              }))
+                              StreamBuilder(
+                                  stream: refTrackOrder
+                                      .read(orderTrackProvider)
+                                      .getOrderTrackStream(orderNum),
+                                  builder: (context, snapshotStreamTrack) {
+                                    var model = snapTrackOrder.data!;
+
+                                    if (snapshotStreamTrack.hasData) {
+                                      model = snapshotStreamTrack.data!;
+                                    }
+                                    return Column(
+                                        children: List.generate(
+                                            orderNames.length, (index) {
+                                      var restrictedList = [6, 7, 8, 9];
+                                      if (restrictedList
+                                              .indexOf(model.orderStatus!) !=
+                                          -1) {
+                                        restrictedList.removeAt(restrictedList
+                                            .indexOf(model.orderStatus!));
+                                      }
+                                      return trackList(model, index, orderNames,
+                                          restrictedList);
+                                    }));
+                                  })
 
                               /*  Container(
                                 width: double.infinity,
@@ -384,7 +394,7 @@ class TrackOrder extends StatelessWidget {
     );
   }
 
-  Widget trackList(AsyncSnapshot<OrderTrackModel?> snapTrackOrder, int index,
+  Widget trackList(OrderTrackModel snapTrackOrder, int index,
       Map<String, String> orderNames, List<int> restricted) {
     if (restricted.any((element) => (index == element))) {
       return SizedBox.shrink();
@@ -402,10 +412,10 @@ class TrackOrder extends StatelessWidget {
                     child: Column(
                       children: [
                         Icon(
-                          (snapTrackOrder.data!.orderStatus! >= index)
+                          (snapTrackOrder.orderStatus! >= index)
                               ? Icons.check_circle
                               : Icons.radio_button_checked,
-                          color: (snapTrackOrder.data!.orderStatus! >= index)
+                          color: (snapTrackOrder.orderStatus! >= index)
                               ? Colors.red
                               : Colors.blue,
                           size: 15,
@@ -431,8 +441,7 @@ class TrackOrder extends StatelessWidget {
                           Text(orderNames.keys.toList()[index],
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  color: (snapTrackOrder.data!.orderStatus! >=
-                                          index)
+                                  color: (snapTrackOrder.orderStatus! >= index)
                                       ? Appcolors.appThemeColor
                                       : Colors.blue)),
                         ],
