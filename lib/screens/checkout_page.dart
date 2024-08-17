@@ -25,12 +25,18 @@ class CheckoutPage extends StatefulWidget {
   final List<CartModel> carts;
   final double totalCost;
   final WidgetRef rootref;
+  final bool? isPlaceOrder;
+  final double? shippingCharge;
+  final String? transID;
 
   const CheckoutPage({
     super.key,
     required this.carts,
     required this.totalCost,
     required this.rootref,
+    this.isPlaceOrder,
+    this.shippingCharge,
+    this.transID,
   });
 
   @override
@@ -231,7 +237,9 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 10, vertical: 10),
                                 child: Text(
-                                  '${refPrice.watch(checkoutPageProvider).shipCharge?.amount.toString() ?? "0.0"} Tk',
+                                  (widget.shippingCharge != null)
+                                      ? '${widget.shippingCharge.toString()} Tk'
+                                      : '${refPrice.watch(checkoutPageProvider).shipCharge?.amount.toString() ?? "0.0"} Tk',
                                   style: const TextStyle(
                                       fontSize: 15,
                                       fontWeight: FontWeight.normal),
@@ -253,7 +261,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 10, vertical: 10),
                                 child: Text(
-                                  '${(widget.totalCost + discount + shipping).toString()} Tk',
+                                  '${(widget.totalCost + discount + (widget.shippingCharge ?? shipping)).toString()} Tk',
                                   style: const TextStyle(
                                       fontSize: 15,
                                       fontWeight: FontWeight.normal),
@@ -441,50 +449,51 @@ class _CheckoutPageState extends State<CheckoutPage> {
               SizedBox(
                 height: 20,
               ),
-              Consumer(
-                builder: (ctxCharge, refCharge, _) => Container(
-                  padding: const EdgeInsets.only(left: 10),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      FittedBox(
-                        child: Text(
-                          "Shipping Charge",
-                          style: Theme.of(context).textTheme.bodyLarge,
+              if (widget.shippingCharge == null)
+                Consumer(
+                  builder: (ctxCharge, refCharge, _) => Container(
+                    padding: const EdgeInsets.only(left: 10),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        FittedBox(
+                          child: Text(
+                            "Shipping Charge",
+                            style: Theme.of(context).textTheme.bodyLarge,
+                          ),
                         ),
-                      ),
-                      FutureBuilder(
-                          future: refCharge
-                              .read(checkoutPageProvider)
-                              .getShippingData(),
-                          builder: (ctx, snapShip) => (!snapShip.hasData)
-                              ? const SizedBox.shrink()
-                              : Row(
-                                  children: List.generate(
-                                    snapShip.data!.length,
-                                    (index) => Expanded(
-                                      child: RadioListTile<String>(
-                                          title: FittedBox(
-                                            child: Text(
-                                              snapShip.data![index]
-                                                  .shippingChargeName,
-                                              maxLines: 1,
+                        FutureBuilder(
+                            future: refCharge
+                                .read(checkoutPageProvider)
+                                .getShippingData(),
+                            builder: (ctx, snapShip) => (!snapShip.hasData)
+                                ? const SizedBox.shrink()
+                                : Row(
+                                    children: List.generate(
+                                      snapShip.data!.length,
+                                      (index) => Expanded(
+                                        child: RadioListTile<String>(
+                                            title: FittedBox(
+                                              child: Text(
+                                                snapShip.data![index]
+                                                    .shippingChargeName,
+                                                maxLines: 1,
+                                              ),
                                             ),
-                                          ),
-                                          value: snapShip
-                                              .data![index].shippingChargeName,
-                                          groupValue: chargeName,
-                                          onChanged: (val) {
-                                            _handleRadioValueChange(
-                                                val,
-                                                refCharge,
-                                                snapShip.data![index]);
-                                          }),
+                                            value: snapShip.data![index]
+                                                .shippingChargeName,
+                                            groupValue: chargeName,
+                                            onChanged: (val) {
+                                              _handleRadioValueChange(
+                                                  val,
+                                                  refCharge,
+                                                  snapShip.data![index]);
+                                            }),
+                                      ),
                                     ),
-                                  ),
-                                )
+                                  )
 
-                          /*  [
+                            /*  [
                                   Expanded(
                                     child: RadioListTile<String>(
                                         title:  Text(snapShip.data![index]
@@ -501,9 +510,9 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                         onChanged: _handleRadioValueChange),
                                   ),
                                 ], */
-                          ),
+                            ),
 
-                      /*  DropdownButtonHideUnderline(
+                        /*  DropdownButtonHideUnderline(
                         child: Expanded(
                           flex: 2,
                           child: Container(
@@ -565,10 +574,10 @@ class _CheckoutPageState extends State<CheckoutPage> {
                           ),
                         ),
                       ), */
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
               const SizedBox(height: 20),
               Text(
                 'Payment Method',
@@ -610,7 +619,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                       );
 
                                       try {
-                                        if (chargeName == null) {
+                                        if (chargeName == null &&
+                                            widget.shippingCharge == null) {
                                           ScaffoldMessenger.of(context)
                                               .showSnackBar(SnackBar(
                                                   content: Text(
@@ -634,7 +644,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                               .setRebuild();
                                           return null;
                                         }
-                                        if (chargeName == null) {
+                                        /*   if (chargeName == null) {
                                           ScaffoldMessenger.of(context)
                                               .showSnackBar(SnackBar(
                                                   content: Text(
@@ -643,10 +653,10 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                               .watch(checkoutPageProvider)
                                               .setCurrentShipping(null);
                                           return null;
-                                        }
+                                        } */
                                         final payAmount = widget.totalCost +
                                             discount +
-                                            shipping;
+                                            (widget.shippingCharge ?? shipping);
                                         List<CartOnline> carts = List.generate(
                                             widget.carts.length,
                                             (index) => CartOnline(
@@ -669,11 +679,14 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                             transaction_id: customTransId);
                                         print(
                                             "custom transaction id $customTransId");
-                                        final res = await refPay
-                                            .read(checkoutPageProvider)
-                                            .postOnlinePayOrder(cModel);
+                                        if (widget.isPlaceOrder == null ||
+                                            widget.isPlaceOrder == true) {
+                                          final res = await refPay
+                                              .read(checkoutPageProvider)
+                                              .postOnlinePayOrder(cModel);
 
-                                        print("Result online: $res");
+                                          print("Result online: $res");
+                                        }
                                         var result = await sslCommerz.payNow();
 
                                         if (result is PlatformException) {
@@ -684,6 +697,13 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                           print(
                                               "resultJson:${result.toJson()}");
                                         } else {
+                                          for (int i = 0;
+                                              i < widget.carts.length;
+                                              i++) {
+                                            await refPay
+                                                .read(cartPageProvider)
+                                                .deleteCart(widget.carts[i].id);
+                                          }
                                           if (result.status == "VALID") {
                                             print(
                                                 "resultJson:${result.toJson()}");
@@ -692,18 +712,12 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                             final resSuccess = await refPay
                                                 .read(checkoutPageProvider)
                                                 .onlinePaySuccess(
-                                                    customTransId,
+                                                    widget.transID ??
+                                                        customTransId,
                                                     result.bankTranId!,
                                                     result.cardBrand ??
                                                         "not defined");
-                                            for (int i = 0;
-                                                i < widget.carts.length;
-                                                i++) {
-                                              await refPay
-                                                  .read(cartPageProvider)
-                                                  .deleteCart(
-                                                      widget.carts[i].id);
-                                            }
+
                                             Navigator.of(context).pushReplacement(
                                                 MaterialPageRoute(
                                                     builder: (ctx) => OrderSuccess(
@@ -731,13 +745,18 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                               ScaffoldMessenger.of(context)
                                                   .hideCurrentSnackBar();
 
-                                              ScaffoldMessenger.of(context)
+                                              await ScaffoldMessenger.of(
+                                                      context)
                                                   .showSnackBar(SnackBar(
                                                       content: Text(
-                                                          "Online Payment Canceled!")));
-                                              refPay
+                                                          "Online Payment Pending!")));
+                                              /*  refPay
                                                   .watch(checkoutPageProvider)
-                                                  .setRebuild();
+                                                  .setRebuild(); */
+                                              widget.rootref
+                                                  .watch(rootPageProvider)
+                                                  .setNavPageIndex(0);
+                                              Navigator.of(context).pop();
                                             }
                                           }
                                           print("Payment Result: $result");
@@ -770,96 +789,100 @@ class _CheckoutPageState extends State<CheckoutPage> {
                             );
                           }),
                       const SizedBox(height: 10),
-                      ElevatedButton.icon(
-                        onPressed: () async {
-                          if (chargeName == null) {
-                            ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                content: Text(
-                                    "Please select your shipping charge!")));
-                            refPay
-                                .watch(checkoutPageProvider)
-                                .setCurrentShipping(null);
-                            return null;
-                          }
-                          if (refPay.read(checkoutPageProvider).isEdit) {
-                            ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                content:
-                                    Text("Please fill up shipping address!")));
-                            refPay.watch(checkoutPageProvider).setRebuild();
-                            return null;
-                          }
-                          final payAmount =
-                              widget.totalCost + discount + shipping;
+                      if (widget.shippingCharge == null)
+                        ElevatedButton.icon(
+                          onPressed: () async {
+                            if (chargeName == null) {
+                              ScaffoldMessenger.of(context)
+                                  .hideCurrentSnackBar();
+                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                  content: Text(
+                                      "Please select your shipping charge!")));
+                              refPay
+                                  .watch(checkoutPageProvider)
+                                  .setCurrentShipping(null);
+                              return null;
+                            }
+                            if (refPay.read(checkoutPageProvider).isEdit) {
+                              ScaffoldMessenger.of(context)
+                                  .hideCurrentSnackBar();
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                      content: Text(
+                                          "Please fill up shipping address!")));
+                              refPay.watch(checkoutPageProvider).setRebuild();
+                              return null;
+                            }
+                            final payAmount =
+                                widget.totalCost + discount + shipping;
 
-                          List<Cart> carts = List.generate(
-                                  widget.carts.length,
-                                  (index) => Cart(
-                                      name: widget.carts[index].title,
-                                      qty: widget.carts[index].amount,
-                                      price: widget.carts[index].price,
-                                      subtotal: widget.carts[index].total,
-                                      image: widget.carts[index].imageLink
-                                          .split('/')
-                                          .last)) /* CartModel(
+                            List<Cart> carts = List.generate(
+                                    widget.carts.length,
+                                    (index) => Cart(
+                                        name: widget.carts[index].title,
+                                        qty: widget.carts[index].amount,
+                                        price: widget.carts[index].price,
+                                        subtotal: widget.carts[index].total,
+                                        image: widget.carts[index].imageLink
+                                            .split('/')
+                                            .last)) /* CartModel(
                                   id: widget.carts[index].id,
                                   title: widget.carts[index].title,
                                   price: widget.carts[index].price,
                                   amount: widget.carts[index].amount,
                                   total: widget.carts[index].total,
                                   imageLink: widget.carts[index].imageLink)) */
-                              ;
+                                ;
 
-                          CodModel cModel = CodModel(
-                              shipping_charge: shipping.toString(),
-                              userId: UserCredential.userId!,
-                              paymentMethod: "COD",
-                              payableAmount: payAmount,
-                              carts: carts);
-                          final res = await refPay
-                              .read(checkoutPageProvider)
-                              .postOrder(cModel);
+                            CodModel cModel = CodModel(
+                                shipping_charge: shipping.toString(),
+                                userId: UserCredential.userId!,
+                                paymentMethod: "COD",
+                                payableAmount: payAmount,
+                                carts: carts);
+                            final res = await refPay
+                                .read(checkoutPageProvider)
+                                .postOrder(cModel);
 
-                          /*    await ScaffoldMessenger.of(context)
+                            /*    await ScaffoldMessenger.of(context)
                               .showSnackBar(SnackBar(content: Text(res))); */
-                          if (res['isSuccess'] == true) {
-                            for (int i = 0; i < widget.carts.length; i++) {
-                              await refPay
-                                  .read(cartPageProvider)
-                                  .deleteCart(widget.carts[i].id);
+                            if (res['isSuccess'] == true) {
+                              for (int i = 0; i < widget.carts.length; i++) {
+                                await refPay
+                                    .read(cartPageProvider)
+                                    .deleteCart(widget.carts[i].id);
+                              }
+                              // refPay.watch(checkoutPageProvider).setRebuild();
+                              Navigator.of(context).pushReplacement(
+                                  MaterialPageRoute(
+                                      builder: (ctx) => OrderSuccess(
+                                          ref: widget.rootref,
+                                          successMessage: res['message'])));
+                            } else {
+                              await ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text(res['message'])));
+                              refPay.watch(checkoutPageProvider).setRebuild();
                             }
-                            // refPay.watch(checkoutPageProvider).setRebuild();
-                            Navigator.of(context).pushReplacement(
-                                MaterialPageRoute(
-                                    builder: (ctx) => OrderSuccess(
-                                        ref: widget.rootref,
-                                        successMessage: res['message'])));
-                          } else {
-                            await ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text(res['message'])));
-                            refPay.watch(checkoutPageProvider).setRebuild();
-                          }
-                          // Handle PayPal payment
-                        },
-                        icon: const Icon(Icons.account_balance_wallet),
-                        label: Text(
-                          'Cash on Delivary',
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleSmall!
-                              .copyWith(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white),
+                            // Handle PayPal payment
+                          },
+                          icon: const Icon(Icons.account_balance_wallet),
+                          label: Text(
+                            'Cash on Delivary',
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleSmall!
+                                .copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Appcolors.appThemeSecondaryColor,
+                            foregroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5)),
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                          ),
                         ),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Appcolors.appThemeSecondaryColor,
-                          foregroundColor: Colors.white,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5)),
-                          padding: const EdgeInsets.symmetric(vertical: 12),
-                        ),
-                      ),
                     ],
                   ),
                 );

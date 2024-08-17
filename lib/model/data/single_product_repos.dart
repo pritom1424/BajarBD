@@ -4,7 +4,7 @@ import '../../utils/Appvars/app_constants.dart';
 import 'package:http/http.dart' as http;
 
 class SingleProductRepos {
-  Future<SingleProduct?> getProduct(String id) async {
+  Future<SingleProductModel?> getProduct(String id) async {
     try {
       const endPoint = "/singleproduct";
       final url = "${ApiLinks.baseurl}$endPoint/$id";
@@ -12,7 +12,7 @@ class SingleProductRepos {
 
       if (response.statusCode == AppConstants.api_success_StatusCode) {
         // Decode the response body and return the SingleProduct object
-        return singleProductFromJson(response.body);
+        return singleProductModelFromJson(response.body);
       }
 
       return null;

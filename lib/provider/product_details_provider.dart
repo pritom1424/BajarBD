@@ -19,8 +19,8 @@ class ProductDetailsProvider with ChangeNotifier {
     _sliderIndex = 0;
   }
 
-  Future<SingleProduct?> getProduct(int id) async {
-    SingleProduct? singleProduct =
+  Future<SingleProductModel?> getProduct(int id) async {
+    SingleProductModel? singleProduct =
         await _singleProductRepos.getProduct(id.toString());
 
     return singleProduct;

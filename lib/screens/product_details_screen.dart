@@ -92,14 +92,15 @@ class ProductDetailsScreen extends StatelessWidget {
                         snapshot.data!.discountPrice == null)
                     ? false
                     : true;
-                final imageLinks = (snapshot.data!.gallery.isEmpty)
+                final imageLinks = (snapshot.data!.gallery == null) ||
+                        (snapshot.data!.gallery!.isEmpty)
                     ? [
                         "${ApiLinks.baseImageUrl}/product/${snapshot.data!.featureImage}"
                       ]
                     : List.generate(
-                        snapshot.data!.gallery.length,
+                        snapshot.data!.gallery!.length,
                         (ind) =>
-                            "${ApiLinks.baseImageUrl}/gallery/${snapshot.data!.gallery[ind].image}");
+                            "${ApiLinks.baseImageUrl}/gallery/${snapshot.data!.gallery![ind].image}");
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
@@ -145,7 +146,7 @@ class ProductDetailsScreen extends StatelessWidget {
 
                     //title
                     Text(
-                      snapshot.data!.title,
+                      snapshot.data!.title ?? "",
                       style: Theme.of(context).textTheme.bodyLarge,
                     ),
 
@@ -293,10 +294,10 @@ class ProductDetailsScreen extends StatelessWidget {
                                               double pr = double.parse(
                                                   (isDiscount)
                                                       ? sProduct.discountPrice!
-                                                      : sProduct.unitPrice);
+                                                      : sProduct.unitPrice!);
                                               final model = CartModel(
                                                   id: id,
-                                                  title: sProduct.title,
+                                                  title: sProduct.title ?? "",
                                                   price: pr,
                                                   amount: 1,
                                                   total: pr,
@@ -366,7 +367,7 @@ class ProductDetailsScreen extends StatelessWidget {
                     //description
 
                     Text(
-                      Bidi.stripHtmlIfNeeded(snapshot.data!.description),
+                      Bidi.stripHtmlIfNeeded(snapshot.data!.description ?? ""),
                       textAlign: TextAlign.justify,
                     ),
                     const SizedBox(
@@ -374,7 +375,7 @@ class ProductDetailsScreen extends StatelessWidget {
                     ),
 
                     HtmlWidget(
-                      cleanHtmlContent(snapshot.data!.shortDescription),
+                      cleanHtmlContent(snapshot.data!.shortDescription ?? ""),
                       // textAlign: TextAlign.justify,
                     ),
 

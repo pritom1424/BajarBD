@@ -1,53 +1,66 @@
 import 'dart:convert';
 
-class SingleProduct {
+SingleProductModel singleProductModelFromJson(String str) =>
+    SingleProductModel.fromJson(json.decode(str));
+
+String singleProductModelToJson(SingleProductModel data) =>
+    json.encode(data.toJson());
+
+class SingleProductModel {
   int id;
-  String title;
-  String description;
-  String shortDescription;
+  String? title;
+  String? description;
+  String? shortDescription;
   int? categoryId;
   int? subcategoryId;
   int? brandId;
-  String unitPrice;
+  String? unitPrice;
   String? quantity;
   String? discount;
   String? discountPrice;
-  String featureImage;
-  bool isPublish;
-  bool isActive;
-  DateTime createdAt;
-  DateTime updatedAt;
+  String? featureImage;
+  bool? featureProduct;
+  bool? hotDeal;
+  String? slug;
+  int? isPublish;
+  int? isActive;
+  DateTime? createdAt;
+  DateTime? updatedAt;
   Category? category;
   Category? subCategory;
-  Category? brand;
-  List<Gallery> gallery;
-  List<dynamic> variation;
+  Brand? brand;
+  List<dynamic>? gallery;
+  List<dynamic>? variation;
 
-  SingleProduct({
+  SingleProductModel({
     required this.id,
-    required this.title,
-    required this.description,
-    required this.shortDescription,
+    this.title,
+    this.description,
+    this.shortDescription,
     this.categoryId,
     this.subcategoryId,
     this.brandId,
-    required this.unitPrice,
+    this.unitPrice,
     this.quantity,
     this.discount,
     this.discountPrice,
-    required this.featureImage,
-    required this.isPublish,
-    required this.isActive,
-    required this.createdAt,
-    required this.updatedAt,
+    this.featureImage,
+    this.featureProduct,
+    this.hotDeal,
+    this.slug,
+    this.isPublish,
+    this.isActive,
+    this.createdAt,
+    this.updatedAt,
     this.category,
     this.subCategory,
     this.brand,
-    required this.gallery,
-    required this.variation,
+    this.gallery,
+    this.variation,
   });
 
-  factory SingleProduct.fromJson(Map<String, dynamic> json) => SingleProduct(
+  factory SingleProductModel.fromJson(Map<String, dynamic> json) =>
+      SingleProductModel(
         id: json["id"],
         title: json["title"],
         description: json["description"],
@@ -60,24 +73,32 @@ class SingleProduct {
         discount: json["discount"],
         discountPrice: json["discount_price"],
         featureImage: json["feature_image"],
-        isPublish: json["is_publish"] == 1,
-        isActive: json["is_active"] == 1,
-        createdAt: DateTime.parse(json["created_at"]),
-        updatedAt: DateTime.parse(json["updated_at"]),
-        category: json["category"] != null
-            ? Category.fromJson(json["category"])
-            : null,
-        subCategory: json["sub_category"] != null
-            ? Category.fromJson(json["sub_category"])
-            : null,
-        brand: json["brand"] != null ? Category.fromJson(json["brand"]) : null,
-        gallery: json["gallery"] != null
-            ? List<Gallery>.from(
-                json["gallery"].map((x) => Gallery.fromJson(x)))
-            : [],
-        variation: json["variation"] != null
-            ? List<dynamic>.from(json["variation"].map((x) => x))
-            : [],
+        featureProduct: json["feature_product"] == null
+            ? null
+            : json["feature_product"] == 1,
+        hotDeal: json["hot_deal"] == null ? null : json["hot_deal"] == 1,
+        slug: json["slug"],
+        isPublish: json["is_publish"],
+        isActive: json["is_active"],
+        createdAt: json["created_at"] == null
+            ? null
+            : DateTime.parse(json["created_at"]),
+        updatedAt: json["updated_at"] == null
+            ? null
+            : DateTime.parse(json["updated_at"]),
+        category: json["category"] == null
+            ? null
+            : Category.fromJson(json["category"]),
+        subCategory: json["sub_category"] == null
+            ? null
+            : Category.fromJson(json["sub_category"]),
+        brand: json["brand"] == null ? null : Brand.fromJson(json["brand"]),
+        gallery: json["gallery"] == null
+            ? null
+            : List<dynamic>.from(json["gallery"].map((x) => x)),
+        variation: json["variation"] == null
+            ? null
+            : List<dynamic>.from(json["variation"].map((x) => x)),
       );
 
   Map<String, dynamic> toJson() => {
@@ -93,25 +114,39 @@ class SingleProduct {
         "discount": discount,
         "discount_price": discountPrice,
         "feature_image": featureImage,
-        "is_publish": isPublish ? 1 : 0,
-        "is_active": isActive ? 1 : 0,
-        "created_at": createdAt.toIso8601String(),
-        "updated_at": updatedAt.toIso8601String(),
+        "feature_product": featureProduct == null
+            ? null
+            : featureProduct!
+                ? 1
+                : 0,
+        "hot_deal": hotDeal == null
+            ? null
+            : hotDeal!
+                ? 1
+                : 0,
+        "slug": slug,
+        "is_publish": isPublish,
+        "is_active": isActive,
+        "created_at": createdAt?.toIso8601String(),
+        "updated_at": updatedAt?.toIso8601String(),
         "category": category?.toJson(),
         "sub_category": subCategory?.toJson(),
         "brand": brand?.toJson(),
-        "gallery": List<dynamic>.from(gallery.map((x) => x.toJson())),
-        "variation": List<dynamic>.from(variation.map((x) => x)),
+        "gallery":
+            gallery == null ? null : List<dynamic>.from(gallery!.map((x) => x)),
+        "variation": variation == null
+            ? null
+            : List<dynamic>.from(variation!.map((x) => x)),
       };
 }
 
 class Category {
-  String name;
-  int id;
+  String? name;
+  int? id;
 
   Category({
-    required this.name,
-    required this.id,
+    this.name,
+    this.id,
   });
 
   factory Category.fromJson(Map<String, dynamic> json) => Category(
@@ -125,33 +160,22 @@ class Category {
       };
 }
 
-class Gallery {
-  int productId;
-  String image;
-  int id;
+class Brand {
+  String? name;
+  int? id;
 
-  Gallery({
-    required this.productId,
-    required this.image,
-    required this.id,
+  Brand({
+    this.name,
+    this.id,
   });
 
-  factory Gallery.fromJson(Map<String, dynamic> json) => Gallery(
-        productId: json["product_id"],
-        image: json["image"],
+  factory Brand.fromJson(Map<String, dynamic> json) => Brand(
+        name: json["name"],
         id: json["id"],
       );
 
   Map<String, dynamic> toJson() => {
-        "product_id": productId,
-        "image": image,
+        "name": name,
         "id": id,
       };
 }
-
-// Function to convert JSON string to SingleProduct object
-SingleProduct singleProductFromJson(String str) =>
-    SingleProduct.fromJson(json.decode(str));
-
-// Function to convert SingleProduct object to JSON string
-String singleProductToJson(SingleProduct data) => json.encode(data.toJson());

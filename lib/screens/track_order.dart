@@ -1,4 +1,6 @@
+import 'package:bajarbd/model/models/cart_model.dart';
 import 'package:bajarbd/model/models/order_track_model.dart';
+import 'package:bajarbd/screens/checkout_page.dart';
 import 'package:bajarbd/screens/product_details_screen.dart';
 import 'package:bajarbd/utils/app_methods.dart';
 import 'package:bajarbd/utils/db/user_credential.dart';
@@ -266,6 +268,65 @@ class TrackOrder extends StatelessWidget {
                               SizedBox(
                                 height: 10,
                               ),
+                              if (snapTrackOrder.data!.paymentMethod != 2 &&
+                                  snapTrackOrder.data!.paymentStatus == 0)
+                                ElevatedButton.icon(
+                                  onPressed: () {
+                                    List<CartModel> carts = [];
+
+                                    for (int i = 0;
+                                        i <
+                                            snapTrackOrder
+                                                .data!.orderDetail.length;
+                                        i++) {
+                                      carts.add(CartModel(
+                                          id: snapTrackOrder
+                                              .data!.orderDetail[i].orderId!,
+                                          title: snapTrackOrder.data!
+                                                  .orderDetail[i].productName ??
+                                              "",
+                                          price: double.parse(snapTrackOrder
+                                                  .data!.orderDetail[i].price ??
+                                              "0.0"),
+                                          amount: int.parse(snapTrackOrder
+                                                  .data!.orderDetail[i].qty ??
+                                              "0"),
+                                          total: double.parse(
+                                              snapTrackOrder.data!.orderDetail[i].subtotal ?? "0.0"),
+                                          imageLink: "https://ecom.szamantech.com/storage/product/${snapTrackOrder.data!.orderDetail[i].image ?? ""}"));
+                                    }
+
+                                    Navigator.of(context)
+                                        .pushReplacement(MaterialPageRoute(
+                                            builder: (ctx) => CheckoutPage(
+                                                  transID: snapTrackOrder
+                                                      .data!.tnxId,
+                                                  shippingCharge: double.parse(
+                                                      snapTrackOrder.data!
+                                                              .shippingCharge ??
+                                                          "0.0"),
+                                                  carts: carts,
+                                                  totalCost: double.parse(
+                                                          snapTrackOrder.data!
+                                                                  .payableAmount ??
+                                                              "0") -
+                                                      double.parse(snapTrackOrder
+                                                              .data!
+                                                              .shippingCharge ??
+                                                          "0"),
+                                                  rootref: refTrackOrder,
+                                                  isPlaceOrder: false,
+                                                )));
+                                  },
+                                  icon: Icon(Icons.payment),
+                                  label: Text("Pay Now!"),
+                                  style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.black,
+                                      foregroundColor: Colors.white,
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10))),
+                                ),
                               Row(
                                 children: [
                                   Text(
@@ -276,7 +337,8 @@ class TrackOrder extends StatelessWidget {
                                   SizedBox(
                                     width: 5,
                                   ),
-                                  Text("${snapTrackOrder.data!.paymentMethod}"),
+                                  Text(
+                                      "${(snapTrackOrder.data!.paymentMethod) == 1 ? "Online" : "Cash On Delivery"}"),
                                   Spacer(),
                                   Text(
                                     "Total",

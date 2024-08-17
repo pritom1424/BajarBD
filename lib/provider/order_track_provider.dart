@@ -8,6 +8,7 @@ class OrderTrackProvider with ChangeNotifier {
 
   Future<OrderTrackModel?> getOrderTrack(String orderNumber) async {
     if (UserCredential.userId == null) {
+      print("order history null" + "uid prob");
       return null;
     }
     final track = await _orderTrackRepos.getOrderTrack(

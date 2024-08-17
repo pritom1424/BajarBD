@@ -17,7 +17,7 @@ class OrderTrackModel {
   String? tnxId;
   String? payableAmount;
   String? shippingCharge;
-  String? paymentMethod;
+  int? paymentMethod;
   DateTime? paymentDate;
   DateTime? orderDate;
   int? orderStatus;

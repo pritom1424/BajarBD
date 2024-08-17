@@ -3,7 +3,7 @@ import '../../utils/db/db_helper.dart';
 import '../../widgets/products/product_tile.dart';
 
 class WishlistModelRepos {
-  Future<bool> addWishlist(SingleProduct prod, String imageLink) async {
+  Future<bool> addWishlist(SingleProductModel prod, String imageLink) async {
     try {
       Map<String, dynamic> data = {
         'id': prod.id,

@@ -17,7 +17,7 @@ class WishlistScreenProvider with ChangeNotifier {
     return _wishlist;
   }
 
-  Future<bool> addToWishList(SingleProduct prod, String imageLink) async {
+  Future<bool> addToWishList(SingleProductModel prod, String imageLink) async {
     bool didAdd = await _wishlistModelRepos.addWishlist(prod, imageLink);
     notifyListeners();
 
