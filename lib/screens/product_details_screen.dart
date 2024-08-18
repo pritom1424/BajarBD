@@ -87,6 +87,9 @@ class ProductDetailsScreen extends StatelessWidget {
                     ),
                   );
                 }
+/* 
+                print("Image:" +
+                    "${ApiLinks.baseImageUrl}/gallery/${snapshot.data!.gallery?[0]['image']}"); */
 
                 final isDiscount = (snapshot.data!.discount == null ||
                         snapshot.data!.discountPrice == null)

@@ -43,7 +43,7 @@ class OrderTile extends StatelessWidget {
                             style:
                                 const TextStyle(fontWeight: FontWeight.normal)),
                         Text(
-                          "transaction id: ${orderHistoryModel.tnxId}",
+                          "Payment: ${orderHistoryModel.paymentMethod == 1 ? "Online" : "Cash On Delivery"}",
                           style: const TextStyle(
                             fontSize: 12,
                           ),

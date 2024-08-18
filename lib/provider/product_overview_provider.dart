@@ -1,3 +1,5 @@
+import 'package:bajarbd/model/models/home_cat_wise_model.dart';
+
 import '../model/data/home_latest_product_repos.dart';
 import '../model/data/slider_model_repos.dart';
 import '../model/models/home_latest_model.dart';
@@ -17,5 +19,11 @@ class ProductOverviewProvider with ChangeNotifier {
 
   Future<List<SliderModel>?> getSliders() async {
     return await _sliderModelRepos.getSliders();
+  }
+
+  Future<List<HomeCatWiseModel>> getCatWiseProduct() async {
+    final products = await _homeLatestProductRepos.getCatProducts();
+
+    return products;
   }
 }

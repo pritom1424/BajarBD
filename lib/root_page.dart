@@ -102,7 +102,9 @@ class RootPage extends ConsumerWidget {
               AppMethods().onNavButtonTap(ind, ref);
             },
           ),
-          drawer: const CustomDrawer(),
+          drawer: CustomDrawer(
+            ref: ref,
+          ),
           body: FutureBuilder(
               future: ref.read(authProvider).tryAutoLogin(),
               builder: (context, snapLoginCheck) {

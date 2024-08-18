@@ -135,16 +135,16 @@ class TrackOrder extends StatelessWidget {
                                   ),
                                 ],
                               ),
-                              SizedBox(height: 8),
+                              /*  SizedBox(height: 8),
                               Row(
                                 children: [
-                                  if (snapTrackOrder.data!.tnxId != null)
+                                  if (snapTrackOrder.data!.paymentDate != null)
                                     Text(
-                                      'Transaction id: ${snapTrackOrder.data!.tnxId}',
+                                      'payment date: ${snapTrackOrder.data!.paymentDate}',
                                       style: TextStyle(color: Colors.grey),
                                     ),
                                 ],
-                              ),
+                              ), */
                               SizedBox(height: 16),
                               SizedBox(
                                 height: Appvars.screenSize.height * 0.15,

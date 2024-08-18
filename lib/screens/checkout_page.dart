@@ -73,7 +73,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Padding(
-                padding: const EdgeInsets.only(bottom: 50),
+                padding: const EdgeInsets.only(bottom: 20),
                 child: Text(
                   "Complete Your Purchase!",
                   style: Theme.of(context).textTheme.titleLarge,
@@ -84,6 +84,170 @@ class _CheckoutPageState extends State<CheckoutPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
+                    Consumer(builder: (context, refBill, ch) {
+                      return Card(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 0),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                'Billing Info',
+                                style: Theme.of(context).textTheme.bodyLarge,
+                                textAlign: TextAlign.center,
+                              ),
+                              const SizedBox(height: 20),
+                              FutureBuilder(
+                                  future: refBill
+                                      .read(checkoutPageProvider)
+                                      .getCustomerInfo(),
+                                  builder: (context, snapBill) {
+                                    if (snapBill.connectionState ==
+                                        ConnectionState.waiting) {
+                                      return Center(
+                                        child: LoaderWidget(),
+                                      );
+                                    }
+                                    if (!snapBill.hasData) {
+                                      return Text("No Billing info available");
+                                    }
+                                    return Container(
+                                      child: Column(
+                                        children: [
+                                          Text(
+                                            snapBill.data!.firstName +
+                                                " " +
+                                                snapBill.data!.lastName,
+                                            style: TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.bold,
+                                                fontStyle: FontStyle.italic),
+                                          ),
+                                          if (snapBill.data!.phone != null)
+                                            Text(
+                                              snapBill.data!.phone!,
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontStyle: FontStyle.italic),
+                                            )
+                                        ],
+                                      ),
+                                    );
+                                  }),
+                            ],
+                          ),
+                        ),
+                      );
+                    }),
+                    const SizedBox(height: 20),
+                    Consumer(builder: (ctx, refAddressRead, ch) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          if (!refAddressRead.read(checkoutPageProvider).isEdit)
+                            FutureBuilder(
+                                future: refAddressRead
+                                    .read(checkoutPageProvider)
+                                    .getShippingAddress(UserCredential.userId!),
+                                builder: (ctx, snapGetAddreees) {
+                                  if (snapGetAddreees.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return SizedBox.shrink();
+                                  }
+                                  if (!snapGetAddreees.hasData) {
+                                    refAddressRead
+                                        .read(checkoutPageProvider)
+                                        .setEdit(true);
+
+                                    return ShippingAddressForm(
+                                        refCheck: refAddressRead);
+                                  }
+
+                                  sModel = snapGetAddreees.data!;
+                                  return Card(
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 5),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.stretch,
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceEvenly,
+                                            children: [
+                                              Expanded(child: SizedBox()),
+                                              Expanded(
+                                                flex: 2,
+                                                child: Text(
+                                                  'Shipping Info',
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyLarge,
+                                                  textAlign: TextAlign.center,
+                                                ),
+                                              ),
+                                              Expanded(
+                                                child: IconButton(
+                                                    onPressed: () {
+                                                      refAddressRead
+                                                          .watch(
+                                                              checkoutPageProvider)
+                                                          .setEdit(true);
+                                                    },
+                                                    icon: Icon(Icons.edit)),
+                                              )
+                                            ],
+                                          ),
+                                          const SizedBox(height: 10),
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              Text(
+                                                "${snapGetAddreees.data!.addressLineOne}",
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontStyle:
+                                                        FontStyle.italic),
+                                              ),
+                                            ],
+                                          ),
+                                          Text(
+                                            "${snapGetAddreees.data!.postOffice},${snapGetAddreees.data!.thana}",
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontStyle: FontStyle.italic),
+                                          ),
+                                          Text(
+                                            "${snapGetAddreees.data!.district}-${snapGetAddreees.data!.postalCode}",
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontStyle: FontStyle.italic),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                }),
+                          if (refAddressRead.read(checkoutPageProvider).isEdit)
+                            ShippingAddressForm(
+                              refCheck: refAddressRead,
+                              houseFlat: sModel?.addressLineOne,
+                              postOFFICE: sModel?.postOffice,
+                              thanaName: sModel?.thana,
+                              postalCodeName: sModel?.postalCode,
+                              districtName: sModel?.district,
+                            )
+                        ],
+                      );
+                    }),
+                    SizedBox(
+                      height: 20,
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -287,168 +451,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
                 ),
               ),
               const SizedBox(height: 20),
-              Consumer(builder: (context, refBill, ch) {
-                return Card(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 5),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          'Billing Info',
-                          style: Theme.of(context).textTheme.bodyLarge,
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(height: 20),
-                        FutureBuilder(
-                            future: refBill
-                                .read(checkoutPageProvider)
-                                .getCustomerInfo(),
-                            builder: (context, snapBill) {
-                              if (snapBill.connectionState ==
-                                  ConnectionState.waiting) {
-                                return Center(
-                                  child: LoaderWidget(),
-                                );
-                              }
-                              if (!snapBill.hasData) {
-                                return Text("No Billing info available");
-                              }
-                              return Container(
-                                child: Column(
-                                  children: [
-                                    Text(
-                                      snapBill.data!.firstName +
-                                          " " +
-                                          snapBill.data!.lastName,
-                                      style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold,
-                                          fontStyle: FontStyle.italic),
-                                    ),
-                                    if (snapBill.data!.phone != null)
-                                      Text(
-                                        snapBill.data!.phone!,
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontStyle: FontStyle.italic),
-                                      )
-                                  ],
-                                ),
-                              );
-                            }),
-                      ],
-                    ),
-                  ),
-                );
-              }),
-              const SizedBox(height: 20),
-              Consumer(builder: (ctx, refAddressRead, ch) {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    if (!refAddressRead.read(checkoutPageProvider).isEdit)
-                      FutureBuilder(
-                          future: refAddressRead
-                              .read(checkoutPageProvider)
-                              .getShippingAddress(UserCredential.userId!),
-                          builder: (ctx, snapGetAddreees) {
-                            if (snapGetAddreees.connectionState ==
-                                ConnectionState.waiting) {
-                              return SizedBox.shrink();
-                            }
-                            if (!snapGetAddreees.hasData) {
-                              refAddressRead
-                                  .read(checkoutPageProvider)
-                                  .setEdit(true);
-
-                              return ShippingAddressForm(
-                                  refCheck: refAddressRead);
-                            }
-
-                            sModel = snapGetAddreees.data!;
-                            return Card(
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 5),
-                                child: Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.stretch,
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      children: [
-                                        Expanded(child: SizedBox()),
-                                        Expanded(
-                                          flex: 2,
-                                          child: Text(
-                                            'Shipping Info',
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodyLarge,
-                                            textAlign: TextAlign.center,
-                                          ),
-                                        ),
-                                        Expanded(
-                                          child: IconButton(
-                                              onPressed: () {
-                                                refAddressRead
-                                                    .watch(checkoutPageProvider)
-                                                    .setEdit(true);
-                                              },
-                                              icon: Icon(Icons.edit)),
-                                        )
-                                      ],
-                                    ),
-                                    const SizedBox(height: 10),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          "${snapGetAddreees.data!.addressLineOne}",
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontStyle: FontStyle.italic),
-                                        ),
-                                      ],
-                                    ),
-                                    Text(
-                                      "${snapGetAddreees.data!.postOffice},${snapGetAddreees.data!.thana}",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontStyle: FontStyle.italic),
-                                    ),
-                                    Text(
-                                      "${snapGetAddreees.data!.district}-${snapGetAddreees.data!.postalCode}",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontStyle: FontStyle.italic),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            );
-                          }),
-                    if (refAddressRead.read(checkoutPageProvider).isEdit)
-                      ShippingAddressForm(
-                        refCheck: refAddressRead,
-                        houseFlat: sModel?.addressLineOne,
-                        postOFFICE: sModel?.postOffice,
-                        thanaName: sModel?.thana,
-                        postalCodeName: sModel?.postalCode,
-                        districtName: sModel?.district,
-                      )
-                  ],
-                );
-              }),
-              SizedBox(
-                height: 20,
-              ),
               if (widget.shippingCharge == null)
                 Consumer(
                   builder: (ctxCharge, refCharge, _) => Container(

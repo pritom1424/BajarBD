@@ -1,4 +1,6 @@
 import 'package:bajarbd/utils/Appvars/appvars.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/widgets.dart';
 
 import '../../model/models/cart_model.dart';
 import '../../provider/providers.dart';
@@ -8,7 +10,7 @@ import '../../utils/Colors/appcolors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ProductItem extends ConsumerWidget {
+class HomeCatWiseProductItem extends ConsumerWidget {
   final String link;
   final bool isShowBadge;
   final String? unitPrice;
@@ -17,7 +19,7 @@ class ProductItem extends ConsumerWidget {
   final String? title;
   final int id;
 
-  const ProductItem(
+  const HomeCatWiseProductItem(
       {super.key,
       required this.link,
       required this.isShowBadge,
@@ -79,7 +81,7 @@ class ProductItem extends ConsumerWidget {
                                   borderRadius: BorderRadius.circular(10),
                                   child: Image.network(
                                     link,
-                                    fit: BoxFit.cover,
+                                    fit: BoxFit.contain,
                                     loadingBuilder: (context, child,
                                             loadingProgress) =>
                                         (loadingProgress == null)
@@ -92,6 +94,7 @@ class ProductItem extends ConsumerWidget {
                                                   AppConstants.appPlaceHolder,
                                                 ),
                                               ),
+                                    //),
                                     errorBuilder:
                                         (context, error, stackTrace) =>
                                             Container(
@@ -108,8 +111,7 @@ class ProductItem extends ConsumerWidget {
                               height: 5,
                             ),
                             Expanded(
-                              flex: 1,
-                              child: Padding(
+                              child: Container(
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 10),
                                 child: Text(
@@ -121,7 +123,6 @@ class ProductItem extends ConsumerWidget {
                             ),
                             // const Expanded(child: SizedBox()),
                             Expanded(
-                              flex: 1,
                               child: Padding(
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 10),

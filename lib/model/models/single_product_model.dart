@@ -29,8 +29,8 @@ class SingleProductModel {
   Category? category;
   Category? subCategory;
   Brand? brand;
-  List<dynamic>? gallery;
-  List<dynamic>? variation;
+  List<Gallery>? gallery;
+  List<Variaion>? variation;
 
   SingleProductModel({
     required this.id,
@@ -95,10 +95,12 @@ class SingleProductModel {
         brand: json["brand"] == null ? null : Brand.fromJson(json["brand"]),
         gallery: json["gallery"] == null
             ? null
-            : List<dynamic>.from(json["gallery"].map((x) => x)),
+            : List<Gallery>.from(
+                json["gallery"].map((x) => Gallery.fromJson(x))),
         variation: json["variation"] == null
             ? null
-            : List<dynamic>.from(json["variation"].map((x) => x)),
+            : List<Variaion>.from(
+                json["variation"].map((x) => Variaion.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -132,11 +134,36 @@ class SingleProductModel {
         "category": category?.toJson(),
         "sub_category": subCategory?.toJson(),
         "brand": brand?.toJson(),
-        "gallery":
-            gallery == null ? null : List<dynamic>.from(gallery!.map((x) => x)),
+        "gallery": gallery == null
+            ? null
+            : List<dynamic>.from(gallery!.map((x) => x.toJson())),
         "variation": variation == null
             ? null
-            : List<dynamic>.from(variation!.map((x) => x)),
+            : List<dynamic>.from(variation!.map((x) => x.toJson())),
+      };
+}
+
+class Gallery {
+  int productId;
+  String image;
+  int id;
+
+  Gallery({
+    required this.productId,
+    required this.image,
+    required this.id,
+  });
+
+  factory Gallery.fromJson(Map<String, dynamic> json) => Gallery(
+        productId: json["product_id"],
+        image: json["image"],
+        id: json["id"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "product_id": productId,
+        "image": image,
+        "id": id,
       };
 }
 
@@ -176,6 +203,30 @@ class Brand {
 
   Map<String, dynamic> toJson() => {
         "name": name,
+        "id": id,
+      };
+}
+
+class Variaion {
+  int productId;
+  String image;
+  int id;
+
+  Variaion({
+    required this.productId,
+    required this.image,
+    required this.id,
+  });
+
+  factory Variaion.fromJson(Map<String, dynamic> json) => Variaion(
+        productId: json["product_id"],
+        image: json["image"],
+        id: json["id"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "product_id": productId,
+        "image": image,
         "id": id,
       };
 }

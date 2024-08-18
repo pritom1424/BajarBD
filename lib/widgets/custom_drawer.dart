@@ -1,4 +1,6 @@
+import 'package:bajarbd/provider/providers.dart';
 import 'package:bajarbd/screens/settings_scr.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../screens/track_order.dart';
 import '../utils/Appvars/app_constants.dart';
@@ -14,7 +16,8 @@ import '../screens/order_history.dart';
 import 'package:flutter/material.dart';
 
 class CustomDrawer extends StatelessWidget {
-  const CustomDrawer({super.key});
+  final WidgetRef ref;
+  const CustomDrawer({super.key, required this.ref});
 
   @override
   Widget build(BuildContext context) {
@@ -82,15 +85,15 @@ class CustomDrawer extends StatelessWidget {
                               ? Colors.grey
                               : Colors.black),
                     ),
-                    onTap: () => (UserCredential.userId) == null
-                        ? null
-                        : Navigator.of(context).push(MaterialPageRoute(
-                            builder: (ctx) => const HistoryPage()))
-                    //  Navigator.of(context).pushReplacementNamed(OrderScreen.routeName),
-                    // Navigator.of(context).pushReplacement(CustomeRoute(
-                    //   builder: (context) => OrderScreen(),
-                    // ))
-                    ),
+                    onTap: () {
+                      if (UserCredential.userId == null) {
+                        ref.watch(rootPageProvider).setNavPageIndex(3);
+                        Navigator.of(context).pop();
+                        return;
+                      }
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (ctx) => const HistoryPage()));
+                    }),
                 const Divider(
                   thickness: 0.3,
                   color: Appcolors.appThemeSecondaryColor,
@@ -146,24 +149,26 @@ class CustomDrawer extends StatelessWidget {
                   color: Appcolors.appThemeSecondaryColor,
                 ),
                 ListTile(
-                  leading: Icon(Icons.settings,
-                      color: (UserCredential.userId == null)
-                          ? Colors.grey
-                          : Colors.black),
-                  title: Text(
-                    "Settings",
-                    style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                    leading: Icon(Icons.settings,
                         color: (UserCredential.userId == null)
                             ? Colors.grey
                             : Colors.black),
-                  ),
-                  onTap: (UserCredential.userId) == null
-                      ? null
-                      : () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (ctx) => SettingsScreen()));
-                        },
-                ),
+                    title: Text(
+                      "Settings",
+                      style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                          color: (UserCredential.userId == null)
+                              ? Colors.grey
+                              : Colors.black),
+                    ),
+                    onTap: () {
+                      if (UserCredential.userId == null) {
+                        ref.watch(rootPageProvider).setNavPageIndex(3);
+                        Navigator.of(context).pop();
+                        return;
+                      }
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (ctx) => SettingsScreen()));
+                    }),
                 const Divider(
                   thickness: 0.3,
                   color: Appcolors.appThemeSecondaryColor,
