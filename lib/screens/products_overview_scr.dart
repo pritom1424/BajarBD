@@ -1,3 +1,4 @@
+import 'package:bajarbd/widgets/carousel/cat_wise_featured_product.dart';
 import 'package:bajarbd/widgets/category/catwise/catwise_tile.dart';
 import 'package:bajarbd/widgets/products/home_catwise_list.dart';
 import 'package:bajarbd/widgets/products/home_catwise_product_tile.dart';
@@ -100,8 +101,10 @@ class _ProductsOverviewScrState extends State<ProductsOverviewScr> {
                                             child: Text("Show More"))
                                       ],
                                     ),
-                                    HomeCatWiseList(
-                                        model: snapCat.data![index]),
+                                    CatWiseFeaturedProductWidget(
+                                      model: snapCat.data![index],
+                                      index: index,
+                                    ),
                                   ],
                                 )));
                   }),

@@ -1,4 +1,5 @@
-import 'cat_product_grid.dart';
+import 'package:bajarbd/widgets/category/cat_product_list_tile.dart';
+
 import 'package:flutter/material.dart';
 
 class CatProductItem extends StatelessWidget {
@@ -8,11 +9,11 @@ class CatProductItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(bottom: 30),
+      margin: EdgeInsets.only(bottom: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Container(
+          /* Container(
             color: Colors.black12,
             child: Text(
               catName,
@@ -22,8 +23,11 @@ class CatProductItem extends StatelessWidget {
           ),
           SizedBox(
             height: 10,
-          ),
-          CategoryProductGrid(),
+          ), */
+          CatProductListTile(
+              /*   link:
+                  "https://img.alicdn.com/imgextra/i1/O1CN01DAfRKf26IiQprCklJ_!!6000000007639-0-tps-240-240.jpg", */
+              title: catName),
         ],
       ),
     ); /* ExpansionTile(
