@@ -1,27 +1,65 @@
 // To parse this JSON data, do
 //
-//     final homeLatestProduct = homeLatestProductFromJson(jsonString);
+//     final catWiseModel = catWiseModelFromJson(jsonString);
 
 import 'dart:convert';
 
-List<CatWiseModel> catWiseModelFromJson(String str) => List<CatWiseModel>.from(
-    json.decode(str).map((x) => CatWiseModel.fromJson(x)));
+CatWiseModel catWiseModelFromJson(String str) =>
+    CatWiseModel.fromJson(json.decode(str));
 
-String catWiseModelToJson(List<CatWiseModel> data) =>
-    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+String catWiseModelToJson(CatWiseModel data) => json.encode(data.toJson());
 
 class CatWiseModel {
+  int id;
+  String? name;
+  dynamic image;
+  DateTime createdAt;
+  DateTime updatedAt;
+  List<Product>? product;
+
+  CatWiseModel({
+    required this.id,
+    required this.name,
+    required this.image,
+    required this.createdAt,
+    required this.updatedAt,
+    required this.product,
+  });
+
+  factory CatWiseModel.fromJson(Map<String, dynamic> json) => CatWiseModel(
+        id: json["id"],
+        name: json["name"],
+        image: json["image"],
+        createdAt: DateTime.parse(json["created_at"]),
+        updatedAt: DateTime.parse(json["updated_at"]),
+        product:
+            List<Product>.from(json["product"].map((x) => Product.fromJson(x))),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "name": name,
+        "image": image,
+        "created_at": createdAt.toIso8601String(),
+        "updated_at": updatedAt.toIso8601String(),
+        "product": product == null
+            ? []
+            : List<dynamic>.from(product!.map((x) => x.toJson())),
+      };
+}
+
+class Product {
   int id;
   String? title;
   String? description;
   String? shortDescription;
   int? categoryId;
   dynamic subcategoryId;
-  int? brandId;
+  dynamic brandId;
   String? unitPrice;
   String? quantity;
-  String? discount;
-  String? discountPrice;
+  dynamic discount;
+  dynamic discountPrice;
   String? featureImage;
   dynamic featureProduct;
   dynamic hotDeal;
@@ -30,13 +68,8 @@ class CatWiseModel {
   int? isActive;
   DateTime createdAt;
   DateTime updatedAt;
-  Brand? category;
-  dynamic subCategory;
-  Brand? brand;
-  List<Gallery>? gallery;
-  List<dynamic>? variation;
 
-  CatWiseModel({
+  Product({
     required this.id,
     required this.title,
     required this.description,
@@ -56,14 +89,9 @@ class CatWiseModel {
     required this.isActive,
     required this.createdAt,
     required this.updatedAt,
-    required this.category,
-    required this.subCategory,
-    required this.brand,
-    required this.gallery,
-    required this.variation,
   });
 
-  factory CatWiseModel.fromJson(Map<String, dynamic> json) => CatWiseModel(
+  factory Product.fromJson(Map<String, dynamic> json) => Product(
         id: json["id"],
         title: json["title"],
         description: json["description"],
@@ -83,13 +111,6 @@ class CatWiseModel {
         isActive: json["is_active"],
         createdAt: DateTime.parse(json["created_at"]),
         updatedAt: DateTime.parse(json["updated_at"]),
-        category:
-            json["category"] == null ? null : Brand.fromJson(json["category"]),
-        subCategory: json["sub_category"],
-        brand: json["brand"] == null ? null : Brand.fromJson(json["brand"]),
-        gallery:
-            List<Gallery>.from(json["gallery"].map((x) => Gallery.fromJson(x))),
-        variation: List<dynamic>.from(json["variation"].map((x) => x)),
       );
 
   Map<String, dynamic> toJson() => {
@@ -112,54 +133,5 @@ class CatWiseModel {
         "is_active": isActive,
         "created_at": createdAt.toIso8601String(),
         "updated_at": updatedAt.toIso8601String(),
-        "category": category?.toJson(),
-        "sub_category": subCategory,
-        "brand": brand?.toJson(),
-        "gallery": List<dynamic>.from(gallery?.map((x) => x.toJson()) ?? []),
-        "variation": List<dynamic>.from(variation?.map((x) => x) ?? []),
-      };
-}
-
-class Brand {
-  String? name;
-  int id;
-
-  Brand({
-    required this.name,
-    required this.id,
-  });
-
-  factory Brand.fromJson(Map<String, dynamic> json) => Brand(
-        name: json["name"],
-        id: json["id"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "name": name,
-        "id": id,
-      };
-}
-
-class Gallery {
-  int? productId;
-  String? image;
-  int id;
-
-  Gallery({
-    required this.productId,
-    required this.image,
-    required this.id,
-  });
-
-  factory Gallery.fromJson(Map<String, dynamic> json) => Gallery(
-        productId: json["product_id"],
-        image: json["image"],
-        id: json["id"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "product_id": productId,
-        "image": image,
-        "id": id,
       };
 }

@@ -9,7 +9,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class CatWiseScreen extends StatefulWidget {
   final String? title;
-  const CatWiseScreen({super.key, this.title});
+  final int catId;
+  const CatWiseScreen({super.key, this.title, required this.catId});
 
   @override
   State<CatWiseScreen> createState() => _CatWiseScreenState();
@@ -68,7 +69,9 @@ class _CatWiseScreenState extends State<CatWiseScreen> {
             //         const FeaturedProductWidget(),
             Consumer(builder: (ctx, ref, _) {
               return FutureBuilder(
-                  future: ref.watch(catWiseProvider).getCatWiseProducts(),
+                  future: ref
+                      .watch(catWiseProvider)
+                      .getCatWiseProducts(widget.catId),
                   builder: (ctx, snapLatestProduct) {
                     if (snapLatestProduct.connectionState ==
                         ConnectionState.waiting) {
@@ -76,8 +79,7 @@ class _CatWiseScreenState extends State<CatWiseScreen> {
                           height: Appvars.screenSize.height * 0.6,
                           child: const Center(child: LoaderWidget()));
                     }
-                    if (!snapLatestProduct.hasData ||
-                        snapLatestProduct.data!.isEmpty) {
+                    if (!snapLatestProduct.hasData) {
                       return SizedBox(
                         height: Appvars.screenSize.height * 0.6,
                         child: const Center(
@@ -88,7 +90,7 @@ class _CatWiseScreenState extends State<CatWiseScreen> {
                     return CatWiseGrids(
                       false,
                       isScroll: false,
-                      products: snapLatestProduct.data!,
+                      model: snapLatestProduct.data!,
                     );
                   });
             })

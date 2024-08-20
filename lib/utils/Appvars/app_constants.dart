@@ -21,4 +21,7 @@ class AppConstants {
   static const loginErrorText = "login failed! try again!";
   static const signupErrorText = "Account Creation failed! try again!";
   static const defaultfontFamily = "Lato";
+
+  //------ services
+  static const crispID = "1bcf3ab5-f85f-4950-9712-b08b04422a04";
 }

@@ -7,9 +7,9 @@ import 'package:flutter/material.dart';
 class CatWiseGrids extends StatelessWidget {
   final bool showFav;
   final bool? isScroll;
-  final List<CatWiseModel> products;
+  final CatWiseModel model;
   const CatWiseGrids(this.showFav,
-      {super.key, this.isScroll, required this.products});
+      {super.key, this.isScroll, required this.model});
 
   @override
   Widget build(BuildContext context) {
@@ -24,25 +24,25 @@ class CatWiseGrids extends StatelessWidget {
             ? const AlwaysScrollableScrollPhysics()
             : const NeverScrollableScrollPhysics(),
         padding: const EdgeInsets.all(10),
-        itemCount: products.length, //products.length,
+        itemCount: model.product?.length ?? 0, //products.length,
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
             childAspectRatio: 0.66,
             mainAxisSpacing: 10,
             crossAxisSpacing: 10),
         itemBuilder: (ctx, ind) => CatWiseItem(
-          link: products[ind].featureImage == null
+          link: model.product?[ind].featureImage == null
               ? ""
-              : ("${ApiLinks.baseImageUrl}/product/${products[ind].featureImage!}"),
-          isShowBadge: (products[ind].discount == null ||
-                  products[ind].discountPrice == null)
+              : ("${ApiLinks.baseImageUrl}/product/${model.product![ind].featureImage!}"),
+          isShowBadge: (model.product?[ind].discount == null ||
+                  model.product?[ind].discountPrice == null)
               ? false
               : true,
-          unitPrice: products[ind].unitPrice,
-          discount: products[ind].discount,
-          discountPrice: products[ind].discountPrice,
-          title: products[ind].title,
-          id: products[ind].id,
+          unitPrice: model.product?[ind].unitPrice ?? "0.0",
+          discount: model.product?[ind].discount ?? "0.0",
+          discountPrice: model.product?[ind].discountPrice ?? "0.0",
+          title: model.product?[ind].title ?? "",
+          id: model.product?[ind].id ?? -1,
         ) /* ChangeNotifierProvider.value(
           value: products[ind],
           child: ProductItems(),

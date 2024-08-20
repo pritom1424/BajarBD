@@ -5,9 +5,12 @@ import '../../utils/Colors/appcolors.dart';
 import 'package:flutter/material.dart';
 
 class CatProductListTile extends StatelessWidget {
+  final int catId;
   final String title; // link,
   const CatProductListTile(
-      {super.key, required this.title}); //required this.link,
+      {super.key,
+      required this.title,
+      required this.catId}); //required this.link,
 
   @override
   Widget build(BuildContext context) {
@@ -17,6 +20,7 @@ class CatProductListTile extends StatelessWidget {
       onTap: () {
         Navigator.of(context).push(MaterialPageRoute(
             builder: (ctx) => CatWiseScreen(
+                  catId: catId,
                   title: title,
                 )));
       },

@@ -3,8 +3,9 @@ import 'package:bajarbd/widgets/category/cat_product_list_tile.dart';
 import 'package:flutter/material.dart';
 
 class CatProductItem extends StatelessWidget {
+  final int catId;
   final String catName;
-  const CatProductItem({super.key, required this.catName});
+  const CatProductItem({super.key, required this.catName, required this.catId});
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +26,7 @@ class CatProductItem extends StatelessWidget {
             height: 10,
           ), */
           CatProductListTile(
+              catId: catId,
               /*   link:
                   "https://img.alicdn.com/imgextra/i1/O1CN01DAfRKf26IiQprCklJ_!!6000000007639-0-tps-240-240.jpg", */
               title: catName),

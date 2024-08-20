@@ -15,10 +15,10 @@ class CatProductGridTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Navigator.of(context).push(MaterialPageRoute(
+        /*    Navigator.of(context).push(MaterialPageRoute(
             builder: (ctx) => CatWiseScreen(
                   title: "product",
-                )));
+                ))); */
       },
       child: GridTile(
         /*   footer: Container(

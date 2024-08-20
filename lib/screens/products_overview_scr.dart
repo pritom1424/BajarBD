@@ -1,3 +1,4 @@
+import 'package:bajarbd/screens/catwise_screen.dart';
 import 'package:bajarbd/widgets/carousel/cat_wise_featured_product.dart';
 import 'package:bajarbd/widgets/category/catwise/catwise_tile.dart';
 import 'package:bajarbd/widgets/products/home_catwise_list.dart';
@@ -97,8 +98,19 @@ class _ProductsOverviewScrState extends State<ProductsOverviewScr> {
                                               .bodyLarge,
                                         ),
                                         TextButton(
-                                            onPressed: () {},
-                                            child: Text("Show More"))
+                                            onPressed: () {
+                                              Navigator.of(context).push(
+                                                  MaterialPageRoute(
+                                                      builder: (ctx) =>
+                                                          CatWiseScreen(
+                                                              title: snapCat
+                                                                  .data![index]
+                                                                  .name,
+                                                              catId: snapCat
+                                                                  .data![index]
+                                                                  .id)));
+                                            },
+                                            child: Text("View All"))
                                       ],
                                     ),
                                     CatWiseFeaturedProductWidget(

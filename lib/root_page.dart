@@ -1,10 +1,10 @@
+import 'package:bajarbd/model/data/services/chat_service.dart';
+import 'package:crisp_chat/crisp_chat.dart';
+
 import 'utils/Appvars/app_constants.dart';
 
 import 'provider/providers.dart';
-import 'screens/cart_screen.dart';
-import 'screens/products_overview_scr.dart';
-import 'screens/products_wishlist.dart';
-import 'screens/profile_page.dart';
+
 import 'utils/Appvars/appvars.dart';
 import 'utils/Components/appcomponent.dart';
 import 'utils/app_methods.dart';
@@ -104,6 +104,15 @@ class RootPage extends ConsumerWidget {
           ),
           drawer: CustomDrawer(
             ref: ref,
+          ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () async {
+              final conf = ChatService().Init(AppConstants.crispID);
+              await FlutterCrispChat.openCrispChat(config: conf);
+              //CrispChatSdk().openChat();
+              // Crisp.startChat();
+            },
+            child: Icon(Icons.message),
           ),
           body: FutureBuilder(
               future: ref.read(authProvider).tryAutoLogin(),

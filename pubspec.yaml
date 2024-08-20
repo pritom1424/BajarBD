@@ -47,6 +47,9 @@ dependencies:
   flutter_launcher_icons: ^0.13.1
   shared_preferences: ^2.2.3
   uuid: ^4.4.2
+  flutter_local_notifications: ^17.2.2
+  crisp_chat: ^2.0.3
+
 
 dev_dependencies:
   flutter_test:

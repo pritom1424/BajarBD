@@ -10,8 +10,8 @@ class CatWiseProvider with ChangeNotifier {
   final CatWiseRepos _homeLatestProductRepos = CatWiseRepos();
   final SliderModelRepos _sliderModelRepos = SliderModelRepos();
 
-  Future<List<CatWiseModel>> getCatWiseProducts() async {
-    final products = await _homeLatestProductRepos.getProducts();
+  Future<CatWiseModel?> getCatWiseProducts(int catId) async {
+    final products = await _homeLatestProductRepos.getProducts(catId);
 
     return products;
   }

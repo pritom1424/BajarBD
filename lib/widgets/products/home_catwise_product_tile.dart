@@ -122,7 +122,7 @@ class HomeCatWiseProductItem extends ConsumerWidget {
                               ),
                             ),
                             // const Expanded(child: SizedBox()),
-                            Expanded(
+                            FittedBox(
                               child: Padding(
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 10),
