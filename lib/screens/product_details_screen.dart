@@ -1,3 +1,4 @@
+import 'package:bajarbd/provider/product_details_provider.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import '../model/models/cart_model.dart';
@@ -36,6 +37,7 @@ class ProductDetailsScreen extends StatelessWidget {
     bool isInit = false;
     bool isdisableToCart = isDisable;
     bool isdisableFavorite = isFav;
+    int rating = 0;
     String cleanHtmlContent(String htmlContent) {
       // Replace newlines and tabs with spaces
       String cleanedHtml = htmlContent.replaceAll(RegExp(r'\s+'), ' ');
@@ -362,6 +364,37 @@ class ProductDetailsScreen extends StatelessWidget {
                         ],
                       ),
                     ),
+
+                    Consumer(builder: (context, refRate, ch) {
+                      return Row(
+                          children: List.generate(
+                              5,
+                              (index) => (rating >= index)
+                                  ? IconButton(
+                                      icon: Icon(
+                                        Icons.star,
+                                        color: Appcolors.appThemeSecondaryColor,
+                                      ),
+                                      onPressed: () {
+                                        rating = index;
+                                        refRate
+                                            .watch(detailsPageProvider)
+                                            .setRebuild();
+                                      },
+                                    )
+                                  : IconButton(
+                                      icon: Icon(
+                                        Icons.star_border,
+                                        color: Appcolors.appThemeSecondaryColor,
+                                      ),
+                                      onPressed: () {
+                                        rating = index;
+                                        refRate
+                                            .watch(detailsPageProvider)
+                                            .setRebuild();
+                                      },
+                                    )));
+                    }),
                     const Divider(
                       height: 20,
                       thickness: 0.3,

@@ -1,4 +1,5 @@
 import 'package:bajarbd/utils/Appvars/appvars.dart';
+import 'package:bajarbd/widgets/products/rating_tile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
 
@@ -76,7 +77,7 @@ class HomeCatWiseProductItem extends ConsumerWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Expanded(
-                              flex: 4,
+                              flex: 3,
                               child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10),
                                   child: Image.network(
@@ -121,6 +122,9 @@ class HomeCatWiseProductItem extends ConsumerWidget {
                                 ),
                               ),
                             ),
+                            SizedBox(
+                              height: 5,
+                            ),
                             // const Expanded(child: SizedBox()),
                             FittedBox(
                               child: Padding(
@@ -161,7 +165,7 @@ class HomeCatWiseProductItem extends ConsumerWidget {
                                         ),
                                       ],
                                     ),
-                                    IconButton(
+                                    /* IconButton(
                                         onPressed: didDisable
                                             ? null
                                             : () async {
@@ -198,9 +202,58 @@ class HomeCatWiseProductItem extends ConsumerWidget {
                                           color: didDisable
                                               ? Appcolors.appThemeSecondaryColor
                                               : Appcolors.appThemeColor,
-                                        ))
+                                        )) */
                                   ],
                                 ),
+                              ),
+                            ),
+                            FittedBox(
+                              child: Row(
+                                children: [
+                                  Padding(
+                                      padding:
+                                          EdgeInsets.only(right: 15, left: 10),
+                                      child: FittedBox(
+                                          child: RatingTile(rating: 2))),
+                                  IconButton(
+                                      onPressed: didDisable
+                                          ? null
+                                          : () async {
+                                              double pr = double.parse(
+                                                  (isShowBadge)
+                                                      ? discountPrice!
+                                                      : unitPrice ?? "0");
+                                              final model = CartModel(
+                                                  id: id,
+                                                  title: title ?? "title",
+                                                  price: pr,
+                                                  amount: 1,
+                                                  total: pr,
+                                                  imageLink: link);
+                                              bool didAdd = await ref
+                                                  .watch(cartPageProvider)
+                                                  .addCart(model);
+                                              if (context.mounted) {
+                                                ScaffoldMessenger.of(context)
+                                                    .hideCurrentSnackBar();
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(SnackBar(
+                                                        content: Text((didAdd)
+                                                            ? AppConstants
+                                                                .cartAddMessage
+                                                            : AppConstants
+                                                                .cartAddFailedMessage)));
+                                              }
+                                            },
+                                      icon: Icon(
+                                        didDisable
+                                            ? Icons.remove_shopping_cart
+                                            : Icons.shopping_cart,
+                                        color: didDisable
+                                            ? Appcolors.appThemeSecondaryColor
+                                            : Appcolors.appThemeColor,
+                                      ))
+                                ],
                               ),
                             )
                           ],

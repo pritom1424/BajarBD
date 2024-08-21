@@ -1,5 +1,6 @@
 import 'package:bajarbd/screens/catwise_screen.dart';
 import 'package:bajarbd/widgets/carousel/cat_wise_featured_product.dart';
+import 'package:bajarbd/widgets/carousel/special_featured_product.dart';
 import 'package:bajarbd/widgets/category/catwise/catwise_tile.dart';
 import 'package:bajarbd/widgets/products/home_catwise_list.dart';
 import 'package:bajarbd/widgets/products/home_catwise_product_tile.dart';
@@ -69,57 +70,130 @@ class _ProductsOverviewScrState extends State<ProductsOverviewScr> {
           searchWidget(),
           const FeaturedProductWidget(),
           Consumer(builder: (context, refCat, ch) {
-            return Container(
-              padding: EdgeInsets.symmetric(vertical: 10),
-              child: FutureBuilder(
-                  future: refCat
-                      .read(productOverviewPageProvider)
-                      .getCatWiseProduct(),
-                  builder: (context, snapCat) {
-                    if (!snapCat.hasData) {
-                      return SizedBox.shrink();
-                    }
-                    return Column(
-                        children: List.generate(
-                            snapCat.data!.length,
-                            (index) => Column(
-                                  children: [
-                                    Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+            return Column(
+              children: [
+                FutureBuilder(
+                    future: refCat
+                        .read(productOverviewPageProvider)
+                        .getCatWiseProduct(),
+                    builder: (context, snapCat) {
+                      if (!snapCat.hasData) {
+                        return SizedBox.shrink();
+                      }
+                      return Container(
+                        margin: EdgeInsets.symmetric(vertical: 10),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Text(
+                              "Featured Products",
+                              style: Theme.of(context).textTheme.bodyLarge,
+                            ),
+                            SpecialFeaturedProductWidget(
+                                model: snapCat.data![0]),
+                          ],
+                        ),
+                      );
+                    }),
+                FutureBuilder(
+                    future: refCat
+                        .read(productOverviewPageProvider)
+                        .getCatWiseProduct(),
+                    builder: (context, snapCat) {
+                      if (!snapCat.hasData) {
+                        return SizedBox.shrink();
+                      }
+                      return Container(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Text(
+                              "Trending Products",
+                              style: Theme.of(context).textTheme.bodyLarge,
+                            ),
+                            SpecialFeaturedProductWidget(
+                                model: snapCat.data![1]),
+                          ],
+                        ),
+                      );
+                    }),
+                FutureBuilder(
+                    future: refCat
+                        .read(productOverviewPageProvider)
+                        .getCatWiseProduct(),
+                    builder: (context, snapCat) {
+                      if (!snapCat.hasData) {
+                        return SizedBox.shrink();
+                      }
+                      return Container(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Text(
+                              "Hot Deals",
+                              style: Theme.of(context).textTheme.bodyLarge,
+                            ),
+                            SpecialFeaturedProductWidget(
+                                model: snapCat.data![2]),
+                          ],
+                        ),
+                      );
+                    }),
+                Container(
+                  padding: EdgeInsets.symmetric(vertical: 10),
+                  child: FutureBuilder(
+                      future: refCat
+                          .read(productOverviewPageProvider)
+                          .getCatWiseProduct(),
+                      builder: (context, snapCat) {
+                        if (!snapCat.hasData) {
+                          return SizedBox.shrink();
+                        }
+                        return Column(
+                            children: List.generate(
+                                snapCat.data!.length,
+                                (index) => Column(
                                       children: [
-                                        Text(
-                                          snapCat.data![index].name ??
-                                              "Category",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyLarge,
+                                        Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              snapCat.data![index].name ??
+                                                  "Category",
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyLarge,
+                                            ),
+                                            TextButton(
+                                                onPressed: () {
+                                                  Navigator.of(context).push(
+                                                      MaterialPageRoute(
+                                                          builder: (ctx) =>
+                                                              CatWiseScreen(
+                                                                  title: snapCat
+                                                                      .data![
+                                                                          index]
+                                                                      .name,
+                                                                  catId: snapCat
+                                                                      .data![
+                                                                          index]
+                                                                      .id)));
+                                                },
+                                                child: Text("View All"))
+                                          ],
                                         ),
-                                        TextButton(
-                                            onPressed: () {
-                                              Navigator.of(context).push(
-                                                  MaterialPageRoute(
-                                                      builder: (ctx) =>
-                                                          CatWiseScreen(
-                                                              title: snapCat
-                                                                  .data![index]
-                                                                  .name,
-                                                              catId: snapCat
-                                                                  .data![index]
-                                                                  .id)));
-                                            },
-                                            child: Text("View All"))
+                                        CatWiseFeaturedProductWidget(
+                                          model: snapCat.data![index],
+                                          index: index,
+                                        ),
                                       ],
-                                    ),
-                                    CatWiseFeaturedProductWidget(
-                                      model: snapCat.data![index],
-                                      index: index,
-                                    ),
-                                  ],
-                                )));
-                  }),
+                                    )));
+                      }),
+                ),
+              ],
             );
           }),
           Consumer(builder: (ctx, ref, _) {

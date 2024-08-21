@@ -1,4 +1,6 @@
 import 'package:bajarbd/utils/Appvars/appvars.dart';
+import 'package:bajarbd/widgets/products/rating_tile.dart';
+import 'package:flutter/widgets.dart';
 
 import '../../model/models/cart_model.dart';
 import '../../provider/providers.dart';
@@ -74,7 +76,7 @@ class ProductItem extends ConsumerWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Expanded(
-                              flex: 4,
+                              flex: 3,
                               child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10),
                                   child: Image.network(
@@ -119,6 +121,9 @@ class ProductItem extends ConsumerWidget {
                                 ),
                               ),
                             ),
+                            const SizedBox(
+                              height: 5,
+                            ),
                             // const Expanded(child: SizedBox()),
                             Expanded(
                               flex: 1,
@@ -160,46 +165,57 @@ class ProductItem extends ConsumerWidget {
                                         ),
                                       ],
                                     ),
-                                    IconButton(
-                                        onPressed: didDisable
-                                            ? null
-                                            : () async {
-                                                double pr = double.parse(
-                                                    (isShowBadge)
-                                                        ? discountPrice!
-                                                        : unitPrice ?? "0");
-                                                final model = CartModel(
-                                                    id: id,
-                                                    title: title ?? "title",
-                                                    price: pr,
-                                                    amount: 1,
-                                                    total: pr,
-                                                    imageLink: link);
-                                                bool didAdd = await ref
-                                                    .watch(cartPageProvider)
-                                                    .addCart(model);
-                                                if (context.mounted) {
-                                                  ScaffoldMessenger.of(context)
-                                                      .hideCurrentSnackBar();
-                                                  ScaffoldMessenger.of(context)
-                                                      .showSnackBar(SnackBar(
-                                                          content: Text((didAdd)
-                                                              ? AppConstants
-                                                                  .cartAddMessage
-                                                              : AppConstants
-                                                                  .cartAddFailedMessage)));
-                                                }
-                                              },
-                                        icon: Icon(
-                                          didDisable
-                                              ? Icons.remove_shopping_cart
-                                              : Icons.shopping_cart,
-                                          color: didDisable
-                                              ? Appcolors.appThemeSecondaryColor
-                                              : Appcolors.appThemeColor,
-                                        ))
                                   ],
                                 ),
+                              ),
+                            ),
+                            FittedBox(
+                              child: Row(
+                                children: [
+                                  Padding(
+                                      padding:
+                                          EdgeInsets.only(right: 15, left: 5),
+                                      child: FittedBox(
+                                          child: RatingTile(rating: 2))),
+                                  IconButton(
+                                      onPressed: didDisable
+                                          ? null
+                                          : () async {
+                                              double pr = double.parse(
+                                                  (isShowBadge)
+                                                      ? discountPrice!
+                                                      : unitPrice ?? "0");
+                                              final model = CartModel(
+                                                  id: id,
+                                                  title: title ?? "title",
+                                                  price: pr,
+                                                  amount: 1,
+                                                  total: pr,
+                                                  imageLink: link);
+                                              bool didAdd = await ref
+                                                  .watch(cartPageProvider)
+                                                  .addCart(model);
+                                              if (context.mounted) {
+                                                ScaffoldMessenger.of(context)
+                                                    .hideCurrentSnackBar();
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(SnackBar(
+                                                        content: Text((didAdd)
+                                                            ? AppConstants
+                                                                .cartAddMessage
+                                                            : AppConstants
+                                                                .cartAddFailedMessage)));
+                                              }
+                                            },
+                                      icon: Icon(
+                                        didDisable
+                                            ? Icons.remove_shopping_cart
+                                            : Icons.shopping_cart,
+                                        color: didDisable
+                                            ? Appcolors.appThemeSecondaryColor
+                                            : Appcolors.appThemeColor,
+                                      ))
+                                ],
                               ),
                             )
                           ],

@@ -10,6 +10,10 @@ class ProductDetailsProvider with ChangeNotifier {
     return _sliderIndex;
   }
 
+  void setRebuild() {
+    notifyListeners();
+  }
+
   void setSliderIndex(int ind) {
     _sliderIndex = ind;
     notifyListeners();
