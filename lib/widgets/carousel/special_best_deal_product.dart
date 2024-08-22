@@ -1,5 +1,6 @@
 import 'package:bajarbd/model/models/featured_product_model.dart';
 import 'package:bajarbd/model/models/home_cat_wise_model.dart';
+import 'package:bajarbd/utils/Colors/appcolors.dart';
 
 import 'package:bajarbd/widgets/products/home_catwise_product_tile.dart';
 
@@ -9,11 +10,11 @@ import '../../utils/Appvars/api_links.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SpecialFeaturedProductWidget extends ConsumerWidget {
+class SpecialBestDealProductWidget extends ConsumerWidget {
   final int? index;
   final int? scrollLimiterItmNumber;
-  final List<Fetauredproduct> model;
-  const SpecialFeaturedProductWidget(
+  final List<HomeCatWiseProduct> model;
+  const SpecialBestDealProductWidget(
       {this.scrollLimiterItmNumber,
       required this.model,
       this.index,
@@ -38,16 +39,17 @@ class SpecialFeaturedProductWidget extends ConsumerWidget {
               aspectRatio: 3 / 2,
               enlargeCenterPage: false,
               floatingIndicator: false,
-              showIndicator: false,
+              showIndicator: false
               /*  slideIndicator: CircularSlideIndicator(
                   slideIndicatorOptions: SlideIndicatorOptions(
                       indicatorBackgroundColor: Colors.black12,
                       currentIndicatorColor: Appcolors.appThemeColor)) */
+              ,
               enableInfiniteScroll: (scrollLimiterItmNumber != null &&
                       scrollLimiterItmNumber! >= model.length)
                   ? false
                   : true,
-              /*  scrollPhysics: (scrollLimiterItmNumber != null &&
+              /*   scrollPhysics: (scrollLimiterItmNumber != null &&
                       scrollLimiterItmNumber! >= model.length)
                   ? NeverScrollableScrollPhysics()
                   : AlwaysScrollableScrollPhysics(), */

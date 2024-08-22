@@ -175,8 +175,7 @@ class ProductItem extends ConsumerWidget {
                                   Padding(
                                       padding:
                                           EdgeInsets.only(right: 15, left: 5),
-                                      child: FittedBox(
-                                          child: RatingTile(rating: 2))),
+                                      child: RatingTile(rating: 2)),
                                   IconButton(
                                       onPressed: didDisable
                                           ? null

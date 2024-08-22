@@ -1,7 +1,7 @@
 import 'package:bajarbd/model/models/home_cat_wise_model.dart';
 import 'package:bajarbd/utils/Appvars/appvars.dart';
 import 'package:bajarbd/widgets/products/home_catwise_product_tile.dart';
-import 'package:carousel_slider/carousel_slider.dart';
+
 import '../../provider/providers.dart';
 import '../../utils/Appvars/api_links.dart';
 import 'package:flutter/material.dart';

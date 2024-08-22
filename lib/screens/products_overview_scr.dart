@@ -1,6 +1,9 @@
 import 'package:bajarbd/screens/catwise_screen.dart';
+
 import 'package:bajarbd/widgets/carousel/cat_wise_featured_product.dart';
+import 'package:bajarbd/widgets/carousel/special_best_deal_product.dart';
 import 'package:bajarbd/widgets/carousel/special_featured_product.dart';
+import 'package:bajarbd/widgets/carousel/special_hot_deal.dart';
 import 'package:bajarbd/widgets/category/catwise/catwise_tile.dart';
 import 'package:bajarbd/widgets/products/home_catwise_list.dart';
 import 'package:bajarbd/widgets/products/home_catwise_product_tile.dart';
@@ -68,14 +71,25 @@ class _ProductsOverviewScrState extends State<ProductsOverviewScr> {
       child: Column(
         children: [
           searchWidget(),
-          const FeaturedProductWidget(),
           Consumer(builder: (context, refCat, ch) {
             return Column(
               children: [
                 FutureBuilder(
+                    future:
+                        refCat.read(productOverviewPageProvider).getSliders(),
+                    builder: (context, snapSlide) {
+                      if (!snapSlide.hasData) {
+                        return SizedBox.shrink();
+                      }
+                      return Container(
+                        margin: EdgeInsets.symmetric(vertical: 5),
+                        child: FeaturedProductWidget(snapSlide.data!),
+                      );
+                    }),
+                FutureBuilder(
                     future: refCat
                         .read(productOverviewPageProvider)
-                        .getCatWiseProduct(),
+                        .getFeaturedProducts(),
                     builder: (context, snapCat) {
                       if (!snapCat.hasData) {
                         return SizedBox.shrink();
@@ -90,29 +104,9 @@ class _ProductsOverviewScrState extends State<ProductsOverviewScr> {
                               style: Theme.of(context).textTheme.bodyLarge,
                             ),
                             SpecialFeaturedProductWidget(
-                                model: snapCat.data![0]),
-                          ],
-                        ),
-                      );
-                    }),
-                FutureBuilder(
-                    future: refCat
-                        .read(productOverviewPageProvider)
-                        .getCatWiseProduct(),
-                    builder: (context, snapCat) {
-                      if (!snapCat.hasData) {
-                        return SizedBox.shrink();
-                      }
-                      return Container(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            Text(
-                              "Trending Products",
-                              style: Theme.of(context).textTheme.bodyLarge,
+                              model: snapCat.data!,
+                              scrollLimiterItmNumber: 3,
                             ),
-                            SpecialFeaturedProductWidget(
-                                model: snapCat.data![1]),
                           ],
                         ),
                       );
@@ -120,7 +114,7 @@ class _ProductsOverviewScrState extends State<ProductsOverviewScr> {
                 FutureBuilder(
                     future: refCat
                         .read(productOverviewPageProvider)
-                        .getCatWiseProduct(),
+                        .getHotProducts(),
                     builder: (context, snapCat) {
                       if (!snapCat.hasData) {
                         return SizedBox.shrink();
@@ -133,8 +127,32 @@ class _ProductsOverviewScrState extends State<ProductsOverviewScr> {
                               "Hot Deals",
                               style: Theme.of(context).textTheme.bodyLarge,
                             ),
-                            SpecialFeaturedProductWidget(
-                                model: snapCat.data![2]),
+                            SpecialHotDealProductWidget(
+                              model: snapCat.data!,
+                              scrollLimiterItmNumber: 3,
+                            ),
+                          ],
+                        ),
+                      );
+                    }),
+                FutureBuilder(
+                    future: refCat
+                        .read(productOverviewPageProvider)
+                        .getCatWiseProduct(),
+                    builder: (context, snapCat) {
+                      if (!snapCat.hasData) {
+                        return SizedBox.shrink();
+                      }
+                      return Container(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Text(
+                              "Best Sales",
+                              style: Theme.of(context).textTheme.bodyLarge,
+                            ),
+                            SpecialBestDealProductWidget(
+                                model: snapCat.data![2].products),
                           ],
                         ),
                       );

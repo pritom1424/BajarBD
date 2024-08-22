@@ -1,6 +1,7 @@
 import 'package:bajarbd/provider/product_details_provider.dart';
-import 'package:carousel_slider/carousel_slider.dart';
+
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
 import '../model/models/cart_model.dart';
 import '../provider/providers.dart';
 import '../root_page.dart';
@@ -111,7 +112,7 @@ class ProductDetailsScreen extends StatelessWidget {
                   children: [
                     Consumer(builder: (context, ref, _) {
                       if (!isInit) {
-                        ref.read(detailsPageProvider).resetSliderIndex();
+                        //  ref.read(detailsPageProvider).resetSliderIndex();
                         isInit = true;
                       }
                       return Column(
@@ -120,7 +121,7 @@ class ProductDetailsScreen extends StatelessWidget {
                               height: Appvars.screenSize.height * 0.4,
                               padding: const EdgeInsets.symmetric(vertical: 8),
                               //width: double.infinity,
-                              child: CarouselSlider(
+                              child: FlutterCarousel(
                                 items: imageLinks
                                     .map((itm) => Container(
                                         child: Image.network(itm,
@@ -128,23 +129,33 @@ class ProductDetailsScreen extends StatelessWidget {
                                             width: double.infinity)))
                                     .toList(),
                                 options: CarouselOptions(
-                                  autoPlay: false,
-                                  autoPlayInterval: const Duration(seconds: 3),
-                                  aspectRatio: 2 / 2,
-                                  enlargeCenterPage: false,
-                                  viewportFraction: 1,
-                                  onPageChanged: (index, reason) => ref
+                                    autoPlay: false,
+                                    autoPlayInterval:
+                                        const Duration(seconds: 3),
+                                    aspectRatio: 2 / 2,
+                                    enlargeCenterPage: false,
+                                    viewportFraction: 1,
+                                    floatingIndicator: false,
+                                    slideIndicator: CircularSlideIndicator(
+                                        slideIndicatorOptions:
+                                            SlideIndicatorOptions(
+                                                indicatorBackgroundColor:
+                                                    Colors.black12,
+                                                currentIndicatorColor:
+                                                    Appcolors.appThemeColor))
+
+                                    /*  onPageChanged: (index, reason) => ref
                                       .watch(detailsPageProvider)
-                                      .setSliderIndex(index),
-                                ),
+                                      .setSliderIndex(index), */
+                                    ),
                               ) //Image.network(imageLink),
 
                               ),
-                          AppComponent().sliderIndicators(
+                          /* AppComponent().sliderIndicators(
                               imageLinks.length,
-                              ref.read(detailsPageProvider).sliderIndex,
+                              //   ref.read(detailsPageProvider).sliderIndex,
                               Appcolors.appThemeColor,
-                              Appcolors.appThemeSecondaryColor),
+                              Appcolors.appThemeSecondaryColor), */
                         ],
                       );
                     }),

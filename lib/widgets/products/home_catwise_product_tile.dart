@@ -210,11 +210,12 @@ class HomeCatWiseProductItem extends ConsumerWidget {
                             FittedBox(
                               child: Row(
                                 children: [
-                                  Padding(
-                                      padding:
-                                          EdgeInsets.only(right: 15, left: 10),
-                                      child: FittedBox(
-                                          child: RatingTile(rating: 2))),
+                                  FittedBox(
+                                    child: Padding(
+                                        padding: EdgeInsets.only(left: 2),
+                                        child: FittedBox(
+                                            child: RatingTile(rating: 2))),
+                                  ),
                                   IconButton(
                                       onPressed: didDisable
                                           ? null

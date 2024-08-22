@@ -105,15 +105,17 @@ class RootPage extends ConsumerWidget {
           drawer: CustomDrawer(
             ref: ref,
           ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: () async {
-              final conf = ChatService().Init(AppConstants.crispID);
-              await FlutterCrispChat.openCrispChat(config: conf);
-              //CrispChatSdk().openChat();
-              // Crisp.startChat();
-            },
-            child: Icon(Icons.message),
-          ),
+          floatingActionButton: (ref.read(rootPageProvider).navPageIndex) == 0
+              ? FloatingActionButton(
+                  onPressed: () async {
+                    final conf = ChatService().Init(AppConstants.crispID);
+                    await FlutterCrispChat.openCrispChat(config: conf);
+                    //CrispChatSdk().openChat();
+                    // Crisp.startChat();
+                  },
+                  child: Icon(Icons.message),
+                )
+              : null,
           body: FutureBuilder(
               future: ref.read(authProvider).tryAutoLogin(),
               builder: (context, snapLoginCheck) {

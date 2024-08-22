@@ -1,14 +1,19 @@
-import 'package:carousel_slider/carousel_slider.dart';
+import 'package:bajarbd/model/models/slider_model.dart';
+import 'package:bajarbd/utils/Appvars/appvars.dart';
+import 'package:bajarbd/utils/Colors/appcolors.dart';
+
+import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
 import '../../provider/providers.dart';
 import '../../utils/Appvars/api_links.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class FeaturedProductWidget extends ConsumerWidget {
-  const FeaturedProductWidget({super.key});
+class FeaturedProductWidget extends StatelessWidget {
+  final List<SliderModel> model;
+  const FeaturedProductWidget(this.model, {super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     /*  final List<String> imgList = [
       'https://ecom.szamantech.com/frontend/img/header-slider/4.jpg',
       'https://ecom.szamantech.com/frontend/img/header-slider/2.jpg',
@@ -16,35 +21,32 @@ class FeaturedProductWidget extends ConsumerWidget {
       'https://ecom.szamantech.com/frontend/img/header-slider/6.jpg',
       'https://ecom.szamantech.com/frontend/img/header-slider/7.jpg',
     ]; */
-    return FutureBuilder(
-        future: ref.read(productOverviewPageProvider).getSliders(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting ||
-              !snapshot.hasData) {
-            return const SizedBox.shrink();
-          }
-          final imgList = snapshot.data!;
-          return Center(
-            child: CarouselSlider(
-                options: CarouselOptions(
-                    autoPlay: true,
-                    autoPlayInterval: const Duration(seconds: 3),
-                    aspectRatio: 7 / 2,
-                    enlargeCenterPage: true,
-                    viewportFraction: 0.9),
-                items: List.generate(
-                    imgList.length,
-                    (ind) => InkWell(
-                          onTap: () {
-                            print("did tap top");
-                          },
-                          child: Center(
-                              child: Image.network(
-                                  "${ApiLinks.baseImageUrl}/slider/${imgList[ind].image}",
-                                  fit: BoxFit.cover,
-                                  width: 1000)),
-                        ))),
-          );
-        });
+    return FlutterCarousel(
+        options: CarouselOptions(
+            padEnds: false,
+            autoPlay: true,
+            autoPlayInterval: const Duration(seconds: 3),
+            aspectRatio: 7 / 2,
+            enlargeCenterPage: false,
+            floatingIndicator: false,
+            slideIndicator: CircularSlideIndicator(
+                slideIndicatorOptions: SlideIndicatorOptions(
+                    indicatorBackgroundColor: Colors.black12,
+                    currentIndicatorColor: Appcolors.appThemeColor)),
+            viewportFraction: 0.9),
+        items: List.generate(
+            model.length,
+            (ind) => Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: InkWell(
+                    onTap: () {
+                      print("did tap top");
+                    },
+                    child: Image.network(
+                      "${ApiLinks.baseImageUrl}/slider/${model[ind].image}",
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                )));
   }
 }
