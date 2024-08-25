@@ -125,8 +125,8 @@ class ProductItem extends ConsumerWidget {
                               height: 5,
                             ),
                             // const Expanded(child: SizedBox()),
-                            Expanded(
-                              flex: 1,
+                            FittedBox(
+                              //flex: 1,
                               child: Padding(
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 10),
@@ -175,7 +175,7 @@ class ProductItem extends ConsumerWidget {
                                   Padding(
                                       padding:
                                           EdgeInsets.only(right: 15, left: 5),
-                                      child: RatingTile(rating: 2)),
+                                      child: RatingTile(rating: 5)),
                                   IconButton(
                                       onPressed: didDisable
                                           ? null

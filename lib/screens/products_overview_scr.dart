@@ -138,7 +138,7 @@ class _ProductsOverviewScrState extends State<ProductsOverviewScr> {
                 FutureBuilder(
                     future: refCat
                         .read(productOverviewPageProvider)
-                        .getCatWiseProduct(),
+                        .getBestSellProducts(),
                     builder: (context, snapCat) {
                       if (!snapCat.hasData) {
                         return SizedBox.shrink();
@@ -152,7 +152,9 @@ class _ProductsOverviewScrState extends State<ProductsOverviewScr> {
                               style: Theme.of(context).textTheme.bodyLarge,
                             ),
                             SpecialBestDealProductWidget(
-                                model: snapCat.data![2].products),
+                              model: snapCat.data!,
+                              scrollLimiterItmNumber: 3,
+                            ),
                           ],
                         ),
                       );

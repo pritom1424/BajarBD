@@ -1,5 +1,7 @@
+import 'package:bajarbd/model/data/bestsell_product_repos.dart';
 import 'package:bajarbd/model/data/featured_product_repos.dart';
 import 'package:bajarbd/model/data/hotdeal_product_repos.dart';
+import 'package:bajarbd/model/models/best_sell_model.dart';
 import 'package:bajarbd/model/models/featured_product_model.dart';
 import 'package:bajarbd/model/models/home_cat_wise_model.dart';
 import 'package:bajarbd/model/models/hot_deal_product.dart';
@@ -16,6 +18,7 @@ class ProductOverviewProvider with ChangeNotifier {
   final SliderModelRepos _sliderModelRepos = SliderModelRepos();
   final FeaturedProductRepos _featuredProductRepos = FeaturedProductRepos();
   final HotDealProductRepos _hotDealProductRepos = HotDealProductRepos();
+  final BestSellProductRepos _bestSellProductRepos = BestSellProductRepos();
 
   Future<List<HomeLatestProduct>> getHomeLatestProducts() async {
     final products = await _homeLatestProductRepos.getProducts();
@@ -39,5 +42,9 @@ class ProductOverviewProvider with ChangeNotifier {
 
   Future<List<HotDealModel>?> getHotProducts() async {
     return await _hotDealProductRepos.getProducts();
+  }
+
+  Future<List<BestSellingProductModel>?> getBestSellProducts() async {
+    return await _bestSellProductRepos.getProducts();
   }
 }

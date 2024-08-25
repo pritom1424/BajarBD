@@ -58,6 +58,22 @@ class ProductDetailsScreen extends StatelessWidget {
 
       return cleanedHtml;
     }
+//import 'package:url_launcher/url_launcher.dart';
+/*     Future<void> launchLink(String schema, String link) async {
+      final Uri launchUri = Uri(scheme: schema, path: link);
+      //final Uri launchWebUri = Uri.parse(link);
+      // final Uri currentURi = launchUri;
+      if (schema.contains(websiteSchema)) {
+        if (!await launchUrl(Uri.parse(link))) throw 'Could not launch $link';
+      } else {
+        if (!await launchUrl(launchUri)) throw 'Could not launch $link';
+        /* if (await canLaunchUrl(launchUri)) {
+          await launchUrl(launchUri, mode: LaunchMode.externalApplication);
+        } else {
+          throw 'Could not launch $launchUri';
+        } */
+      }
+    } */
 
     return Consumer(
       builder: (ctx, ref, _) => Scaffold(
@@ -172,13 +188,6 @@ class ProductDetailsScreen extends StatelessWidget {
                       thickness: 0.3,
                     ),
                     Container(
-                      /*  padding: const EdgeInsets.symmetric(
-                          vertical: 20, horizontal: 10), */
-                      /*  decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(0),
-                          border: Border.all(width: 0.5, color: Colors.grey)), */
-
-                      // color: Colors.green,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
@@ -269,11 +278,7 @@ class ProductDetailsScreen extends StatelessWidget {
                                         padding: const EdgeInsets.all(10),
                                         shape: RoundedRectangleBorder(
                                             borderRadius:
-                                                BorderRadius.circular(5))
-                                        /* shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(50))) */
-                                        ),
+                                                BorderRadius.circular(5))),
                                     child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
@@ -376,7 +381,7 @@ class ProductDetailsScreen extends StatelessWidget {
                       ),
                     ),
 
-                    Consumer(builder: (context, refRate, ch) {
+                    /* Consumer(builder: (context, refRate, ch) {
                       return Row(
                           children: List.generate(
                               5,
@@ -405,7 +410,7 @@ class ProductDetailsScreen extends StatelessWidget {
                                             .setRebuild();
                                       },
                                     )));
-                    }),
+                    }), */
                     const Divider(
                       height: 20,
                       thickness: 0.3,
@@ -413,9 +418,17 @@ class ProductDetailsScreen extends StatelessWidget {
                     ),
                     //description
 
-                    Text(
+                    /* Text(
                       Bidi.stripHtmlIfNeeded(snapshot.data!.description ?? ""),
                       textAlign: TextAlign.justify,
+                    ) */
+                    HtmlWidget(
+                      cleanHtmlContent(snapshot.data!.description ?? ""),
+                      /* onTapUrl: (url) async {
+                        await launchLink(websiteSchema, url);
+                        return true;
+                      }, */
+                      // textAlign: TextAlign.justify,
                     ),
                     const SizedBox(
                       height: 10,

@@ -82,7 +82,7 @@ class HomeCatWiseProductItem extends ConsumerWidget {
                                   borderRadius: BorderRadius.circular(10),
                                   child: Image.network(
                                     link,
-                                    fit: BoxFit.contain,
+                                    fit: BoxFit.cover,
                                     loadingBuilder: (context, child,
                                             loadingProgress) =>
                                         (loadingProgress == null)
@@ -214,7 +214,7 @@ class HomeCatWiseProductItem extends ConsumerWidget {
                                     child: Padding(
                                         padding: EdgeInsets.only(left: 2),
                                         child: FittedBox(
-                                            child: RatingTile(rating: 2))),
+                                            child: RatingTile(rating: 5))),
                                   ),
                                   IconButton(
                                       onPressed: didDisable

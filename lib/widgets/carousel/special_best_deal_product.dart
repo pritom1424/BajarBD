@@ -1,3 +1,5 @@
+import 'package:bajarbd/model/data/bestsell_product_repos.dart';
+import 'package:bajarbd/model/models/best_sell_model.dart';
 import 'package:bajarbd/model/models/featured_product_model.dart';
 import 'package:bajarbd/model/models/home_cat_wise_model.dart';
 import 'package:bajarbd/utils/Colors/appcolors.dart';
@@ -13,7 +15,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class SpecialBestDealProductWidget extends ConsumerWidget {
   final int? index;
   final int? scrollLimiterItmNumber;
-  final List<HomeCatWiseProduct> model;
+  final List<BestSellingProductModel> model;
   const SpecialBestDealProductWidget(
       {this.scrollLimiterItmNumber,
       required this.model,

@@ -23,5 +23,5 @@ class AppConstants {
   static const defaultfontFamily = "Lato";
 
   //------ services
-  static const crispID = "1bcf3ab5-f85f-4950-9712-b08b04422a04";
+  static const crispID = "072efc38-340f-4eb8-a485-7dbaf008f76f";
 }
