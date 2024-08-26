@@ -1,4 +1,5 @@
 import 'package:bajarbd/screens/catwise_screen.dart';
+import 'package:bajarbd/utils/Colors/appcolors.dart';
 
 import 'package:bajarbd/widgets/carousel/cat_wise_featured_product.dart';
 import 'package:bajarbd/widgets/carousel/special_best_deal_product.dart';
@@ -95,7 +96,11 @@ class _ProductsOverviewScrState extends State<ProductsOverviewScr> {
                         return SizedBox.shrink();
                       }
                       return Container(
-                        margin: EdgeInsets.symmetric(vertical: 10),
+                        margin:
+                            EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                        /*   decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Appcolors.appThemeSecondaryColor), */
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
@@ -103,9 +108,12 @@ class _ProductsOverviewScrState extends State<ProductsOverviewScr> {
                               "Featured Products",
                               style: Theme.of(context).textTheme.bodyLarge,
                             ),
-                            SpecialFeaturedProductWidget(
-                              model: snapCat.data!,
-                              scrollLimiterItmNumber: 3,
+                            Container(
+                              //  padding: const EdgeInsets.all(8.0),
+                              child: SpecialFeaturedProductWidget(
+                                model: snapCat.data!,
+                                scrollLimiterItmNumber: 3,
+                              ),
                             ),
                           ],
                         ),

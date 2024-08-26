@@ -38,7 +38,7 @@ class SpecialBestDealProductWidget extends ConsumerWidget {
               autoPlay: false,
               reverse: (index == null || index! % 2 != 0) ? false : true,
               autoPlayInterval: const Duration(seconds: 3),
-              aspectRatio: 3 / 2,
+              aspectRatio: 1.6,
               enlargeCenterPage: false,
               floatingIndicator: false,
               showIndicator: false

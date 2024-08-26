@@ -6,13 +6,15 @@ class WishlistModelRepos {
   Future<bool> addWishlist(SingleProductModel prod, String imageLink) async {
     try {
       Map<String, dynamic> data = {
-        'id': prod.id,
-        'title': prod.title.toString(),
-        'unit_price': prod.unitPrice.toString(),
-        'discount_price': prod.discountPrice.toString(),
-        'discount': prod.discount.toString(),
-        'isShowBadge':
-            (prod.discount == null || prod.discountPrice == null) ? 0 : 1,
+        'id': prod.productDetail.id,
+        'title': prod.productDetail.title.toString(),
+        'unit_price': prod.productDetail.unitPrice.toString(),
+        'discount_price': prod.productDetail.discountPrice.toString(),
+        'discount': prod.productDetail.discount.toString(),
+        'isShowBadge': (prod.productDetail.discount == null ||
+                prod.productDetail.discountPrice == null)
+            ? 0
+            : 1,
         'imageLink': imageLink
       };
       int test =

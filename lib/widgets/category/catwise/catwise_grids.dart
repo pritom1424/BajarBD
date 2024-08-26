@@ -27,9 +27,9 @@ class CatWiseGrids extends StatelessWidget {
         itemCount: model.product?.length ?? 0, //products.length,
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
-            childAspectRatio: 0.66,
+            childAspectRatio: 0.62,
             mainAxisSpacing: 10,
-            crossAxisSpacing: 10),
+            crossAxisSpacing: 5),
         itemBuilder: (ctx, ind) => CatWiseItem(
           link: model.product?[ind].featureImage == null
               ? ""

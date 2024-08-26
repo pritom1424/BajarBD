@@ -1,13 +1,15 @@
+import 'package:bajarbd/model/models/single_product_model.dart';
+
 import '../../model/models/home_latest_model.dart';
 import '../../utils/Appvars/api_links.dart';
 import 'product_tile.dart';
 import 'package:flutter/material.dart';
 
-class ProductsGrid extends StatelessWidget {
+class RelatedProductsGrid extends StatelessWidget {
   final bool showFav;
   final bool? isScroll;
-  final List<HomeLatestProduct> products;
-  const ProductsGrid(this.showFav,
+  final List<ProductDetail> products;
+  const RelatedProductsGrid(this.showFav,
       {super.key, this.isScroll, required this.products});
 
   @override

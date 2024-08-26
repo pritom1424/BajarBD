@@ -76,8 +76,9 @@ class HomeCatWiseProductItem extends ConsumerWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Expanded(
-                              flex: 3,
+                            Container(
+                              //flex: 3,
+                              height: Appvars.screenSize.height * 0.15,
                               child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10),
                                   child: Image.network(
@@ -119,11 +120,18 @@ class HomeCatWiseProductItem extends ConsumerWidget {
                                   title ?? "title" /* product.title */,
                                   textAlign: TextAlign.start,
                                   maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  /* style: Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge
+                                      ?.copyWith(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.normal), */
                                 ),
                               ),
                             ),
                             SizedBox(
-                              height: 5,
+                              height: 10,
                             ),
                             // const Expanded(child: SizedBox()),
                             FittedBox(
@@ -134,36 +142,31 @@ class HomeCatWiseProductItem extends ConsumerWidget {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        if (isShowBadge)
-                                          Text(
-                                              "BDT $discountPrice" /* product.title */,
-                                              textAlign: TextAlign.start,
-                                              maxLines: 1,
-                                              style: const TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                              )),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                        Text(
-                                          "BDT $unitPrice" /* product.title */,
+                                    if (isShowBadge)
+                                      Text(
+                                          "BDT $discountPrice" /* product.title */,
                                           textAlign: TextAlign.start,
                                           maxLines: 1,
-                                          style: TextStyle(
-                                              color: isShowBadge
-                                                  ? Appcolors
-                                                      .appThemeSecondaryColor
-                                                  : Colors.black,
+                                          style: const TextStyle(
                                               fontWeight: FontWeight.bold,
-                                              decoration: (isShowBadge)
-                                                  ? TextDecoration.lineThrough
-                                                  : TextDecoration.none),
-                                        ),
-                                      ],
+                                              fontSize: 10)),
+                                    if (isShowBadge)
+                                      const SizedBox(
+                                        width: 5,
+                                      ),
+                                    Text(
+                                      "BDT $unitPrice" /* product.title */,
+                                      textAlign: TextAlign.start,
+                                      maxLines: 1,
+                                      style: TextStyle(
+                                          fontSize: 10,
+                                          color: isShowBadge
+                                              ? Appcolors.appThemeSecondaryColor
+                                              : Colors.black,
+                                          fontWeight: FontWeight.bold,
+                                          decoration: (isShowBadge)
+                                              ? TextDecoration.lineThrough
+                                              : TextDecoration.none),
                                     ),
                                     /* IconButton(
                                         onPressed: didDisable
@@ -210,12 +213,13 @@ class HomeCatWiseProductItem extends ConsumerWidget {
                             FittedBox(
                               child: Row(
                                 children: [
-                                  FittedBox(
-                                    child: Padding(
-                                        padding: EdgeInsets.only(left: 2),
-                                        child: FittedBox(
-                                            child: RatingTile(rating: 5))),
-                                  ),
+                                  Padding(
+                                      padding: EdgeInsets.only(left: 2),
+                                      child: FittedBox(
+                                          child: RatingTile(
+                                        rating: 5,
+                                        rad: 18,
+                                      ))),
                                   IconButton(
                                       onPressed: didDisable
                                           ? null
@@ -247,6 +251,7 @@ class HomeCatWiseProductItem extends ConsumerWidget {
                                               }
                                             },
                                       icon: Icon(
+                                        size: 18,
                                         didDisable
                                             ? Icons.remove_shopping_cart
                                             : Icons.shopping_cart,

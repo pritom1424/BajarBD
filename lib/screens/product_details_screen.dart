@@ -1,4 +1,7 @@
 import 'package:bajarbd/provider/product_details_provider.dart';
+import 'package:bajarbd/widgets/category/cat_product_grid.dart';
+import 'package:bajarbd/widgets/category/catwise/catwise_grids.dart';
+import 'package:bajarbd/widgets/products/relatedproduct_grids.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
@@ -106,23 +109,25 @@ class ProductDetailsScreen extends StatelessWidget {
                     ),
                   );
                 }
-/* 
-                print("Image:" +
-                    "${ApiLinks.baseImageUrl}/gallery/${snapshot.data!.gallery?[0]['image']}"); */
 
-                final isDiscount = (snapshot.data!.discount == null ||
-                        snapshot.data!.discountPrice == null)
-                    ? false
-                    : true;
-                final imageLinks = (snapshot.data!.gallery == null) ||
-                        (snapshot.data!.gallery!.isEmpty)
+                /* print("Image:" +
+                    "${ApiLinks.baseImageUrl}/gallery/${snapshot.data!.productDetail.gallery?[0]['image']}"); */
+
+                final isDiscount =
+                    (snapshot.data!.productDetail.discount == null ||
+                            snapshot.data!.productDetail.discountPrice == null)
+                        ? false
+                        : true;
+                final imageLinks = (snapshot.data!.productDetail.gallery ==
+                            null) ||
+                        (snapshot.data!.productDetail.gallery!.isEmpty)
                     ? [
-                        "${ApiLinks.baseImageUrl}/product/${snapshot.data!.featureImage}"
+                        "${ApiLinks.baseImageUrl}/product/${snapshot.data!.productDetail.featureImage}"
                       ]
                     : List.generate(
-                        snapshot.data!.gallery!.length,
+                        snapshot.data!.productDetail.gallery!.length,
                         (ind) =>
-                            "${ApiLinks.baseImageUrl}/gallery/${snapshot.data!.gallery![ind].image}");
+                            "${ApiLinks.baseImageUrl}/gallery/${snapshot.data!.productDetail.gallery![ind].image}");
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
@@ -178,7 +183,7 @@ class ProductDetailsScreen extends StatelessWidget {
 
                     //title
                     Text(
-                      snapshot.data!.title ?? "",
+                      snapshot.data!.productDetail.title ?? "",
                       style: Theme.of(context).textTheme.bodyLarge,
                     ),
 
@@ -198,7 +203,7 @@ class ProductDetailsScreen extends StatelessWidget {
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 10),
                                   child: Text(
-                                    "${snapshot.data!.discountPrice} Tk",
+                                    "${snapshot.data!.productDetail.discountPrice} Tk",
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodyLarge!
@@ -209,7 +214,7 @@ class ProductDetailsScreen extends StatelessWidget {
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 10),
                                 child: Text(
-                                  "${snapshot.data!.unitPrice} Tk",
+                                  "${snapshot.data!.productDetail.unitPrice} Tk",
                                   style: Theme.of(context)
                                       .textTheme
                                       .bodyLarge!
@@ -311,7 +316,8 @@ class ProductDetailsScreen extends StatelessWidget {
                                       onPressed: (isdisableToCart)
                                           ? null
                                           : () async {
-                                              final sProduct = snapshot.data!;
+                                              final sProduct =
+                                                  snapshot.data!.productDetail;
                                               double pr = double.parse(
                                                   (isDiscount)
                                                       ? sProduct.discountPrice!
@@ -423,7 +429,8 @@ class ProductDetailsScreen extends StatelessWidget {
                       textAlign: TextAlign.justify,
                     ) */
                     HtmlWidget(
-                      cleanHtmlContent(snapshot.data!.description ?? ""),
+                      cleanHtmlContent(
+                          snapshot.data!.productDetail.description ?? ""),
                       /* onTapUrl: (url) async {
                         await launchLink(websiteSchema, url);
                         return true;
@@ -435,7 +442,8 @@ class ProductDetailsScreen extends StatelessWidget {
                     ),
 
                     HtmlWidget(
-                      cleanHtmlContent(snapshot.data!.shortDescription ?? ""),
+                      cleanHtmlContent(
+                          snapshot.data!.productDetail.shortDescription ?? ""),
                       // textAlign: TextAlign.justify,
                     ),
 
@@ -466,14 +474,16 @@ class ProductDetailsScreen extends StatelessWidget {
                     const SizedBox(
                       height: 10,
                     ),
+
                     Container(
-                      padding: const EdgeInsets.symmetric(vertical: 8),
-                      child: const ProductsGrid(
-                        false,
-                        isScroll: false,
-                        products: [],
-                      ),
-                    )
+                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        child: Column(
+                          children: [
+                            RelatedProductsGrid(false,
+                                isScroll: false,
+                                products: snapshot.data!.relatedProducts!),
+                          ],
+                        ))
                   ],
                 );
               }),

@@ -26,9 +26,9 @@ class CatWiseFeaturedProductWidget extends ConsumerWidget {
       crossAxisCount: 3,
       physics: NeverScrollableScrollPhysics(),
       shrinkWrap: true,
-      childAspectRatio: 2 / 4,
+      childAspectRatio: 0.52,
       mainAxisSpacing: 10,
-      crossAxisSpacing: 10,
+      crossAxisSpacing: 5,
       children: List.generate(
         model.products.length,
         (ind) => HomeCatWiseProductItem(

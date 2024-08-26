@@ -2,6 +2,7 @@ import 'package:bajarbd/model/models/cart_model.dart';
 import 'package:bajarbd/provider/providers.dart';
 import 'package:bajarbd/screens/product_details_screen.dart';
 import 'package:bajarbd/utils/Appvars/app_constants.dart';
+import 'package:bajarbd/utils/Appvars/appvars.dart';
 import 'package:bajarbd/utils/Colors/appcolors.dart';
 import 'package:bajarbd/widgets/products/rating_tile.dart';
 import 'package:flutter/material.dart';
@@ -73,8 +74,8 @@ class CatWiseItem extends ConsumerWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Expanded(
-                              flex: 3,
+                            Container(
+                              height: Appvars.screenSize.height * 0.2,
                               child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10),
                                   child: Image.network(
@@ -115,13 +116,15 @@ class CatWiseItem extends ConsumerWidget {
                                   title ?? "title" /* product.title */,
                                   textAlign: TextAlign.start,
                                   maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                               ),
                             ),
                             SizedBox(
                               height: 5,
                             ),
-                            FittedBox(
+                            Container(
+                              //  height: Appvars.screenSize.height * 0.04,
                               child: Padding(
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 10),
@@ -129,36 +132,31 @@ class CatWiseItem extends ConsumerWidget {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        if (isShowBadge)
-                                          Text(
-                                              "BDT $discountPrice" /* product.title */,
-                                              textAlign: TextAlign.start,
-                                              maxLines: 1,
-                                              style: const TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                              )),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                        Text(
-                                          "BDT $unitPrice" /* product.title */,
+                                    if (isShowBadge)
+                                      Text(
+                                          "BDT $discountPrice" /* product.title */,
                                           textAlign: TextAlign.start,
                                           maxLines: 1,
-                                          style: TextStyle(
-                                              color: isShowBadge
-                                                  ? Appcolors
-                                                      .appThemeSecondaryColor
-                                                  : Colors.black,
+                                          style: const TextStyle(
                                               fontWeight: FontWeight.bold,
-                                              decoration: (isShowBadge)
-                                                  ? TextDecoration.lineThrough
-                                                  : TextDecoration.none),
-                                        ),
-                                      ],
+                                              fontSize: 12)),
+                                    if (isShowBadge)
+                                      const SizedBox(
+                                        width: 5,
+                                      ),
+                                    Text(
+                                      "BDT $unitPrice" /* product.title */,
+                                      textAlign: TextAlign.start,
+                                      maxLines: 1,
+                                      style: TextStyle(
+                                          color: isShowBadge
+                                              ? Appcolors.appThemeSecondaryColor
+                                              : Colors.black,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 12,
+                                          decoration: (isShowBadge)
+                                              ? TextDecoration.lineThrough
+                                              : TextDecoration.none),
                                     ),
                                     /* IconButton(
                                         onPressed: didDisable
@@ -202,54 +200,55 @@ class CatWiseItem extends ConsumerWidget {
                                 ),
                               ),
                             ),
-                            FittedBox(
-                              child: Row(
-                                children: [
-                                  Padding(
-                                      padding:
-                                          EdgeInsets.only(right: 15, left: 10),
-                                      child: FittedBox(
-                                          child: RatingTile(rating: 2))),
-                                  IconButton(
-                                      onPressed: didDisable
-                                          ? null
-                                          : () async {
-                                              double pr = double.parse(
-                                                  (isShowBadge)
-                                                      ? discountPrice!
-                                                      : unitPrice ?? "0");
-                                              final model = CartModel(
-                                                  id: id,
-                                                  title: title ?? "title",
-                                                  price: pr,
-                                                  amount: 1,
-                                                  total: pr,
-                                                  imageLink: link);
-                                              bool didAdd = await ref
-                                                  .watch(cartPageProvider)
-                                                  .addCart(model);
-                                              if (context.mounted) {
-                                                ScaffoldMessenger.of(context)
-                                                    .hideCurrentSnackBar();
-                                                ScaffoldMessenger.of(context)
-                                                    .showSnackBar(SnackBar(
-                                                        content: Text((didAdd)
-                                                            ? AppConstants
-                                                                .cartAddMessage
-                                                            : AppConstants
-                                                                .cartAddFailedMessage)));
-                                              }
-                                            },
-                                      icon: Icon(
-                                        didDisable
-                                            ? Icons.remove_shopping_cart
-                                            : Icons.shopping_cart,
-                                        color: didDisable
-                                            ? Appcolors.appThemeSecondaryColor
-                                            : Appcolors.appThemeColor,
-                                      ))
-                                ],
-                              ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Padding(
+                                    padding: EdgeInsets.only(left: 2),
+                                    child: RatingTile(
+                                      rating: 5,
+                                      rad: 18,
+                                    )),
+                                IconButton(
+                                    onPressed: didDisable
+                                        ? null
+                                        : () async {
+                                            double pr = double.parse(
+                                                (isShowBadge)
+                                                    ? discountPrice!
+                                                    : unitPrice ?? "0");
+                                            final model = CartModel(
+                                                id: id,
+                                                title: title ?? "title",
+                                                price: pr,
+                                                amount: 1,
+                                                total: pr,
+                                                imageLink: link);
+                                            bool didAdd = await ref
+                                                .watch(cartPageProvider)
+                                                .addCart(model);
+                                            if (context.mounted) {
+                                              ScaffoldMessenger.of(context)
+                                                  .hideCurrentSnackBar();
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(SnackBar(
+                                                      content: Text((didAdd)
+                                                          ? AppConstants
+                                                              .cartAddMessage
+                                                          : AppConstants
+                                                              .cartAddFailedMessage)));
+                                            }
+                                          },
+                                    icon: Icon(
+                                      size: 18,
+                                      didDisable
+                                          ? Icons.remove_shopping_cart
+                                          : Icons.shopping_cart,
+                                      color: didDisable
+                                          ? Appcolors.appThemeSecondaryColor
+                                          : Appcolors.appThemeColor,
+                                    ))
+                              ],
                             )
                           ],
                         ),
