@@ -1,4 +1,5 @@
 import 'package:bajarbd/screens/catwise_screen.dart';
+import 'package:bajarbd/screens/search_screen.dart';
 import 'package:bajarbd/utils/Colors/appcolors.dart';
 
 import 'package:bajarbd/widgets/carousel/cat_wise_featured_product.dart';
@@ -18,60 +19,38 @@ import '../widgets/products/product_grids.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ProductsOverviewScr extends StatefulWidget {
+class ProductsOverviewScr extends StatelessWidget {
   const ProductsOverviewScr({super.key});
 
   @override
-  State<ProductsOverviewScr> createState() => _ProductsOverviewScrState();
-}
-
-class _ProductsOverviewScrState extends State<ProductsOverviewScr> {
-  TextEditingController searchController = TextEditingController();
-  @override
-  void dispose() {
-    searchController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    Widget searchWidget() {
-      return Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: TextField(
-          controller: searchController,
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
-          decoration: InputDecoration(
-              filled: true,
-              fillColor: Colors.white,
-              focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20),
-                  borderSide: const BorderSide(width: 1, color: Colors.white)),
-              contentPadding: const EdgeInsets.symmetric(horizontal: 5),
-              hintText: "search",
-              prefixIcon: const Icon(Icons.search),
-              hintStyle: const TextStyle(
-                  fontSize: 18,
-                  color: Colors.grey,
-                  fontWeight: FontWeight.normal),
-              enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20),
-                  borderSide: const BorderSide(width: 1, color: Colors.white))),
-          onChanged: (value) {
-            /*   Provider.of<EmployeeDataController>(context, listen: false)
-                .filterUserData(value); */
-
-            // filterUsers(value, snapshot.data!);
-          },
-        ),
-      );
-    }
-
     return SingleChildScrollView(
       padding: EdgeInsets.symmetric(horizontal: 10),
       child: Column(
         children: [
-          searchWidget(),
+          //searchWidget(),
+          Container(
+            margin: EdgeInsets.symmetric(vertical: 10),
+            child: ListTile(
+              onTap: () {
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (ctx) => SearchScreen()));
+              },
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  side: BorderSide(color: Colors.grey, width: 0.3)),
+              leading: Icon(Icons.search),
+              title: Text(
+                "Search",
+              ),
+              minTileHeight: Appvars.screenSize.height * 0.02,
+              titleTextStyle: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.normal,
+                  color: Colors.grey),
+            ),
+          ),
+
           Consumer(builder: (context, refCat, ch) {
             return Column(
               children: [
@@ -96,8 +75,8 @@ class _ProductsOverviewScrState extends State<ProductsOverviewScr> {
                         return SizedBox.shrink();
                       }
                       return Container(
-                        margin:
-                            EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                        /*                margin:
+                            EdgeInsets.symmetric(vertical: 10, horizontal: 10), */
                         /*   decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             color: Appcolors.appThemeSecondaryColor), */

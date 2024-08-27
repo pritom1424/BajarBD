@@ -28,50 +28,48 @@ class SpecialFeaturedProductWidget extends ConsumerWidget {
       'https://ecom.szamantech.com/frontend/img/header-slider/6.jpg',
       'https://ecom.szamantech.com/frontend/img/header-slider/7.jpg',
     ]; */
-    return Center(
-      child: FlutterCarousel(
-          options: CarouselOptions(
-              padEnds: false,
-              autoPlay: false,
-              reverse: (index == null || index! % 2 != 0) ? false : true,
-              autoPlayInterval: const Duration(seconds: 3),
-              aspectRatio: 1.6,
-              enlargeCenterPage: false,
-              floatingIndicator: false,
-              showIndicator: false,
-              /*  slideIndicator: CircularSlideIndicator(
-                  slideIndicatorOptions: SlideIndicatorOptions(
-                      indicatorBackgroundColor: Colors.black12,
-                      currentIndicatorColor: Appcolors.appThemeColor)) */
-              enableInfiniteScroll: (scrollLimiterItmNumber != null &&
-                      scrollLimiterItmNumber! >= model.length)
+    return FlutterCarousel(
+        options: CarouselOptions(
+            padEnds: false,
+            autoPlay: false,
+            reverse: (index == null || index! % 2 != 0) ? false : true,
+            autoPlayInterval: const Duration(seconds: 3),
+            aspectRatio: 1.6,
+            enlargeCenterPage: false,
+            floatingIndicator: false,
+            showIndicator: false,
+            /*  slideIndicator: CircularSlideIndicator(
+                slideIndicatorOptions: SlideIndicatorOptions(
+                    indicatorBackgroundColor: Colors.black12,
+                    currentIndicatorColor: Appcolors.appThemeColor)) */
+            enableInfiniteScroll: (scrollLimiterItmNumber != null &&
+                    scrollLimiterItmNumber! >= model.length)
+                ? false
+                : true,
+            /*  scrollPhysics: (scrollLimiterItmNumber != null &&
+                    scrollLimiterItmNumber! >= model.length)
+                ? NeverScrollableScrollPhysics()
+                : AlwaysScrollableScrollPhysics(), */
+            viewportFraction: 0.35),
+        items: List.generate(
+          model.length,
+          (ind) => Container(
+            margin: EdgeInsets.symmetric(horizontal: 3),
+            child: HomeCatWiseProductItem(
+              link: model[ind].featureImage == null
+                  ? ""
+                  : ("${ApiLinks.baseImageUrl}/product/${model[ind].featureImage!}"),
+              isShowBadge: (model[ind].discount == null ||
+                      model[ind].discountPrice == null)
                   ? false
                   : true,
-              /*  scrollPhysics: (scrollLimiterItmNumber != null &&
-                      scrollLimiterItmNumber! >= model.length)
-                  ? NeverScrollableScrollPhysics()
-                  : AlwaysScrollableScrollPhysics(), */
-              viewportFraction: 0.35),
-          items: List.generate(
-            model.length,
-            (ind) => Container(
-              margin: EdgeInsets.symmetric(horizontal: 3),
-              child: HomeCatWiseProductItem(
-                link: model[ind].featureImage == null
-                    ? ""
-                    : ("${ApiLinks.baseImageUrl}/product/${model[ind].featureImage!}"),
-                isShowBadge: (model[ind].discount == null ||
-                        model[ind].discountPrice == null)
-                    ? false
-                    : true,
-                unitPrice: model[ind].unitPrice,
-                discount: model[ind].discount,
-                discountPrice: model[ind].discountPrice,
-                title: model[ind].title,
-                id: model[ind].id,
-              ),
+              unitPrice: model[ind].unitPrice,
+              discount: model[ind].discount,
+              discountPrice: model[ind].discountPrice,
+              title: model[ind].title,
+              id: model[ind].id,
             ),
-          )),
-    );
+          ),
+        ));
   }
 }
