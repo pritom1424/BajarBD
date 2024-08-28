@@ -13,9 +13,11 @@ class SpecialFeaturedProductWidget extends ConsumerWidget {
   final int? index;
   final int? scrollLimiterItmNumber;
   final List<Fetauredproduct> model;
+  final bool? isShowTileBottom;
   const SpecialFeaturedProductWidget(
       {this.scrollLimiterItmNumber,
       required this.model,
+      this.isShowTileBottom,
       this.index,
       super.key});
 
@@ -31,10 +33,13 @@ class SpecialFeaturedProductWidget extends ConsumerWidget {
     return FlutterCarousel(
         options: CarouselOptions(
             padEnds: false,
-            autoPlay: false,
+            autoPlay: true,
+            autoPlayCurve: Curves.linear,
             reverse: (index == null || index! % 2 != 0) ? false : true,
             autoPlayInterval: const Duration(seconds: 3),
-            aspectRatio: 1.6,
+            aspectRatio: (isShowTileBottom == null || isShowTileBottom == true)
+                ? 1.4
+                : 1.6,
             enlargeCenterPage: false,
             floatingIndicator: false,
             showIndicator: false,
@@ -68,6 +73,10 @@ class SpecialFeaturedProductWidget extends ConsumerWidget {
               discountPrice: model[ind].discountPrice,
               title: model[ind].title,
               id: model[ind].id,
+              isShowBottom:
+                  (isShowTileBottom == null || isShowTileBottom == true)
+                      ? true
+                      : false,
             ),
           ),
         ));

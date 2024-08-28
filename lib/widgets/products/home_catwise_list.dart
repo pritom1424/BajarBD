@@ -6,7 +6,9 @@ import 'package:flutter/cupertino.dart';
 
 class HomeCatWiseList extends StatelessWidget {
   final HomeCatWiseModel model;
-  const HomeCatWiseList({super.key, required this.model});
+  final bool? isShowTileBottom;
+  const HomeCatWiseList(
+      {super.key, required this.model, this.isShowTileBottom});
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +35,10 @@ class HomeCatWiseList extends StatelessWidget {
                 discountPrice: model.products[ind].discountPrice,
                 title: model.products[ind].title,
                 id: model.products[ind].id,
+                isShowBottom:
+                    (isShowTileBottom == null || isShowTileBottom == true)
+                        ? true
+                        : false,
               ),
             );
           }),

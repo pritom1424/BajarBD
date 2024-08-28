@@ -7,8 +7,12 @@ class ProductsGrid extends StatelessWidget {
   final bool showFav;
   final bool? isScroll;
   final List<HomeLatestProduct> products;
+  final bool? isShowBottomTile;
   const ProductsGrid(this.showFav,
-      {super.key, this.isScroll, required this.products});
+      {super.key,
+      this.isScroll,
+      required this.products,
+      this.isShowBottomTile});
 
   @override
   Widget build(BuildContext context) {
@@ -24,9 +28,12 @@ class ProductsGrid extends StatelessWidget {
             : const NeverScrollableScrollPhysics(),
         padding: const EdgeInsets.all(10),
         itemCount: products.length, //products.length,
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
-            childAspectRatio: 0.6,
+            childAspectRatio:
+                (isShowBottomTile == null || isShowBottomTile == true)
+                    ? 0.56
+                    : 0.65,
             mainAxisSpacing: 10,
             crossAxisSpacing: 5),
         itemBuilder: (ctx, ind) => ProductItem(
@@ -42,6 +49,9 @@ class ProductsGrid extends StatelessWidget {
           discountPrice: products[ind].discountPrice,
           title: products[ind].title,
           id: products[ind].id,
+          isShowBottom: (isShowBottomTile == null || isShowBottomTile == true)
+              ? true
+              : false,
         ) /* ChangeNotifierProvider.value(
           value: products[ind],
           child: ProductItems(),

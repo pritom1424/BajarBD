@@ -16,9 +16,11 @@ class SpecialBestDealProductWidget extends ConsumerWidget {
   final int? index;
   final int? scrollLimiterItmNumber;
   final List<BestSellingProductModel> model;
+  final bool? isShowTileBottom;
   const SpecialBestDealProductWidget(
       {this.scrollLimiterItmNumber,
       required this.model,
+      this.isShowTileBottom,
       this.index,
       super.key});
 
@@ -38,7 +40,10 @@ class SpecialBestDealProductWidget extends ConsumerWidget {
               autoPlay: false,
               reverse: (index == null || index! % 2 != 0) ? false : true,
               autoPlayInterval: const Duration(seconds: 3),
-              aspectRatio: 1.6,
+              aspectRatio:
+                  (isShowTileBottom == null || isShowTileBottom == true)
+                      ? 1.4
+                      : 1.6,
               enlargeCenterPage: false,
               floatingIndicator: false,
               showIndicator: false
@@ -73,6 +78,10 @@ class SpecialBestDealProductWidget extends ConsumerWidget {
                 discountPrice: model[ind].discountPrice,
                 title: model[ind].title,
                 id: model[ind].id,
+                isShowBottom:
+                    (isShowTileBottom == null || isShowTileBottom == true)
+                        ? true
+                        : false,
               ),
             ),
           )),

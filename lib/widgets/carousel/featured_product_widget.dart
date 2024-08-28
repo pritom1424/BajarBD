@@ -26,25 +26,28 @@ class FeaturedProductWidget extends StatelessWidget {
             padEnds: false,
             autoPlay: true,
             autoPlayInterval: const Duration(seconds: 3),
-            aspectRatio: 7 / 2,
+            aspectRatio: 5 / 2,
             enlargeCenterPage: false,
             floatingIndicator: false,
             slideIndicator: CircularSlideIndicator(
                 slideIndicatorOptions: SlideIndicatorOptions(
                     indicatorBackgroundColor: Colors.black12,
                     currentIndicatorColor: Appcolors.appThemeColor)),
-            viewportFraction: 0.9),
+            viewportFraction: 1),
         items: List.generate(
             model.length,
-            (ind) => Padding(
+            (ind) => Container(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
                   child: InkWell(
                     onTap: () {
                       print("did tap top");
                     },
-                    child: Image.network(
-                      "${ApiLinks.baseImageUrl}/slider/${model[ind].image}",
-                      fit: BoxFit.cover,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: Image.network(
+                        "${ApiLinks.baseImageUrl}/slider/${model[ind].image}",
+                        fit: BoxFit.contain,
+                      ),
                     ),
                   ),
                 )));

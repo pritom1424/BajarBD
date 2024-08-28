@@ -58,6 +58,7 @@ class WishlistModelRepos {
                 isShowBadge: (int.parse(postMap['isShowBadge'].toString()) == 0)
                     ? false
                     : true,
+                isShowBottom: true,
               ))
           .toList();
 

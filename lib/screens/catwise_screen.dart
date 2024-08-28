@@ -65,7 +65,7 @@ class _CatWiseScreenState extends State<CatWiseScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            searchWidget(),
+            //searchWidget(),
             //         const FeaturedProductWidget(),
             Consumer(builder: (ctx, ref, _) {
               return FutureBuilder(

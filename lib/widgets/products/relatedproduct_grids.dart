@@ -9,8 +9,12 @@ class RelatedProductsGrid extends StatelessWidget {
   final bool showFav;
   final bool? isScroll;
   final List<ProductDetail> products;
+  final bool? isShowBottomTile;
   const RelatedProductsGrid(this.showFav,
-      {super.key, this.isScroll, required this.products});
+      {super.key,
+      this.isScroll,
+      required this.products,
+      this.isShowBottomTile});
 
   @override
   Widget build(BuildContext context) {
@@ -44,6 +48,9 @@ class RelatedProductsGrid extends StatelessWidget {
           discountPrice: products[ind].discountPrice,
           title: products[ind].title,
           id: products[ind].id,
+          isShowBottom: (isShowBottomTile == null || isShowBottomTile == true)
+              ? true
+              : false,
         ) /* ChangeNotifierProvider.value(
           value: products[ind],
           child: ProductItems(),

@@ -10,8 +10,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class CatWiseFeaturedProductWidget extends ConsumerWidget {
   final int? index;
   final HomeCatWiseModel model;
+  final bool? isShowTileBottom;
   const CatWiseFeaturedProductWidget(
-      {required this.model, this.index, super.key});
+      {required this.model, this.isShowTileBottom, this.index, super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -26,7 +27,8 @@ class CatWiseFeaturedProductWidget extends ConsumerWidget {
       crossAxisCount: 3,
       physics: NeverScrollableScrollPhysics(),
       shrinkWrap: true,
-      childAspectRatio: 0.52,
+      childAspectRatio:
+          (isShowTileBottom == null || isShowTileBottom == true) ? 0.48 : 0.55,
       mainAxisSpacing: 10,
       crossAxisSpacing: 5,
       children: List.generate(
@@ -44,6 +46,9 @@ class CatWiseFeaturedProductWidget extends ConsumerWidget {
           discountPrice: model.products[ind].discountPrice,
           title: model.products[ind].title,
           id: model.products[ind].id,
+          isShowBottom: (isShowTileBottom == null || isShowTileBottom == true)
+              ? true
+              : false,
         ),
       ),
     ); /* Center(

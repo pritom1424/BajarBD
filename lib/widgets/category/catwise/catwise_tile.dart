@@ -17,16 +17,19 @@ class CatWiseItem extends ConsumerWidget {
   final String? discount;
   final String? title;
   final int id;
+  final bool isShowBottom;
 
-  const CatWiseItem(
-      {super.key,
-      required this.link,
-      required this.isShowBadge,
-      required this.unitPrice,
-      this.discountPrice,
-      this.discount,
-      required this.title,
-      required this.id});
+  const CatWiseItem({
+    super.key,
+    required this.link,
+    required this.isShowBadge,
+    required this.unitPrice,
+    this.discountPrice,
+    this.discount,
+    required this.title,
+    required this.id,
+    required this.isShowBottom,
+  });
   // final String id, url, title;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -68,6 +71,7 @@ class CatWiseItem extends ConsumerWidget {
                   child: Stack(
                     children: [
                       Container(
+                        margin: EdgeInsets.symmetric(vertical: 10),
                         decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(10)),
@@ -261,11 +265,13 @@ class CatWiseItem extends ConsumerWidget {
                               padding: const EdgeInsets.all(5),
                               decoration: const BoxDecoration(
                                   color: Appcolors.appThemeColor,
-                                  borderRadius: BorderRadius.only(
+                                  borderRadius: BorderRadius.all(Radius.circular(
+                                      2)) /* BorderRadius.only(
                                       bottomLeft: Radius.circular(10),
-                                      topRight: Radius.circular(10))),
+                                      topRight: Radius.circular(10)) */
+                                  ),
                               child: Text(
-                                "flat ${discount!}% discount",
+                                "flat ${discount!}% off",
                                 style: const TextStyle(
                                     fontSize: 8,
                                     color: Colors.white,

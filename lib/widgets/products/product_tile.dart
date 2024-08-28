@@ -18,16 +18,19 @@ class ProductItem extends ConsumerWidget {
   final String? discount;
   final String? title;
   final int id;
+  final bool isShowBottom;
 
-  const ProductItem(
-      {super.key,
-      required this.link,
-      required this.isShowBadge,
-      required this.unitPrice,
-      this.discountPrice,
-      this.discount,
-      required this.title,
-      required this.id});
+  const ProductItem({
+    super.key,
+    required this.link,
+    required this.isShowBadge,
+    required this.unitPrice,
+    this.discountPrice,
+    this.discount,
+    required this.title,
+    required this.id,
+    required this.isShowBottom,
+  });
   // final String id, url, title;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -69,6 +72,7 @@ class ProductItem extends ConsumerWidget {
                   child: Stack(
                     children: [
                       Container(
+                        margin: EdgeInsets.symmetric(vertical: 10),
                         decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(10)),
@@ -171,56 +175,64 @@ class ProductItem extends ConsumerWidget {
                                 ),
                               ),
                             ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Padding(
-                                    padding: EdgeInsets.only(left: 2),
-                                    child: RatingTile(
-                                      rating: 5,
-                                      rad: 18,
-                                    )),
-                                IconButton(
-                                    onPressed: didDisable
-                                        ? null
-                                        : () async {
-                                            double pr = double.parse(
-                                                (isShowBadge)
-                                                    ? discountPrice!
-                                                    : unitPrice ?? "0");
-                                            final model = CartModel(
-                                                id: id,
-                                                title: title ?? "title",
-                                                price: pr,
-                                                amount: 1,
-                                                total: pr,
-                                                imageLink: link);
-                                            bool didAdd = await ref
-                                                .watch(cartPageProvider)
-                                                .addCart(model);
-                                            if (context.mounted) {
-                                              ScaffoldMessenger.of(context)
-                                                  .hideCurrentSnackBar();
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(SnackBar(
-                                                      content: Text((didAdd)
-                                                          ? AppConstants
-                                                              .cartAddMessage
-                                                          : AppConstants
-                                                              .cartAddFailedMessage)));
-                                            }
-                                          },
-                                    icon: Icon(
-                                      size: 18,
-                                      didDisable
-                                          ? Icons.remove_shopping_cart
-                                          : Icons.shopping_cart,
-                                      color: didDisable
-                                          ? Appcolors.appThemeSecondaryColor
-                                          : Appcolors.appThemeColor,
-                                    ))
-                              ],
-                            )
+                            (isShowBottom)
+                                ? Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Padding(
+                                          padding: EdgeInsets.only(left: 2),
+                                          child: RatingTile(
+                                            rating: 5,
+                                            rad: 18,
+                                          )),
+                                      IconButton(
+                                          onPressed: didDisable
+                                              ? null
+                                              : () async {
+                                                  double pr = double.parse(
+                                                      (isShowBadge)
+                                                          ? discountPrice!
+                                                          : unitPrice ?? "0");
+                                                  final model = CartModel(
+                                                      id: id,
+                                                      title: title ?? "title",
+                                                      price: pr,
+                                                      amount: 1,
+                                                      total: pr,
+                                                      imageLink: link);
+                                                  bool didAdd = await ref
+                                                      .watch(cartPageProvider)
+                                                      .addCart(model);
+                                                  if (context.mounted) {
+                                                    ScaffoldMessenger.of(
+                                                            context)
+                                                        .hideCurrentSnackBar();
+                                                    ScaffoldMessenger.of(
+                                                            context)
+                                                        .showSnackBar(SnackBar(
+                                                            content: Text((didAdd)
+                                                                ? AppConstants
+                                                                    .cartAddMessage
+                                                                : AppConstants
+                                                                    .cartAddFailedMessage)));
+                                                  }
+                                                },
+                                          icon: Icon(
+                                            size: 18,
+                                            didDisable
+                                                ? Icons.remove_shopping_cart
+                                                : Icons.shopping_cart,
+                                            color: didDisable
+                                                ? Appcolors
+                                                    .appThemeSecondaryColor
+                                                : Appcolors.appThemeColor,
+                                          ))
+                                    ],
+                                  )
+                                : SizedBox(
+                                    height: 10,
+                                  )
                           ],
                         ),
                       ),
@@ -232,11 +244,13 @@ class ProductItem extends ConsumerWidget {
                               padding: const EdgeInsets.all(5),
                               decoration: const BoxDecoration(
                                   color: Appcolors.appThemeColor,
-                                  borderRadius: BorderRadius.only(
+                                  borderRadius: BorderRadius.all(Radius.circular(
+                                      2)) /* BorderRadius.only(
                                       bottomLeft: Radius.circular(10),
-                                      topRight: Radius.circular(10))),
+                                      topRight: Radius.circular(10)) */
+                                  ),
                               child: Text(
-                                "flat ${discount!}% discount",
+                                "flat ${discount!}% off",
                                 style: const TextStyle(
                                     fontSize: 8,
                                     color: Colors.white,

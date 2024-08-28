@@ -8,8 +8,9 @@ class CatWiseGrids extends StatelessWidget {
   final bool showFav;
   final bool? isScroll;
   final CatWiseModel model;
+  final bool? isShowBottomTile;
   const CatWiseGrids(this.showFav,
-      {super.key, this.isScroll, required this.model});
+      {super.key, this.isScroll, required this.model, this.isShowBottomTile});
 
   @override
   Widget build(BuildContext context) {
@@ -25,9 +26,12 @@ class CatWiseGrids extends StatelessWidget {
             : const NeverScrollableScrollPhysics(),
         padding: const EdgeInsets.all(10),
         itemCount: model.product?.length ?? 0, //products.length,
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
-            childAspectRatio: 0.62,
+            childAspectRatio:
+                (isShowBottomTile == null || isShowBottomTile == true)
+                    ? 0.6
+                    : 0.65,
             mainAxisSpacing: 10,
             crossAxisSpacing: 5),
         itemBuilder: (ctx, ind) => CatWiseItem(
@@ -43,6 +47,9 @@ class CatWiseGrids extends StatelessWidget {
           discountPrice: model.product?[ind].discountPrice ?? "0.0",
           title: model.product?[ind].title ?? "",
           id: model.product?[ind].id ?? -1,
+          isShowBottom: (isShowBottomTile == null || isShowBottomTile == true)
+              ? true
+              : false,
         ) /* ChangeNotifierProvider.value(
           value: products[ind],
           child: ProductItems(),
