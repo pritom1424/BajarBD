@@ -1,6 +1,6 @@
 // To parse this JSON data, do
 //
-//     final catModel = catModelFromJson(jsonString);
+//     final brandModel = brandModelFromJson(jsonString);
 
 import 'dart:convert';
 
@@ -12,20 +12,24 @@ String brandModelToJson(List<BrandModel> data) =>
 
 class BrandModel {
   String name;
-  String? image;
+  dynamic image;
+  int id;
 
   BrandModel({
     required this.name,
     required this.image,
+    required this.id,
   });
 
   factory BrandModel.fromJson(Map<String, dynamic> json) => BrandModel(
         name: json["name"],
         image: json["image"],
+        id: json["id"],
       );
 
   Map<String, dynamic> toJson() => {
         "name": name,
         "image": image,
+        "id": id,
       };
 }

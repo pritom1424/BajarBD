@@ -1,21 +1,17 @@
-import 'package:bajarbd/model/models/single_product_model.dart';
-
-import '../../model/models/home_latest_model.dart';
-import '../../utils/Appvars/api_links.dart';
-import 'product_tile.dart';
+import 'package:bajarbd/model/models/brand_wise_model.dart';
+import 'package:bajarbd/model/models/cat_wise_model.dart';
+import 'package:bajarbd/model/models/home_latest_model.dart';
+import 'package:bajarbd/utils/Appvars/api_links.dart';
+import 'package:bajarbd/widgets/category/catwise/catwise_tile.dart';
 import 'package:flutter/material.dart';
 
-class RelatedProductsGrid extends StatelessWidget {
+class BrandWiseGrids extends StatelessWidget {
   final bool showFav;
   final bool? isScroll;
-  final List<ProductDetail> products;
+  final List<BrandWiseProductsModel> model;
   final bool? isShowBottomTile;
-
-  const RelatedProductsGrid(this.showFav,
-      {super.key,
-      this.isScroll,
-      required this.products,
-      this.isShowBottomTile});
+  const BrandWiseGrids(this.showFav,
+      {super.key, this.isScroll, required this.model, this.isShowBottomTile});
 
   @override
   Widget build(BuildContext context) {
@@ -30,28 +26,28 @@ class RelatedProductsGrid extends StatelessWidget {
             ? const AlwaysScrollableScrollPhysics()
             : const NeverScrollableScrollPhysics(),
         padding: const EdgeInsets.all(10),
-        itemCount: products.length, //products.length,
+        itemCount: model.length ?? 0, //products.length,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
             childAspectRatio:
                 (isShowBottomTile == null || isShowBottomTile == true)
-                    ? 0.56
+                    ? 0.6
                     : 0.65,
             mainAxisSpacing: 10,
             crossAxisSpacing: 5),
-        itemBuilder: (ctx, ind) => ProductItem(
-          link: products[ind].featureImage == null
+        itemBuilder: (ctx, ind) => CatWiseItem(
+          link: model[ind].featureImage == null
               ? ""
-              : ("${ApiLinks.baseImageUrl}/product/${products[ind].featureImage!}"),
-          isShowBadge: (products[ind].discount == null ||
-                  products[ind].discountPrice == null)
-              ? false
-              : true,
-          unitPrice: products[ind].unitPrice,
-          discount: products[ind].discount,
-          discountPrice: products[ind].discountPrice,
-          title: products[ind].title,
-          id: products[ind].id,
+              : ("${ApiLinks.baseImageUrl}/product/${model[ind].featureImage!}"),
+          isShowBadge:
+              (model[ind].discount == null || model[ind].discountPrice == null)
+                  ? false
+                  : true,
+          unitPrice: model[ind].unitPrice ?? "0.0",
+          discount: model[ind].discount ?? "0.0",
+          discountPrice: model[ind].discountPrice ?? "0.0",
+          title: model[ind].title ?? "",
+          id: model[ind].id ?? -1,
           isShowBottom: (isShowBottomTile == null || isShowBottomTile == true)
               ? true
               : false,

@@ -1,6 +1,9 @@
 import 'package:bajarbd/screens/catwise_screen.dart';
 import 'package:bajarbd/screens/search_screen.dart';
 import 'package:bajarbd/utils/Colors/appcolors.dart';
+import 'package:bajarbd/widgets/brand/brand_tile.dart';
+import 'package:bajarbd/widgets/brand/brandlist.dart';
+import 'package:bajarbd/widgets/brand/home_brand_list.dart';
 
 import 'package:bajarbd/widgets/carousel/cat_wise_featured_product.dart';
 import 'package:bajarbd/widgets/carousel/special_best_deal_product.dart';
@@ -11,6 +14,7 @@ import 'package:bajarbd/widgets/products/home_catwise_list.dart';
 import 'package:bajarbd/widgets/products/home_catwise_product_tile.dart';
 import 'package:bajarbd/widgets/products/product_tile.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
 
 import '../provider/providers.dart';
 import '../utils/Appvars/appvars.dart';
@@ -93,20 +97,20 @@ class ProductsOverviewScr extends StatelessWidget {
                         /*                margin:
                             EdgeInsets.symmetric(vertical: 10, horizontal: 10), */
                         decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            gradient: LinearGradient(colors: [
-                              Appcolors.appThemeSecondaryColor,
-                              Appcolors.appThemeColor
-                            ])),
+                          color: Colors.deepOrange.withOpacity(0.5),
+                          borderRadius: BorderRadius.circular(10),
+                          /*  gradient: LinearGradient(
+                                colors: [Colors.blueGrey, Colors.white]) */
+                        ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             Row(
                               children: [
-                                Icon(Icons.star,
-                                    color:
-                                        Colors.white //Appcolors.appThemeColor,
-                                    ),
+                                Icon(
+                                  Icons.star,
+                                  color: Appcolors.appThemeColor,
+                                ),
                                 SizedBox(
                                   width: 10,
                                 ),
@@ -114,8 +118,7 @@ class ProductsOverviewScr extends StatelessWidget {
                                   "Featured Products",
                                   style: Theme.of(context)
                                       .textTheme
-                                      .bodyLarge
-                                      ?.copyWith(color: Colors.white),
+                                      .bodyLarge /*    ?.copyWith(color: Colors.white) */,
                                 ),
                               ],
                             ),
@@ -292,6 +295,50 @@ class ProductsOverviewScr extends StatelessWidget {
               ],
             );
           }),
+          Consumer(builder: (context, refBrand, ch) {
+            return FutureBuilder(
+                future: refBrand.read(bandPageProvider).getBrandData(),
+                builder: (context, snapBrand) {
+                  /*    if (snapBrand.connectionState == ConnectionState.waiting) {
+                    return SizedBox(
+                        height: Appvars.screenSize.height * 0.2,
+                        child: const Center(child: LoaderWidget()));
+                  } */
+                  if (snapBrand.data == null) {
+                    return const SizedBox.shrink();
+                  }
+                  /* return Column(
+                      children: [Brandlist(models: snapBrand.data!)],
+                    ); */
+                  return Column(
+                    children: [
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.storefront,
+                            color: Appcolors.appThemeColor,
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            "Top Brands",
+                            style: Theme.of(context).textTheme.bodyLarge,
+                          ),
+                        ],
+                      ),
+                      titleBelowSpace,
+                      HomeBrandList(
+                        model: snapBrand.data!,
+                        scrollLimiterItmNumber: 3,
+                      ),
+                      SizedBox(
+                        height: 10,
+                      )
+                    ],
+                  );
+                });
+          }),
           Consumer(builder: (ctx, ref, _) {
             return FutureBuilder(
                 future: ref
@@ -309,7 +356,7 @@ class ProductsOverviewScr extends StatelessWidget {
                     return SizedBox(
                       height: Appvars.screenSize.height * 0.6,
                       child: const Center(
-                        child: Text("No products found!"),
+                        child: Text("No product found!"),
                       ),
                     );
                   }

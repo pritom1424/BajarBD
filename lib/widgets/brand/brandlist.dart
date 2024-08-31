@@ -19,6 +19,7 @@ class Brandlist extends StatelessWidget {
       children: List.generate(
           models.length,
           (ind) => BrandTile(
+              id: models[ind].id,
               name: models[ind].name,
               link: (models[ind].image == null)
                   ? ""

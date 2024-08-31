@@ -26,8 +26,8 @@ class CatProductListTile extends StatelessWidget {
       },
       titleTextStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
           fontSize: 18,
-          color: Appcolors.appThemeColorDark,
-          fontWeight: FontWeight.bold),
+          color: Colors.black, //Appcolors.appThemeColorDark,
+          fontWeight: FontWeight.normal),
       title: Container(
         height: Appvars.screenSize.height * 0.05,
         width: Appvars.screenSize.width,
@@ -38,10 +38,9 @@ class CatProductListTile extends StatelessWidget {
                 child: Text(
               title,
             )),
-            Icon(
-              Icons.arrow_right,
-              color: Appcolors.appThemeColorDark,
-            )
+            Icon(Icons.arrow_right,
+                color: Colors.black //Appcolors.appThemeColorDark,
+                )
             /* ClipRRect(
               borderRadius: BorderRadius.only(
                   topRight: Radius.circular(10),
