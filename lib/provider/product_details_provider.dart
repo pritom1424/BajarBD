@@ -4,7 +4,10 @@ import 'package:flutter/material.dart';
 
 class ProductDetailsProvider with ChangeNotifier {
   /*  int _sliderIndex = 0; */
-  final SingleProductRepos _singleProductRepos = SingleProductRepos();
+/*   final SingleProductRepos singleProductRepos = SingleProductRepos(); */
+  final SingleProductRepos singleProductRepos;
+
+  ProductDetailsProvider({required this.singleProductRepos});
 
 /*   int get sliderIndex {
     return _sliderIndex;
@@ -25,7 +28,7 @@ class ProductDetailsProvider with ChangeNotifier {
 
   Future<SingleProductModel?> getProduct(int id) async {
     SingleProductModel? singleProduct =
-        await _singleProductRepos.getProduct(id.toString());
+        await singleProductRepos.getProduct(id.toString());
 
     return singleProduct;
   }

@@ -4,14 +4,16 @@ import 'package:bajarbd/utils/db/user_credential.dart';
 import 'package:flutter/material.dart';
 
 class OrderHistoryProvider with ChangeNotifier {
-  final OrderHistoryRepos _orderHistoryRepos = OrderHistoryRepos();
+  /*  final OrderHistoryRepos orderHistoryRepos = OrderHistoryRepos(); */
+  final OrderHistoryRepos orderHistoryRepos;
+
+  OrderHistoryProvider({required this.orderHistoryRepos});
 
   Future<List<OrderHistoryModel>> getOrderHistory() async {
     if (UserCredential.userId == null) {
       return [];
     }
-    final products =
-        await _orderHistoryRepos.getHistory(UserCredential.userId!);
+    final products = await orderHistoryRepos.getHistory(UserCredential.userId!);
 
     return products;
   }

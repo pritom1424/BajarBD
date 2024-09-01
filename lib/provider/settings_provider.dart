@@ -4,15 +4,18 @@ import 'package:bajarbd/utils/db/user_credential.dart';
 import 'package:flutter/material.dart';
 
 class SettingsProvider with ChangeNotifier {
-  final _settingsRepos = SettingsRepos();
+  /*  final settingsRepos = SettingsRepos(); */
+  final SettingsRepos settingsRepos;
   bool _isLoading = false;
   bool _isEdit = false;
+
+  SettingsProvider({required this.settingsRepos});
   Future<String> updatePassword(String pass) async {
     if (UserCredential.userId == null) {
       return "Illegal try!";
     }
     final didSuccess =
-        await _settingsRepos.updatePass(UserCredential.userId!, pass);
+        await settingsRepos.updatePass(UserCredential.userId!, pass);
     if (didSuccess) {
       return "Password update successful";
     } else {
@@ -46,6 +49,6 @@ class SettingsProvider with ChangeNotifier {
     if (UserCredential.userId == null) {
       return false;
     }
-    return _settingsRepos.postAddress(model);
+    return settingsRepos.postAddress(model);
   }
 }

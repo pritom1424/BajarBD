@@ -3,9 +3,13 @@ import '../model/models/cat_model.dart';
 import 'package:flutter/material.dart';
 
 class CategoryScreenProvider with ChangeNotifier {
-  final _catscrRepos = CategoryScrRepos();
+  /* final catscrRepos = CategoryScrRepos(); */
+  final CategoryScrRepos catscrRepos;
+
   List<bool> _clicksBool = [];
   int _itemNumber = 0;
+
+  CategoryScreenProvider({required this.catscrRepos});
 
   int get itemNumber {
     return _itemNumber;
@@ -42,7 +46,7 @@ class CategoryScreenProvider with ChangeNotifier {
   }
 
   Future<List<CatModel>> getSideData() async {
-    final res = await _catscrRepos.getProducts();
+    final res = await catscrRepos.getProducts();
     return res;
   }
 }

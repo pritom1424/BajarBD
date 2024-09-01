@@ -13,38 +13,50 @@ import '../model/models/slider_model.dart';
 import 'package:flutter/material.dart';
 
 class ProductOverviewProvider with ChangeNotifier {
-  final HomeLatestProductRepos _homeLatestProductRepos =
+  /*  final HomeLatestProductRepos _homeLatestProductRepos =
       HomeLatestProductRepos();
   final SliderModelRepos _sliderModelRepos = SliderModelRepos();
   final FeaturedProductRepos _featuredProductRepos = FeaturedProductRepos();
   final HotDealProductRepos _hotDealProductRepos = HotDealProductRepos();
-  final BestSellProductRepos _bestSellProductRepos = BestSellProductRepos();
+  final BestSellProductRepos _bestSellProductRepos = BestSellProductRepos(); */
+  final HomeLatestProductRepos homeLatestProductRepos;
+  final SliderModelRepos sliderModelRepos;
+  final FeaturedProductRepos featuredProductRepos;
+  final HotDealProductRepos hotDealProductRepos;
+  final BestSellProductRepos bestSellProductRepos;
+
+  ProductOverviewProvider(
+      {required this.homeLatestProductRepos,
+      required this.sliderModelRepos,
+      required this.featuredProductRepos,
+      required this.hotDealProductRepos,
+      required this.bestSellProductRepos});
 
   Future<List<HomeLatestProduct>> getHomeLatestProducts() async {
-    final products = await _homeLatestProductRepos.getProducts();
+    final products = await homeLatestProductRepos.getProducts();
 
     return products;
   }
 
   Future<List<SliderModel>?> getSliders() async {
-    return await _sliderModelRepos.getSliders();
+    return await sliderModelRepos.getSliders();
   }
 
   Future<List<HomeCatWiseModel>> getCatWiseProduct() async {
-    final products = await _homeLatestProductRepos.getCatProducts();
+    final products = await homeLatestProductRepos.getCatProducts();
 
     return products;
   }
 
   Future<List<Fetauredproduct>?> getFeaturedProducts() async {
-    return await _featuredProductRepos.getProducts();
+    return await featuredProductRepos.getProducts();
   }
 
   Future<List<HotDealModel>?> getHotProducts() async {
-    return await _hotDealProductRepos.getProducts();
+    return await hotDealProductRepos.getProducts();
   }
 
   Future<List<BestSellingProductModel>?> getBestSellProducts() async {
-    return await _bestSellProductRepos.getProducts();
+    return await bestSellProductRepos.getProducts();
   }
 }

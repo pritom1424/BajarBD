@@ -3,10 +3,13 @@ import '../model/models/cart_model.dart';
 import 'package:flutter/material.dart';
 
 class CartScreenProvider with ChangeNotifier {
+  final CartModelRepos cartModelRepos;
   List<CartModel> _carts = [];
   int _amount = 1;
 
-  final CartModelRepos _cartModelRepos = CartModelRepos();
+  CartScreenProvider({required this.cartModelRepos});
+
+/*   final CartModelRepos cartModelRepos = CartModelRepos(); */
 
   int get amount {
     return _amount;
@@ -31,7 +34,7 @@ class CartScreenProvider with ChangeNotifier {
         imageLink: cm.imageLink);
     _carts[ind] = updateCm;
 
-    await _cartModelRepos.updateCart(id, updateCm.amount.toString(),
+    await cartModelRepos.updateCart(id, updateCm.amount.toString(),
         (updateCm.price * updateCm.amount).toString());
 
     notifyListeners();
@@ -53,18 +56,18 @@ class CartScreenProvider with ChangeNotifier {
   }
 
   Future<List<CartModel>> get carts async {
-    _carts = await _cartModelRepos.getCarts();
+    _carts = await cartModelRepos.getCarts();
     return _carts;
   }
 
   Future<bool> addCart(CartModel cart) async {
-    bool didAdd = await _cartModelRepos.addCart(cart);
+    bool didAdd = await cartModelRepos.addCart(cart);
     notifyListeners();
     return didAdd;
   }
 
   Future<bool> deleteCart(int id) async {
-    bool didDelete = await _cartModelRepos.deleteCart(id);
+    bool didDelete = await cartModelRepos.deleteCart(id);
     notifyListeners();
     return didDelete;
   }

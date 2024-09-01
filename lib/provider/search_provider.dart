@@ -4,10 +4,13 @@ import 'package:bajarbd/model/models/search_itm_model.dart';
 import 'package:flutter/material.dart';
 
 class SearchProvider with ChangeNotifier {
-  SearchRepos _searchRepos = SearchRepos();
+  /*  SearchRepos searchRepos = SearchRepos(); */
+  final SearchRepos searchRepos;
+
+  SearchProvider({required this.searchRepos});
 
   Future<List<SearchItemModel>> getItems(String keyword) {
-    final items = _searchRepos.getSearchResult(keyword);
+    final items = searchRepos.getSearchResult(keyword);
 
     return items;
   }

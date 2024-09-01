@@ -8,10 +8,14 @@ class AuthProvider with ChangeNotifier {
   // String _token = "";
   // DateTime _expiryDate = DateTime(0);
   // int? _userId;
+  final AuthRepos authRepos;
+
+  AuthProvider({required this.authRepos});
   bool _isLoading = false;
 
   Timer _authTimer = Timer(Duration.zero, () {});
-  AuthRepos _authRepos = AuthRepos();
+
+/*   AuthRepos _authRepos = AuthRepos(); */
   bool get isAuth {
     return UserCredential.token?.isNotEmpty ?? false;
   }
@@ -19,8 +23,8 @@ class AuthProvider with ChangeNotifier {
   Future<int> SignUp(String fName, String lName, String ph, String email,
       String password, String addr) async {
     try {
-      final response = await _authRepos.Authenticate(
-          fName, lName, ph, email, password, addr);
+      final response =
+          await authRepos.Authenticate(fName, lName, ph, email, password, addr);
 
       if (response != null) {
         autoLogout();
@@ -39,7 +43,7 @@ class AuthProvider with ChangeNotifier {
   Future<int> Login(String emailOrPh, String password) async {
     try {
       final response =
-          await _authRepos.Login(emailOrPh, password, UserCredential.address);
+          await authRepos.Login(emailOrPh, password, UserCredential.address);
 
       if (response != null) {
         autoLogout();
@@ -56,11 +60,11 @@ class AuthProvider with ChangeNotifier {
   }
 
   void logout() async {
-    final stat = await _authRepos.logout();
+    final stat = await authRepos.logout();
   }
 
   Future<bool> tryAutoLogin() async {
-    return await _authRepos.tryAutoLogin();
+    return await authRepos.tryAutoLogin();
   }
 
   void setRebuild() {

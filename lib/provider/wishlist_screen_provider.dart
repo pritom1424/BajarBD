@@ -5,27 +5,31 @@ import 'package:flutter/material.dart';
 
 class WishlistScreenProvider with ChangeNotifier {
   List<ProductItem> _wishlist = [];
+/* 
+  final wishlistModelRepos = WishlistModelRepos(); */
 
-  final _wishlistModelRepos = WishlistModelRepos();
+  final WishlistModelRepos wishlistModelRepos;
+
+  WishlistScreenProvider({required this.wishlistModelRepos});
 
   void setRebuild() {
     notifyListeners();
   }
 
   Future<List<ProductItem>> get getWishlist async {
-    _wishlist = await _wishlistModelRepos.getWishList();
+    _wishlist = await wishlistModelRepos.getWishList();
     return _wishlist;
   }
 
   Future<bool> addToWishList(SingleProductModel prod, String imageLink) async {
-    bool didAdd = await _wishlistModelRepos.addWishlist(prod, imageLink);
+    bool didAdd = await wishlistModelRepos.addWishlist(prod, imageLink);
     notifyListeners();
 
     return didAdd;
   }
 
   Future<bool> deleteFromWishlist(int id) async {
-    bool didDelete = await _wishlistModelRepos.deleteFromWishlist(id);
+    bool didDelete = await wishlistModelRepos.deleteFromWishlist(id);
     notifyListeners();
     return didDelete;
   }

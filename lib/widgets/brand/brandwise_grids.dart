@@ -26,7 +26,7 @@ class BrandWiseGrids extends StatelessWidget {
             ? const AlwaysScrollableScrollPhysics()
             : const NeverScrollableScrollPhysics(),
         padding: const EdgeInsets.all(10),
-        itemCount: model.length ?? 0, //products.length,
+        itemCount: model.length, //products.length,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
             childAspectRatio:
@@ -47,7 +47,7 @@ class BrandWiseGrids extends StatelessWidget {
           discount: model[ind].discount ?? "0.0",
           discountPrice: model[ind].discountPrice ?? "0.0",
           title: model[ind].title ?? "",
-          id: model[ind].id ?? -1,
+          id: model[ind].id,
           isShowBottom: (isShowBottomTile == null || isShowBottomTile == true)
               ? true
               : false,

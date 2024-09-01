@@ -13,25 +13,25 @@ String brandWiseProductsModelToJson(List<BrandWiseProductsModel> data) =>
 
 class BrandWiseProductsModel {
   int id;
-  String title;
-  String description;
-  String shortDescription;
-  int categoryId;
+  String? title;
+  String? description;
+  String? shortDescription;
+  int? categoryId;
   dynamic subcategoryId;
-  int brandId;
-  String unitPrice;
-  String quantity;
-  String discount;
-  String discountPrice;
-  String featureImage;
-  int featureProduct;
-  int hotDeal;
-  String slug;
-  int isPublish;
-  int isActive;
+  int? brandId;
+  String? unitPrice;
+  String? quantity;
+  String? discount;
+  String? discountPrice;
+  String? featureImage;
+  int? featureProduct;
+  int? hotDeal;
+  String? slug;
+  int? isPublish;
+  int? isActive;
   DateTime createdAt;
   DateTime updatedAt;
-  int bestSelling;
+  int? bestSelling;
 
   BrandWiseProductsModel({
     required this.id,

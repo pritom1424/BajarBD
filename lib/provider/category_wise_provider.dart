@@ -7,16 +7,20 @@ import '../model/models/slider_model.dart';
 import 'package:flutter/material.dart';
 
 class CatWiseProvider with ChangeNotifier {
-  final CatWiseRepos _homeLatestProductRepos = CatWiseRepos();
-  final SliderModelRepos _sliderModelRepos = SliderModelRepos();
+  /* final CatWiseRepos homeLatestProductRepos = CatWiseRepos();
+  final SliderModelRepos sliderModelRepos = SliderModelRepos(); */
+  final CatWiseRepos catWiseRepos;
+  final SliderModelRepos sliderModelRepos;
+
+  CatWiseProvider({required this.catWiseRepos, required this.sliderModelRepos});
 
   Future<CatWiseModel?> getCatWiseProducts(int catId) async {
-    final products = await _homeLatestProductRepos.getProducts(catId);
+    final products = await catWiseRepos.getProducts(catId);
 
     return products;
   }
 
   Future<List<SliderModel>?> getSliders() async {
-    return await _sliderModelRepos.getSliders();
+    return await sliderModelRepos.getSliders();
   }
 }

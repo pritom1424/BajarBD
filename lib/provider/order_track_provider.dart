@@ -4,14 +4,17 @@ import 'package:bajarbd/utils/db/user_credential.dart';
 import 'package:flutter/material.dart';
 
 class OrderTrackProvider with ChangeNotifier {
-  final OrderTrackRespos _orderTrackRepos = OrderTrackRespos();
+  /*  final OrderTrackRespos orderTrackRepos = OrderTrackRespos(); */
+  final OrderTrackRespos orderTrackRepos;
+
+  OrderTrackProvider({required this.orderTrackRepos});
 
   Future<OrderTrackModel?> getOrderTrack(String orderNumber) async {
     if (UserCredential.userId == null) {
       print("order history null" + "uid prob");
       return null;
     }
-    final track = await _orderTrackRepos.getOrderTrack(
+    final track = await orderTrackRepos.getOrderTrack(
         UserCredential.userId!, orderNumber);
 
     return track;
@@ -22,7 +25,7 @@ class OrderTrackProvider with ChangeNotifier {
       return false;
     }
     notifyListeners();
-    return await _orderTrackRepos.cancelOrder(
+    return await orderTrackRepos.cancelOrder(
         UserCredential.userId!, orderNumber);
   }
 
@@ -35,7 +38,7 @@ class OrderTrackProvider with ChangeNotifier {
 
       try {
         // Fetch order tracking details
-        final track = await _orderTrackRepos.getOrderTrack(
+        final track = await orderTrackRepos.getOrderTrack(
           UserCredential.userId!,
           orderNumber,
         );
