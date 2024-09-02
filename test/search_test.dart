@@ -4,7 +4,6 @@ import 'package:bajarbd/provider/search_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-
 import 'mocksearch_repos.dart';
 
 void main() {
