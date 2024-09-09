@@ -55,7 +55,7 @@ class TrackOrder extends StatelessWidget {
                   if (snapTrackOrder.connectionState ==
                       ConnectionState.waiting) {
                     return SizedBox(
-                      height: Appvars.screenSize.height * 0.6,
+                      height: Appvars.screenSize.height * 0.8,
                       child: Center(
                         child: LoaderWidget(),
                       ),
@@ -63,7 +63,7 @@ class TrackOrder extends StatelessWidget {
                   }
                   if (!snapTrackOrder.hasData) {
                     return SizedBox(
-                      height: Appvars.screenSize.height,
+                      height: Appvars.screenSize.height * 0.8,
                       child: Center(
                         child: Text("No order to track!"),
                       ),

@@ -60,7 +60,7 @@ class _ProductsOverviewScrState extends State<ProductsWishlist> {
           builder: (context, snapWish) {
             if (snapWish.connectionState == ConnectionState.waiting) {
               return SizedBox(
-                  height: Appvars.screenSize.height * 0.6,
+                  height: Appvars.screenSize.height * 0.8,
                   child: const Center(child: LoaderWidget()));
             }
             if (!snapWish.hasData || snapWish.data!.isEmpty) {

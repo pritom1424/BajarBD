@@ -1,5 +1,6 @@
 import 'package:bajarbd/model/models/brand_model.dart';
 import 'package:bajarbd/model/models/brand_wise_model.dart';
+import 'package:bajarbd/utils/Appvars/api_links.dart';
 import 'package:bajarbd/utils/Colors/appcolors.dart';
 import 'package:bajarbd/widgets/brand/brand_tile.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +19,8 @@ class HomeBrandList extends StatelessWidget {
             model.length,
             (ind) => BrandTile(
                 name: model[ind].name,
-                link: model[ind].image ?? "",
+                link:
+                    "${ApiLinks.baseImageUrl}/brand/${model[ind].image!}" ?? "",
                 id: model[ind].id))
 
         /* [

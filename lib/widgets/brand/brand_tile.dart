@@ -30,11 +30,15 @@ class BrandTile extends StatelessWidget {
           children: [
             Container(
               height: Appvars.screenSize.height * 0.1,
+              padding: EdgeInsets.symmetric(horizontal: 5),
               //radius: 30,
               // backgroundColor: Colors.transparent,
               child: (link.isEmpty)
                   ? Image.asset(AppConstants.appPlaceHolder)
-                  : Image.network(link),
+                  : Image.network(
+                      link,
+                      fit: BoxFit.contain,
+                    ),
             ),
             Container(
               child: Text(name),

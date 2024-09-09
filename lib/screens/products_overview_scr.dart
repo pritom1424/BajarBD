@@ -243,53 +243,57 @@ class ProductsOverviewScr extends StatelessWidget {
                           .read(productOverviewPageProvider)
                           .getCatWiseProduct(),
                       builder: (context, snapCat) {
-                        if (!snapCat.hasData) {
+                        if (!snapCat.hasData || snapCat.data!.isEmpty) {
                           return SizedBox.shrink();
                         }
+
                         return Column(
                             children: List.generate(
                                 snapCat.data!.length,
-                                (index) => Column(
-                                      children: [
-                                        Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              snapCat.data![index].name ??
-                                                  "Category",
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyLarge,
-                                            ),
-                                            titleBelowSpace,
-                                            TextButton(
-                                                onPressed: () {
-                                                  Navigator.of(context).push(
-                                                      MaterialPageRoute(
-                                                          builder: (ctx) =>
-                                                              CatWiseScreen(
-                                                                  title: snapCat
-                                                                      .data![
-                                                                          index]
-                                                                      .name,
-                                                                  catId: snapCat
-                                                                      .data![
-                                                                          index]
-                                                                      .id)));
-                                                },
-                                                child: Text("View All"))
-                                          ],
-                                        ),
-                                        CatWiseFeaturedProductWidget(
-                                          model: snapCat.data![index],
-                                          index: index,
-                                        ),
-                                        div
-                                      ],
-                                    )));
+                                (index) =>
+                                    (snapCat.data![index].products.length == 0)
+                                        ? SizedBox.shrink()
+                                        : Column(
+                                            children: [
+                                              Row(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Text(
+                                                    snapCat.data![index].name ??
+                                                        "Category",
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .bodyLarge,
+                                                  ),
+                                                  titleBelowSpace,
+                                                  TextButton(
+                                                      onPressed: () {
+                                                        Navigator.of(context).push(
+                                                            MaterialPageRoute(
+                                                                builder: (ctx) => CatWiseScreen(
+                                                                    title: snapCat
+                                                                        .data![
+                                                                            index]
+                                                                        .name,
+                                                                    catId: snapCat
+                                                                        .data![
+                                                                            index]
+                                                                        .id)));
+                                                      },
+                                                      child: Text("View All"))
+                                                ],
+                                              ),
+                                              CatWiseFeaturedProductWidget(
+                                                model: snapCat.data![index],
+                                                index: index,
+                                              ),
+                                              div
+                                            ],
+                                          )));
                       }),
                 ),
               ],

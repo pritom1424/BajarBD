@@ -77,13 +77,13 @@ class _CatWiseScreenState extends State<BrandWiseScreen> {
                     if (snapLatestProduct.connectionState ==
                         ConnectionState.waiting) {
                       return SizedBox(
-                          height: Appvars.screenSize.height * 0.6,
+                          height: Appvars.screenSize.height * 0.8,
                           child: const Center(child: LoaderWidget()));
                     }
                     if (!snapLatestProduct.hasData ||
                         snapLatestProduct.data!.isEmpty) {
                       return SizedBox(
-                        height: Appvars.screenSize.height * 0.6,
+                        height: Appvars.screenSize.height * 0.8,
                         child: const Center(
                           child: Text("No products found!"),
                         ),

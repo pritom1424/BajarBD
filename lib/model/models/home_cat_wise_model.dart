@@ -15,14 +15,16 @@ class HomeCatWiseModel {
   int id;
   String? name;
   dynamic image;
+  String? slug;
   DateTime createdAt;
   DateTime updatedAt;
-  List<HomeCatWiseProduct> products;
+  List<Product> products;
 
   HomeCatWiseModel({
     required this.id,
     required this.name,
     required this.image,
+    required this.slug,
     required this.createdAt,
     required this.updatedAt,
     required this.products,
@@ -33,44 +35,47 @@ class HomeCatWiseModel {
         id: json["id"],
         name: json["name"],
         image: json["image"],
+        slug: json["slug"],
         createdAt: DateTime.parse(json["created_at"]),
         updatedAt: DateTime.parse(json["updated_at"]),
-        products: List<HomeCatWiseProduct>.from(
-            json["products"].map((x) => HomeCatWiseProduct.fromJson(x))),
+        products: List<Product>.from(
+            json["products"].map((x) => Product.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
         "name": name,
         "image": image,
+        "slug": slug,
         "created_at": createdAt.toIso8601String(),
         "updated_at": updatedAt.toIso8601String(),
         "products": List<dynamic>.from(products.map((x) => x.toJson())),
       };
 }
 
-class HomeCatWiseProduct {
+class Product {
   int id;
   String title;
-  String description;
+  String? description;
   String? shortDescription;
   int categoryId;
-  dynamic subcategoryId;
+  int? subcategoryId;
   int? brandId;
   String unitPrice;
   String? quantity;
-  dynamic discount;
-  dynamic discountPrice;
-  String? featureImage;
+  String? discount;
+  String? discountPrice;
+  String featureImage;
   int? featureProduct;
-  dynamic hotDeal;
+  int? hotDeal;
   String? slug;
   int isPublish;
   int isActive;
   DateTime createdAt;
   DateTime updatedAt;
+  int? bestSelling;
 
-  HomeCatWiseProduct({
+  Product({
     required this.id,
     required this.title,
     required this.description,
@@ -90,10 +95,10 @@ class HomeCatWiseProduct {
     required this.isActive,
     required this.createdAt,
     required this.updatedAt,
+    required this.bestSelling,
   });
 
-  factory HomeCatWiseProduct.fromJson(Map<String, dynamic> json) =>
-      HomeCatWiseProduct(
+  factory Product.fromJson(Map<String, dynamic> json) => Product(
         id: json["id"],
         title: json["title"],
         description: json["description"],
@@ -113,6 +118,7 @@ class HomeCatWiseProduct {
         isActive: json["is_active"],
         createdAt: DateTime.parse(json["created_at"]),
         updatedAt: DateTime.parse(json["updated_at"]),
+        bestSelling: json["best_selling"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -135,5 +141,6 @@ class HomeCatWiseProduct {
         "is_active": isActive,
         "created_at": createdAt.toIso8601String(),
         "updated_at": updatedAt.toIso8601String(),
+        "best_selling": bestSelling,
       };
 }

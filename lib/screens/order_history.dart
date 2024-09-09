@@ -83,15 +83,18 @@ class _HistoryPageState extends State<HistoryPage> {
                     if (snapOrderHistory.connectionState ==
                         ConnectionState.waiting) {
                       return SizedBox(
-                        height: Appvars.screenSize.height * 0.6,
+                        height: Appvars.screenSize.height * 0.8,
                         child: Center(
                           child: LoaderWidget(),
                         ),
                       );
                     }
                     if (!snapOrderHistory.hasData) {
-                      return Center(
-                        child: Text("no order history!"),
+                      return SizedBox(
+                        height: Appvars.screenSize.height * 0.8,
+                        child: Center(
+                          child: Text("no order history!"),
+                        ),
                       );
                     }
                     return Column(
